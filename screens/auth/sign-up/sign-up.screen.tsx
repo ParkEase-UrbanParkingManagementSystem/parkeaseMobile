@@ -97,8 +97,8 @@ export default function SignUpScreen() {
             setUserInfo({ ...userInfo, password: value });
         }
     };
-    const handleSignUp = () => {
-        router.push("(routes)/verifyAccount")
+    const handleSignUp = async () => {
+        // router.push("(routes)/verifyAccount")
     }
     // const handleSignUp = async () => {
     //     await axios
