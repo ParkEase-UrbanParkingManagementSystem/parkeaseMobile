@@ -1,2 +1,2 @@
-# parkeaseMobile
-ParkEase Client's mobile application
+# ParkEase
+ParkEase Mobile App
