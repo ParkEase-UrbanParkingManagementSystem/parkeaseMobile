@@ -31,7 +31,7 @@ export default function WelcomeIntroScreen() {
     }
     const renderItem = ({ item }: { item: onboardingSwiperDataType }) => (
         <LinearGradient
-            colors={[colors.tertiary, colors.white]}
+            colors={[colors.white, colors.white]}
             style={{ flex: 1, paddingHorizontal: 16 }}
             start={{ x: 0, y: 0 }}
             end={{x: 1 , y: 1 }}
@@ -39,7 +39,7 @@ export default function WelcomeIntroScreen() {
             <View style={{ marginTop: 80 }}>
                 <Image
                     source={item.image}
-                    style={{ alignSelf: "center", marginBottom: 30, width: responsiveWidth(88), height: responsiveHeight(40)}}
+                    style={{ alignSelf: "center", marginBottom: 0, width: responsiveWidth(88), height: responsiveHeight(46)}}
                 />
                 <Text style={[styles.title, { fontFamily: "Raleway_700Bold" }]}>
                     {item.title}

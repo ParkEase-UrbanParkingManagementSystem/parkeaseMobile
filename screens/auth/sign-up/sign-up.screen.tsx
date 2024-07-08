@@ -145,7 +145,7 @@ export default function SignUpScreen() {
                                 style={styles.input}
                                 keyboardType="default"
                                 value={userInfo.name}
-                                placeholder="Jack sparrow"
+                                placeholder="User Name"
                                 onChangeText={(value) =>
                                     setUserInfo({ ...userInfo, name: value })
                                 }
@@ -167,7 +167,7 @@ export default function SignUpScreen() {
                                 style={styles.input}
                                 keyboardType="email-address"
                                 value={userInfo.email}
-                                placeholder="support@becodemy.com"
+                                placeholder="Email Address"
                                 onChangeText={(value) =>
                                     setUserInfo({ ...userInfo, email: value })
                                 }
@@ -190,7 +190,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
                                     defaultValue=""
-                                    placeholder="********"
+                                    placeholder="Password"
                                     onChangeText={handlePasswordValidation}
                                 />
                                 <TouchableOpacity

@@ -1,5 +1,6 @@
 import {
     View,
+    Button,
     Text,
     ScrollView,
     Image,
@@ -140,7 +141,7 @@ export default function LoginScreen() {
                                 style={[styles.input, { paddingLeft: 40 }]}
                                 keyboardType="email-address"
                                 value={userInfo.email}
-                                placeholder="support@becodemy.com"
+                                placeholder="customer@parkease.com"
                                 onChangeText={(value) =>
                                     setUserInfo({ ...userInfo, email: value })
                                 }
@@ -239,11 +240,14 @@ export default function LoginScreen() {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     marginTop: 20,
-                                    gap: 10,
+                                    gap: 15,
                                 }}
                             >
                                 <TouchableOpacity>
                                     <FontAwesome name="google" size={30} />
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <FontAwesome name="apple" size={30} />
                                 </TouchableOpacity>
                                 <TouchableOpacity>
                                     <FontAwesome name="github" size={30} />
@@ -270,6 +274,25 @@ export default function LoginScreen() {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                    </View>
+                    {/*app navigation*/}
+                    <View style={styles.appNavigation}>
+                        <Button
+                            title="Choose vehicle"
+                            onPress={() => router.push("/(routes)/choose-vehicle")}
+                        />
+                        <Button
+                            title="Change Vehicle"
+                            onPress={() => router.push("/(routes)/change-vehicle")}
+                        />
+                        <Button
+                            title="Home page"
+                            onPress={() => router.push("/(routes)/home-page")}
+                        />
+                        <Button
+                            title="Profile"
+                            onPress={() => router.push("/(routes)/profile")}
+                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -340,6 +363,11 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 60,
     },
+    appNavigation: {
+        flexDirection: "row",
+        flexWrap: 'wrap',
+        justifyContent: "flex-start",
+    }
 
 
 });
