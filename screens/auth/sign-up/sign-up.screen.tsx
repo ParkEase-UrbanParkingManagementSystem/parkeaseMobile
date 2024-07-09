@@ -183,6 +183,29 @@ export default function SignUpScreen() {
                                     <Entypo name="cross" size={18} color={"red"} />
                                 </View>
                             )}
+    {/*contact no field*/}
+                            <View style={{marginTop:15}}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="phone-pad"
+                                    value={userInfo.email}
+                                    placeholder="Phone No"
+                                    onChangeText={(value) =>
+                                        setUserInfo({ ...userInfo, email: value })
+                                    }
+                                />
+                                <Fontisto
+                                    style={{ position: "absolute", left: 26, top: 17.8 }}
+                                    name="phone"
+                                    size={20}
+                                    color={"#A1A1A1"}
+                                />
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
         {/*password field*/}
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
@@ -319,7 +342,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 55,
-        marginHorizontal: 16,
+        marginHorizontal: 25,
         borderRadius: 8,
         paddingLeft: 35,
         fontSize: 16,

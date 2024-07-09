@@ -2,8 +2,8 @@ const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
 export default {
-    primary: '#1A2131',
-    secondary: '#FFB403',
+    primary: '#8c9098',
+    secondary: '#f6d27c',
     tertiary: '#FFFFFF',
     success: '#00833D',
     error: '#FF0018',
