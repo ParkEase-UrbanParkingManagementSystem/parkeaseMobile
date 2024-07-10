@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../../constants/Colors'
 
-export default function ChangeVehicleScreen() {
+export default function AddVehicleScreen() {
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -18,18 +18,18 @@ export default function ChangeVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.white, colors.white]}
+            colors={[colors.primary_light, colors.white]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.title}>
                     <Text>
-                        change vehicle
+                        add vehicle
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button title="Go Back"
-                            color={"#000000"}
+                            color={colors.primary_light}
                             onPress={() => router.back()}
                     />
                 </View>
