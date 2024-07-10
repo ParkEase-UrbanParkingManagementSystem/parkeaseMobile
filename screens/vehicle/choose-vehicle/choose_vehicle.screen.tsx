@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button} from "react-native";
+import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
@@ -46,22 +46,29 @@ export default function ChooseVehicleScreen() {
                         source={require('@/assets/images/jeep.png')}
                     />
                 </View>
-                <TouchableOpacity
-                    style={styles.addVehicleButtonContainer}
-                    onPress={() => router.push("/(routes)/change-vehicle")}
-                >
-                    <Text style={styles.addVehicleText}>
-                        continue
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.continueButtonContainer}
-                    onPress={() => router.push("/(routes)/change-vehicle")}
-                >
-                    <Text style={styles.continueText}>
-                        continue
-                    </Text>
-                </TouchableOpacity>
+                <View style={styles.actionButtonContainer}>
+                    <TouchableOpacity
+                        style={styles.addVehicleButtonContainer}
+                        onPress={() => router.push("/(routes)/change-vehicle")}
+                    >
+                        <Text style={styles.addVehicleText}>
+                            Add Vehicle
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.continueButtonContainer}
+                        onPress={() => router.push("/(routes)/change-vehicle")}
+                    >
+                        <Text style={styles.continueText}>
+                            continue
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.vehicleSelectorContainer}>
+                    <ScrollView style={styles.vehicleSelector}>
+
+                    </ScrollView>
+                </View>
                 <View style={styles.buttonContainer}>
                     <Button title="Go Back"
                             color={colors.primary_light}
@@ -114,28 +121,48 @@ export const styles = StyleSheet.create({
         width: wp("45%"),
         height: hp("20%"),
     },
-    addVehicleButtonContainer: {
-
-    },
-    addVehicleText: {
-
-    },
-    continueButtonContainer: {
+    actionButtonContainer: {
         position: "absolute",
-        bottom: 100,
-        // borderStyle: "none",
-        // borderWidth: 1,
+        bottom: 80,
+        flexDirection: "row",
+        gap: 50,
+    },
+    addVehicleButtonContainer: {
+        // position: "absolute",
+        // bottom: 200,
         borderRadius: hp("1%"),
         paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: colors.secondary
+    },
+    addVehicleText: {
+        color: colors.primary,
+        fontSize: 25,
+        fontWeight: "600"
+    },
+    continueButtonContainer: {
+        // position: "absolute",
+        // bottom: 100,
+        borderRadius: hp("1%"),
+        paddingHorizontal: 30,
         paddingVertical: 10,
         backgroundColor: colors.secondary
     },
     continueText: {
         color: colors.primary,
         fontSize: 25,
-        fontWeight: "500"
-
-
+        fontWeight: "600"
+    },
+    vehicleSelectorContainer: {
+        position: "absolute",
+        top: 440,
+        width: wp("95%"),
+        height: hp("36%"),
+        borderStyle: "solid",
+        borderWidth: 0.2,
+        padding: 10
+    },
+    vehicleSelector: {
 
     },
 
