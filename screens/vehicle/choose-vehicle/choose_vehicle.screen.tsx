@@ -43,8 +43,104 @@ export default function ChooseVehicleScreen() {
                 <View style={styles.vehicleImageContainer}>
                     <Image
                         style={styles.vehicleImage}
-                        source={require('@/assets/images/jeep.png')}
+                        source={require('@/assets/images/suv_side.png')}
                     />
+                </View>
+                <View style={styles.vehicleSelectorContainer}>
+                    <ScrollView style={styles.vehicleSelector}>
+                        {/*these are the registered vehicles of this user inside ParkEase*/}
+                        {/*should be loaded from the db*/}
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/bus_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>NB - 1234</Text>
+                                <Text style={styles.vehicleName_2}>Mitsubishi Fuso Rosa</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/car_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>CBF - 4545</Text>
+                                <Text style={styles.vehicleName_2}>Mercedes-AMG GTC</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/jeep_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>CBR - 6789</Text>
+                                <Text style={styles.vehicleName_2}>Jeep Wrangler Rubicon</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/lorry_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>PH - 1628</Text>
+                                <Text style={styles.vehicleName_2}>Mitsubishi Fuso</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/tuktuk_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>ABB - 8256</Text>
+                                <Text style={styles.vehicleName_2}>TVS King</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.vehicleContainer}>
+                            <View style={styles.vehicleIconContainer}>
+                                <Image
+                                    style={styles.vehicleIcon}
+                                    source={require('@/assets/images/van_side.png')}
+                                />
+                            </View>
+                            <View style={styles.vehicleDetailsContainer}>
+                                <Text style={styles.vehicleRegNo}>NB - 7245</Text>
+                                <Text style={styles.vehicleName_2}>Toyota Hiace</Text>
+                            </View>
+                            <TouchableOpacity style={styles.selectButton}>
+                                <Text style={{color: colors.white}}>Select</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
                 </View>
                 <View style={styles.actionButtonContainer}>
                     <TouchableOpacity
@@ -63,11 +159,6 @@ export default function ChooseVehicleScreen() {
                             continue
                         </Text>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.vehicleSelectorContainer}>
-                    <ScrollView style={styles.vehicleSelector}>
-
-                    </ScrollView>
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button title="Go Back"
@@ -158,12 +249,60 @@ export const styles = StyleSheet.create({
         top: 440,
         width: wp("95%"),
         height: hp("36%"),
-        borderStyle: "solid",
-        borderWidth: 0.2,
-        padding: 10
+        backgroundColor: colors.secondary_light,
+        padding: 10,
+        borderRadius: hp("2%"),
     },
     vehicleSelector: {
+        display: "flex",
+        flexDirection: "column",
+    },
+    vehicleContainer: {
+        display: "flex",
+        flexDirection: "row",
+        padding: 5,
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        gap: 10,
+        backgroundColor: colors.primary_light,
+        borderRadius: hp("2%"),
+        marginBottom: 10
+    },
+    vehicleIconContainer: {
+        width: '25%',
+        padding: 5,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    vehicleIcon: {
+        width: 90,
+        height: 90
+    },
+    vehicleDetailsContainer: {
+        width: '50%',
+        height: '100%',
+        padding: 5,
+        paddingLeft: 15,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: 'flex-start',
 
+    },
+    vehicleRegNo:{
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+    vehicleName_2: {
+        fontSize: 16,
+        fontWeight: "normal",
+        color: colors.primary
+    },
+    selectButton: {
+        backgroundColor: colors.primary,
+        padding: 10,
+        borderRadius: 8,
     },
 
 });
