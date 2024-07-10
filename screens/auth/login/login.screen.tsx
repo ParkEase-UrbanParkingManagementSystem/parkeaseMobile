@@ -282,8 +282,8 @@ export default function LoginScreen() {
                             onPress={() => router.push("/(routes)/choose-vehicle")}
                         />
                         <Button
-                            title="Add Vehicle"
-                            onPress={() => router.push("/(routes)/add-vehicle")}
+                            title="Change Vehicle"
+                            onPress={() => router.push("/(routes)/change-vehicle")}
                         />
                         <Button
                             title="Home page"

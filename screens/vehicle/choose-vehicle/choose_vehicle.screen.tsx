@@ -145,7 +145,7 @@ export default function ChooseVehicleScreen() {
                 <View style={styles.actionButtonContainer}>
                     <TouchableOpacity
                         style={styles.addVehicleButtonContainer}
-                        onPress={() => router.push("/(routes)/add-vehicle")}
+                        onPress={() => router.push("/(routes)/change-vehicle")}
                     >
                         <Text style={styles.addVehicleText}>
                             Add Vehicle
