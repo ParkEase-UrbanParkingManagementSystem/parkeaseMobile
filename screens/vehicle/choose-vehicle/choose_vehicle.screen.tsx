@@ -21,7 +21,7 @@ export default function ChooseVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.primary, colors.white]}
+            colors={[colors.secondary_light, colors.white]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
@@ -40,21 +40,31 @@ export default function ChooseVehicleScreen() {
                         Nissan Patrol Y61
                     </Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.changeVehicle}
-                    onPress={() => router.push("/(routes)/change-vehicle")}
-                >
-                    <Text>Change Vehicle</Text>
-                </TouchableOpacity>
                 <View style={styles.vehicleImageContainer}>
                     <Image
                         style={styles.vehicleImage}
-                        source={require('@/assets/images/car.png')}
+                        source={require('@/assets/images/jeep.png')}
                     />
                 </View>
+                <TouchableOpacity
+                    style={styles.addVehicleButtonContainer}
+                    onPress={() => router.push("/(routes)/change-vehicle")}
+                >
+                    <Text style={styles.addVehicleText}>
+                        continue
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.continueButtonContainer}
+                    onPress={() => router.push("/(routes)/change-vehicle")}
+                >
+                    <Text style={styles.continueText}>
+                        continue
+                    </Text>
+                </TouchableOpacity>
                 <View style={styles.buttonContainer}>
                     <Button title="Go Back"
-                            color={"#000000"}
+                            color={colors.primary_light}
                             onPress={() => router.back()}
                     />
                 </View>
@@ -101,10 +111,31 @@ export const styles = StyleSheet.create({
         top: 250,
     },
     vehicleImage: {
-        width: wp("100%"),
-        height: hp("25%"),
+        width: wp("45%"),
+        height: hp("20%"),
     },
-    changeVehicle: {
+    addVehicleButtonContainer: {
+
+    },
+    addVehicleText: {
+
+    },
+    continueButtonContainer: {
+        position: "absolute",
+        bottom: 100,
+        // borderStyle: "none",
+        // borderWidth: 1,
+        borderRadius: hp("1%"),
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: colors.secondary
+    },
+    continueText: {
+        color: colors.primary,
+        fontSize: 25,
+        fontWeight: "500"
+
+
 
     },
 

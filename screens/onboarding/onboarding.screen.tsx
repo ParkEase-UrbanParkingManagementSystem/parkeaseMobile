@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({
     fontSize: hp("3%"),
   },
   buttonWrapper: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#03396c",
     width: wp("92%"),
     paddingVertical: 18,
     borderRadius: 8,
