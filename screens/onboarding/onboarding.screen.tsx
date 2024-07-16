@@ -27,7 +27,7 @@ export default function OnboardingScreen() {
 
   return (
    <LinearGradient
-   colors={["#06837f", "#fed811", "#fff6c4"]}
+   colors={["#FEFFCC", "#FEFFCC"]}
    style={{flex:1, alignItems:"center", justifyContent:"center"}}
    >
       <SafeAreaView style={styles.firstContainer}>

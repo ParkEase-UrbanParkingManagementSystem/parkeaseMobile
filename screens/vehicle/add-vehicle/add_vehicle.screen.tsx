@@ -16,6 +16,10 @@ import { router } from "expo-router";
 import colors from '../../../constants/Colors'
 import {AntDesign, Entypo, FontAwesome, Fontisto, Ionicons, SimpleLineIcons} from "@expo/vector-icons";
 import {useState} from "react";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import PlateNoInput from '@/components/input/PlateNoInput';
+import VehicleNameInput from "@/components/input/VehicleNameInput";
+import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
 
 export default function AddVehicleScreen() {
     const [userInfo, setUserInfo] = useState({
@@ -40,14 +44,14 @@ export default function AddVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.primary_light, colors.white]}
+            colors={[colors.yellow_light, colors.white]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
                 <ScrollView>
                     <Image
                         style={styles.signInImage}
-                        source={require("@/assets/sign-in/signin.webp")}
+                        source={require("@/assets/images/add_vehicle.png")}
                     />
                     <Text style={[styles.welcomeText, { fontFamily: "Raleway_700Bold" }]}>
                         ParkEase your vehicle
@@ -55,75 +59,30 @@ export default function AddVehicleScreen() {
                     <Text style={styles.learningText}>
                         Register your vehicle with ParkEase
                     </Text>
-                    <View style={styles.inputContainer}>
-                        {/*name field*/}
+                    <View style={styles.formContainer}>
                         <View style={{marginTop:15}}>
-                            <TextInput
-                                style={styles.input}
-                                keyboardType="default"
-                                value={userInfo.name}
-                                placeholder="User Name"
-                                onChangeText={(value) =>
-                                    setUserInfo({ ...userInfo, name: value })
-                                }
-                            />
-                            <AntDesign
-                                style={{ position: "absolute", left: 26, top: 17.8 }}
-                                name="user"
-                                size={20}
-                                color={"#A1A1A1"}
-                            />
-                            {required && (
-                                <View style={styles.errorContainer}>
-                                    <Entypo name="cross" size={18} color={"red"} />
-                                </View>
-                            )}
-                            {/*email field*/}
-                            <View style={{marginTop:15}}>
-                                <TextInput
-                                    style={styles.input}
-                                    keyboardType="email-address"
-                                    value={userInfo.email}
-                                    placeholder="Email Address"
-                                    onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, email: value })
-                                    }
-                                />
-                                <Fontisto
-                                    style={{ position: "absolute", left: 26, top: 17.8 }}
-                                    name="email"
-                                    size={20}
-                                    color={"#A1A1A1"}
-                                />
-                                {required && (
-                                    <View style={styles.errorContainer}>
-                                        <Entypo name="cross" size={18} color={"red"} />
-                                    </View>
-                                )}
-                                {/*contact no field*/}
-                                <View style={{marginTop:15}}>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType="phone-pad"
-                                        value={userInfo.email}
-                                        placeholder="Phone No"
-                                        onChangeText={(value) =>
-                                            setUserInfo({ ...userInfo, email: value })
-                                        }
+                                <View style={styles.inputContainer}>
+                                    <Image
+                                        style={styles.feildIcon}
+                                        source={require("@/assets/images/plate.png")}
                                     />
-                                    <Fontisto
-                                        style={{ position: "absolute", left: 26, top: 17.8 }}
-                                        name="phone"
-                                        size={20}
-                                        color={"#A1A1A1"}
-                                    />
-                                    {required && (
-                                        <View style={styles.errorContainer}>
-                                            <Entypo name="cross" size={18} color={"red"} />
-                                        </View>
-                                    )}
+                                    <PlateNoInput/>
                                 </View>
-
+                            <View style={styles.inputContainer}>
+                                <Image
+                                    style={styles.feildIcon}
+                                    source={require("@/assets/images/vehicle_name.png")}
+                                />
+                                <VehicleNameInput/>
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Image
+                                    style={styles.feildIcon}
+                                    source={require("@/assets/images/car_side.png")}
+                                />
+                                <VehicleTypeDropDown/>
+                            </View>
+                            <View style={{marginTop:15, alignItems:"center"}}>
                                 <TouchableOpacity
                                     style={{
                                         padding: 16,
@@ -131,8 +90,10 @@ export default function AddVehicleScreen() {
                                         marginHorizontal: 16,
                                         backgroundColor: colors.primary,
                                         marginTop: 15,
+                                        width: wp("50%"),
                                     }}
                                     // onPress={handleSignUp}
+                                    onPress={() => router.push("/(routes)/choose-vehicle")}
                                 >
                                     {buttonSpinner ? (
                                         <ActivityIndicator size="small" color={"white"} />
@@ -145,47 +106,10 @@ export default function AddVehicleScreen() {
                                                 fontFamily: "Raleway_700Bold",
                                             }}
                                         >
-                                            Sign Up
+                                            Add
                                         </Text>
                                     )}
                                 </TouchableOpacity>
-
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        marginTop: 20,
-                                        gap: 10,
-                                    }}
-                                >
-                                    <TouchableOpacity>
-                                        <FontAwesome name="google" size={30} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity>
-                                        <FontAwesome name="github" size={30} />
-                                    </TouchableOpacity>
-                                </View>
-
-                                <View style={styles.signupRedirect}>
-                                    <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>
-                                        Already have an account?
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={() => router.push("/(routes)/login")}
-                                    >
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                fontFamily: "Raleway_600SemiBold",
-                                                color: "#2467EC",
-                                                marginLeft: 5,
-                                            }}
-                                        >
-                                            Login
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
                             </View>
                         </View>
                     </View>
@@ -210,7 +134,7 @@ export const styles = StyleSheet.create({
     },
     signInImage: {
         width: "80%",
-        height: 250,
+        height: 300,
         alignSelf: "center",
         marginTop: 25,
         marginBottom: 25
@@ -225,15 +149,10 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         marginTop: 5,
     },
-    inputContainer: {
-        marginHorizontal: 16,
-        marginTop: 30,
-        rowGap: 30,
-    },
     input: {
         height: 55,
         marginHorizontal: 25,
-        borderRadius: 8,
+        borderRadius: 10,
         paddingLeft: 35,
         fontSize: 16,
         backgroundColor: "white",
@@ -273,5 +192,33 @@ export const styles = StyleSheet.create({
     buttonContainer: {
         position: "absolute",
         bottom: 30,
+    },
+    formContainer: {
+      flex: 1,
+        display: "flex",
+        flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        width: wp("90%"),
+        paddingVertical: 1,
+        paddingHorizontal: 10,
+
+    },
+    inputContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        marginBottom: 20,
+        padding: 5,
+        gap: 10
+    },
+    feildIcon: {
+        width: wp("11%"),
+        height: hp("5%"),
     },
 });

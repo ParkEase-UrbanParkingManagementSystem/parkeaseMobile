@@ -19,7 +19,7 @@ export default function HomePageScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.white, colors.primary]}
+            colors={[colors.white, colors.yellow_light]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>

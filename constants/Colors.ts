@@ -12,6 +12,7 @@ export default {
     background: '#F4F4F4',
     text: '#1C1C1C',
     yellow: '#ffff00',
+    yellow_light: "#FEFFCC",
     white: '#ffffff',
     black: '#000000',
     caution_yellow: '#f7ee20',
