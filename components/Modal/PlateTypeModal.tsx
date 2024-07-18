@@ -7,7 +7,12 @@ import colors from "@/constants/Colors";
 import {Raleway_700Bold, useFonts} from "@expo-google-fonts/raleway";
 import {Nunito_400Regular, Nunito_700Bold} from "@expo-google-fonts/nunito";
 
-const PlateTypeModal = () => {
+interface PlateTypeModalProps {
+    type: number;
+    setType: (type: number) => void;
+}
+
+const PlateTypeModal: React.FC<PlateTypeModalProps> = ({ type, setType }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
@@ -41,7 +46,8 @@ const PlateTypeModal = () => {
                     <TouchableOpacity
                         style={styles.plateType}
                         onPress={() => {
-                            setIsModalVisible(false)
+                            setIsModalVisible(false);
+                            setType(1);
                         }}
                     >
                         <Text style={styles.plateTypeText}>
@@ -51,7 +57,10 @@ const PlateTypeModal = () => {
                     {/*310-2345 type selection*/}
                     <TouchableOpacity
                         style={styles.plateType}
-                        // onPress={() => setIsModalVisible(true)}
+                        onPress={() => {
+                            setIsModalVisible(false);
+                            setType(2);
+                        }}
                     >
                         <Text style={styles.plateTypeText}>
                             123-4567
@@ -60,7 +69,10 @@ const PlateTypeModal = () => {
                     {/*1-shri-1 type selection*/}
                     <TouchableOpacity
                         style={styles.plateType}
-                        // onPress={() => setIsModalVisible(true)}
+                        onPress={() => {
+                            setIsModalVisible(false);
+                            setType(3);
+                        }}
                     >
                         <Text style={styles.plateTypeText}>
                             1-ශ්‍රී-5000
@@ -69,7 +81,10 @@ const PlateTypeModal = () => {
                     {/*`EN 3177` type selection*/}
                     <TouchableOpacity
                         style={styles.plateType}
-                        // onPress={() => setIsModalVisible(true)}
+                        onPress={() => {
+                            setIsModalVisible(false);
+                            setType(4);
+                        }}
                     >
                         <Text style={styles.plateTypeText}>
                             EN 3177

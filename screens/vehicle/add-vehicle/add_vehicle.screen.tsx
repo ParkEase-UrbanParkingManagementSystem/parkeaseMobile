@@ -6,7 +6,6 @@ import {
     SafeAreaView,
     StyleSheet,
     Button,
-    TextInput,
     ActivityIndicator, ScrollView
 } from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
@@ -17,12 +16,47 @@ import colors from '../../../constants/Colors'
 import {AntDesign, Entypo, FontAwesome, Fontisto, Ionicons, SimpleLineIcons} from "@expo/vector-icons";
 import {useState} from "react";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import PlateNoInput from '@/components/input/PlateNoInput';
 import VehicleNameInput from "@/components/input/VehicleNameInput";
 import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
-import PlateTypeModal from "@/components/Modal/PlateTypeModal";
+import PlateTypeModal from "@/components/Modal/PlateTypeModal"
 
+import PlateNoInput_type1 from '@/components/input/PlateNoInput_type1';
+import PlateNoInput_type2 from "@/components/input/PlateNoInput_type2";
+import PlateNoInput_type3 from "@/components/input/PlateNoInput_type3";
+import PlateNoInput_type4 from "@/components/input/PlateNoInput_type4";
 export default function AddVehicleScreen() {
+    const [type, setType] = useState<number>(0);
+    let input
+    let modalButton
+    if (type == 0) {
+        input = <Text style={{color: colors.primary, fontSize: 15.5, fontWeight: "600", fontFamily: "Nunito_700Bold"}}>Please select license plate type</Text>
+        modalButton =
+            <>
+                <View style={styles.inputContainer}>
+                    <Image
+                        style={styles.feildIcon}
+                        source={require("@/assets/images/types_icon.png")}
+                    />
+                    <PlateTypeModal type={type} setType={setType} />
+                </View>
+            </>
+    }
+    else if (type == 1) {
+        input = <PlateNoInput_type1/>
+        modalButton = null
+    }
+    else if (type == 2) {
+        input = <PlateNoInput_type2/>
+        modalButton = null
+    }
+    else if (type == 3) {
+        input = <PlateNoInput_type3/>
+        modalButton = null
+    }
+    else if (type == 4) {
+        input = <PlateNoInput_type4/>
+        modalButton = null
+    }
     const [buttonSpinner, setButtonSpinner] = useState(false);
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
@@ -53,19 +87,13 @@ export default function AddVehicleScreen() {
                     </Text>
                     <View style={styles.formContainer}>
                         <View style={{marginTop:15}}>
-                            <View style={styles.inputContainer}>
-                                <Image
-                                    style={styles.feildIcon}
-                                    source={require("@/assets/images/types_icon.png")}
-                                />
-                                <PlateTypeModal/>
-                            </View>
+                            {modalButton}
                                 <View style={styles.inputContainer}>
                                     <Image
                                         style={styles.feildIcon}
                                         source={require("@/assets/images/plate.png")}
                                     />
-                                    <PlateNoInput/>
+                                    {input}
                                 </View>
                             <View style={styles.inputContainer}>
                                 <Image

@@ -9,7 +9,7 @@ const VehicleNameInput = () => {
         <TextInput
             style={styles.input}
             keyboardType="default"
-            placeholder="Nissan Leaf 2020 "
+            placeholder="Enter Vehicle Name"
             value={name}
             onChangeText={(value) => setName(value)}
         />

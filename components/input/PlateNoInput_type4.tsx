@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const PlateNoInput = () => {
+const PlateNoInput_type1 = () => {
     const [EnglishLetter, setEnglishLetter] = useState('');
     const [Numeric, setNumeric] = useState('');
     const [plateInfo, setPlateInfo] = useState({
@@ -14,7 +14,7 @@ const PlateNoInput = () => {
             <TextInput
                 style={styles.EnglishLetterInput}
                 keyboardType="default"
-                placeholder="ABC"
+                placeholder="EN"
                 value={plateInfo.EnglishLetter}
                 onChangeText={(value) =>
                     setPlateInfo({ ...plateInfo, EnglishLetter: value })
@@ -23,7 +23,7 @@ const PlateNoInput = () => {
             <Text>-</Text>
             <TextInput
                 style={styles.NumericInput}
-                placeholder="1234"
+                placeholder="3177"
                 value={plateInfo.Numeric}
                 onChangeText={(value) =>
                     setPlateInfo({ ...plateInfo, Numeric: value })
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PlateNoInput;
+export default PlateNoInput_type1;
