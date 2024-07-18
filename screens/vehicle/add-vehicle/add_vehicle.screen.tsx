@@ -20,18 +20,10 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import PlateNoInput from '@/components/input/PlateNoInput';
 import VehicleNameInput from "@/components/input/VehicleNameInput";
 import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
+import PlateTypeModal from "@/components/Modal/PlateTypeModal";
 
 export default function AddVehicleScreen() {
-    const [userInfo, setUserInfo] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
     const [buttonSpinner, setButtonSpinner] = useState(false);
-    const [required, setRequired] = useState("");
-    const [error, setError] = useState({
-        password: "",
-    });
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -61,6 +53,13 @@ export default function AddVehicleScreen() {
                     </Text>
                     <View style={styles.formContainer}>
                         <View style={{marginTop:15}}>
+                            <View style={styles.inputContainer}>
+                                <Image
+                                    style={styles.feildIcon}
+                                    source={require("@/assets/images/types_icon.png")}
+                                />
+                                <PlateTypeModal/>
+                            </View>
                                 <View style={styles.inputContainer}>
                                     <Image
                                         style={styles.feildIcon}

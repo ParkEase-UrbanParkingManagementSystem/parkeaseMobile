@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 const PlateNoInput = () => {
     const [EnglishLetter, setEnglishLetter] = useState('');
