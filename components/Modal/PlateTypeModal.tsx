@@ -25,6 +25,7 @@ const PlateTypeModal: React.FC<PlateTypeModalProps> = ({ type, setType }) => {
     }
     return (
         <>
+            {/*modal activation button*/}
             <TouchableOpacity
                 style={styles.addVehicleButtonContainer}
                 onPress={() => setIsModalVisible(true)}

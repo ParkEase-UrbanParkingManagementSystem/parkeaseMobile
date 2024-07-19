@@ -5,8 +5,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {responsiveWidth} from "react-native-responsive-dimensions";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
-import ParkingLotSearchBox from "@/components/SearchBox/ParkingLotSearchBox"
+import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
 
 export default function HomePageScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -36,9 +38,25 @@ export default function HomePageScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                     <View style={styles.home_page_top}>
-                        <ParkingLotSearchBox data={data}/>
-                        <View style={styles.iconContainer}></View>
-                        <View style={styles.iconContainer}></View>
+                        <View style={styles.searchBarContainer}>
+                            <ParkingLotSearchModal/>
+                        </View>
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
+                                <Image
+                                    source={require('@/assets/images/driver_profile.png')}
+                                    style={[styles.icon, {marginRight: 20}]}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.iconContainer}>
+                            <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
+                                <Image
+                                    source={require('@/assets/images/notification.png')}
+                                    style={styles.icon}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button title="Go Back"
@@ -56,7 +74,7 @@ export const styles = StyleSheet.create({
     firstContainer: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
     },
     buttonContainer: {
         position: "absolute",
@@ -64,16 +82,30 @@ export const styles = StyleSheet.create({
     },
     home_page_top: {
         display: "flex",
-        flexDirection: "column",
-        width: responsiveWidth(50),
-        height: responsiveWidth(50),
-        borderStyle: "solid",
-    },
-    searchBox: {
+        flexDirection: "row",
+        width: wp("95%"),
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.secondary_light,
+        padding: 10,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 10,
 
     },
+    searchBarContainer: {
+        width: wp("60%"),
+        marginRight: 10
+    },
+    // searchBar: {
+    //
+    // },
     iconContainer: {
 
+    },
+    icon: {
+        width: wp("9%"),
+        height: hp("4%"),
     },
 
 });
