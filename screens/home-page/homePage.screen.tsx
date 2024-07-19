@@ -39,7 +39,7 @@ export default function HomePageScreen() {
             <SafeAreaView style={styles.firstContainer}>
                     <View style={styles.home_page_top}>
                         <View style={styles.searchBarContainer}>
-                            <ParkingLotSearchModal/>
+                            <ParkingLotSearchModal data={data} />
                         </View>
                         <View style={styles.iconContainer}>
                             <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>

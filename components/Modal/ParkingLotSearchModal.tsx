@@ -6,8 +6,13 @@ import { router } from "expo-router";
 import colors from "@/constants/Colors";
 import {Raleway_700Bold, useFonts} from "@expo-google-fonts/raleway";
 import {Nunito_400Regular, Nunito_700Bold} from "@expo-google-fonts/nunito";
+import ParkingLotSearchBox from "@/components/SearchBox/ParkingLotSearchBox";
 
-const ParkingLotSearchModal: React.FC = () => {
+interface ParkingLotSearchModalProps {
+    data: string[];
+}
+
+const ParkingLotSearchModal: React.FC<ParkingLotSearchModalProps> = ({ data }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
@@ -36,6 +41,13 @@ const ParkingLotSearchModal: React.FC = () => {
                 presentationStyle="pageSheet"
                 onRequestClose={() => setIsModalVisible(false)}
             >
+                <ParkingLotSearchBox data={data}/>
+                <View style={{marginBottom: 60}}>
+                    <Button
+                        title="Cancel"
+                        onPress={() => setIsModalVisible(false)}
+                    />
+                </View>
             </Modal></>
     );
 };
