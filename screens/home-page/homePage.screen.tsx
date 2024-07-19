@@ -7,6 +7,7 @@ import colors from '../../constants/Colors'
 import {responsiveWidth} from "react-native-responsive-dimensions";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import IOSMap from "@/components/Map/IOSMap";
 
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
 
@@ -20,17 +21,6 @@ export default function HomePageScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
-    const data = [
-        'Broadway Parking Hub',
-        'Empire State Parking',
-        'Central Park Garage',
-        'Hudson River Parking',
-        'Times Square Lot',
-        'Brooklyn Bridge Parking',
-        'SoHo Parking Plaza',
-        'Liberty Street Garage',
-    ];
-
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
@@ -39,7 +29,7 @@ export default function HomePageScreen() {
             <SafeAreaView style={styles.firstContainer}>
                     <View style={styles.home_page_top}>
                         <View style={styles.searchBarContainer}>
-                            <ParkingLotSearchModal data={data} />
+                            <ParkingLotSearchModal/>
                         </View>
                         <View style={styles.iconContainer}>
                             <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
@@ -58,6 +48,16 @@ export default function HomePageScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
+                <View style={styles.home_page_mid}>
+                    <View style={styles.title}>
+                        <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
+                            Locate Parking Lots Near you
+                        </Text>
+                    </View>
+                    <View style={styles.map}>
+                        <IOSMap/>
+                    </View>
+                </View>
                     <View style={styles.buttonContainer}>
                         <Button title="Go Back"
                                 color={colors.secondary_light}
@@ -97,15 +97,33 @@ export const styles = StyleSheet.create({
         width: wp("60%"),
         marginRight: 10
     },
-    // searchBar: {
-    //
-    // },
+    home_page_mid: {
+        // flex: 1,
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.secondary_light,
+        width: wp("100%"),
+        height: hp("80%"),
+        // padding: 10
+    },
+    title: {
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.secondary_light,
+
+    },
     iconContainer: {
 
     },
     icon: {
         width: wp("9%"),
         height: hp("4%"),
+    },
+    map: {
+        width: wp("100%"),
+        height: hp("76%"),
     },
 
 });

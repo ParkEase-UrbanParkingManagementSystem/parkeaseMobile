@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, TextInput, FlatList, Text, StyleSheet } from 'react-native';
+import {View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {router} from "expo-router";
 
 interface ParkingLotSearchBoxProps {
     data: string[];
+    isModalVisible: boolean;
+    setIsModalVisible: (visible: boolean) => void;
 }
 
-const ParkingLotSearchBox: React.FC<ParkingLotSearchBoxProps> = ({ data }) => {
+const ParkingLotSearchBox: React.FC<ParkingLotSearchBoxProps> = ({ data, isModalVisible, setIsModalVisible }) => {
     const [query, setQuery] = useState<string>('');
     const [filteredData, setFilteredData] = useState<string[]>(data);
 
@@ -22,6 +25,11 @@ const ParkingLotSearchBox: React.FC<ParkingLotSearchBoxProps> = ({ data }) => {
             setFilteredData(data);
         }
     };
+    const handlePress = () => {{
+        router.push('/(routes)/parking-lot');
+        setIsModalVisible(false)
+    }
+    };
 
     return (
         <View style={styles.container}>
@@ -35,7 +43,9 @@ const ParkingLotSearchBox: React.FC<ParkingLotSearchBoxProps> = ({ data }) => {
                 data={filteredData}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    <Text style={styles.itemText}>{item}</Text>
+                    <TouchableOpacity onPress={handlePress}>
+                        <Text style={styles.itemText}>{item}</Text>
+                    </TouchableOpacity>
                 )}
             />
         </View>
