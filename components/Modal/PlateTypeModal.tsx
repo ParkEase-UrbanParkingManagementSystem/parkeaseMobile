@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, StyleSheet, Modal, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Modal, Text, TouchableOpacity, Button} from 'react-native';
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import { router } from "expo-router";
@@ -93,6 +93,12 @@ const PlateTypeModal: React.FC<PlateTypeModalProps> = ({ type, setType }) => {
                     <Text style={{fontFamily: "Nunito_400Regular", fontSize: 15,textAlign: "center", marginTop: 20}}>
                         Please select the example which matches the license plate type of your vehicle
                     </Text>
+                    <View>
+                        <Button
+                            title="Cancel"
+                            onPress={() => setIsModalVisible(false)}
+                        />
+                    </View>
                 </View>
             </Modal></>
     );

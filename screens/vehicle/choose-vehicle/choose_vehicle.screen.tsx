@@ -153,7 +153,7 @@ export default function ChooseVehicleScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.continueButtonContainer}
-                        onPress={() => router.push("/(routes)/change-vehicle")}
+                        onPress={() => router.push("/(routes)/home-page")}
                     >
                         <Text style={styles.continueText}>
                             continue

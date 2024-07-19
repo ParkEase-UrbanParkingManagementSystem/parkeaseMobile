@@ -6,6 +6,8 @@ import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {responsiveWidth} from "react-native-responsive-dimensions";
 
+import ParkingLotSearchBox from "@/components/SearchBox/ParkingLotSearchBox"
+
 export default function HomePageScreen() {
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
@@ -16,24 +18,31 @@ export default function HomePageScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+    const data = [
+        'Broadway Parking Hub',
+        'Empire State Parking',
+        'Central Park Garage',
+        'Hudson River Parking',
+        'Times Square Lot',
+        'Brooklyn Bridge Parking',
+        'SoHo Parking Plaza',
+        'Liberty Street Garage',
+    ];
 
     return (
         <LinearGradient
-            colors={[colors.white, colors.yellow_light]}
+            colors={[colors.primary, colors.primary]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
-                <View style={styles.title}>
-                    <Text>
-                        home page
-                    </Text>
-                </View>
                     <View style={styles.home_page_top}>
-
+                        <ParkingLotSearchBox data={data}/>
+                        <View style={styles.iconContainer}></View>
+                        <View style={styles.iconContainer}></View>
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button title="Go Back"
-                                color={"#000000"}
+                                color={colors.secondary_light}
                                 onPress={() => router.back()}
                         />
                     </View>
@@ -49,10 +58,6 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    title: {
-        position: "absolute",
-        top: 60,
-    },
     buttonContainer: {
         position: "absolute",
         bottom: 20,
@@ -63,6 +68,12 @@ export const styles = StyleSheet.create({
         width: responsiveWidth(50),
         height: responsiveWidth(50),
         borderStyle: "solid",
-    }
+    },
+    searchBox: {
+
+    },
+    iconContainer: {
+
+    },
 
 });

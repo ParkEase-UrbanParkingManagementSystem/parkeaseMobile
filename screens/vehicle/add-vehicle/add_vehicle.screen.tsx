@@ -87,7 +87,7 @@ export default function AddVehicleScreen() {
                     </Text>
                     <View style={styles.formContainer}>
                         <View style={{marginTop:15}}>
-                            {modalButton}
+                                {modalButton}
                                 <View style={styles.inputContainer}>
                                     <Image
                                         style={styles.feildIcon}
