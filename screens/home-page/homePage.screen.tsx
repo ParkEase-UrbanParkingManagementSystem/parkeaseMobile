@@ -11,6 +11,7 @@ import IOSMap from "@/components/Map/IOSMap";
 
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
 import React from "react";
+import {Marker} from "react-native-maps";
 
 export default function HomePageScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -26,7 +27,7 @@ export default function HomePageScreen() {
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
-            style={{flex:1}}
+            style={{flex:1, alignItems: "center", justifyContent: "center"}}
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.home_page_top}>
@@ -49,7 +50,7 @@ export default function HomePageScreen() {
                                 />
                             </TouchableOpacity>
                         </View>
-                    </View>
+                </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
@@ -207,14 +208,13 @@ export default function HomePageScreen() {
 
                     </View>
                 </View>
-
-                <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
-                            color={colors.secondary_light}
-                            onPress={() => router.back()}
-                    />
-                </View>
             </SafeAreaView>
+            <View style={styles.buttonContainer}>
+                <Button title="Go Back"
+                        color={colors.secondary_light}
+                        onPress={() => router.back()}
+                />
+            </View>
         </LinearGradient>
     )
 }
