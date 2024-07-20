@@ -3,6 +3,11 @@ import { View, TextInput, StyleSheet, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import colors from "@/constants/Colors";
 
 const INITIAL_REGION = {
     latitude: 6.9271,
@@ -91,43 +96,31 @@ export default function IOSMap() {
                     )}
                 </MapView>
             </View>
-            {/*<TextInput*/}
-            {/*    placeholder='Address'*/}
-            {/*    value={address}*/}
-            {/*    onChangeText={setAddress}*/}
-            {/*    style={styles.input}*/}
-            {/*/>*/}
-            {/*<Button title="Geocode Address" onPress={geocode} />*/}
-            {/*<Button title="Reverse Geocode Current Location" onPress={reverseGeocode} />*/}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     map: {
-        flex: 1,
+        // flex: 1,
         width: "100%",
         height: "100%",
+        padding: 10,
     },
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: 20,
+        height: "92%",
+        left: -3,
     },
     mapContainer: {
-        flex: 1,
+        // flex: 1,
         width: "100%",
-        height: "50%",
-        borderRadius: 20,
-        overflow: 'hidden',
+        height: "100%",
+        borderRadius: 15,
+        overflow: "hidden",
     },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        width: '80%',
-        padding: 10,
-    }
 });
