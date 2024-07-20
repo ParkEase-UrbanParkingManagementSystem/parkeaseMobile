@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import MapView, { Marker, Region } from 'react-native-maps';
 import colors from "@/constants/Colors";
 
 const INITIAL_REGION = {
@@ -26,6 +22,8 @@ interface LocationState {
 export default function IOSMap() {
     const [location, setLocation] = useState<LocationState | null>(null);
     const [address, setAddress] = useState<string>('');
+    const [region, setRegion] = useState<Region>(INITIAL_REGION);
+    const mapRef = useRef<MapView | null>(null);
 
     Location.setGoogleApiKey("AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg");
 
@@ -41,49 +39,58 @@ export default function IOSMap() {
             setLocation(currentLocation);
             console.log("Location:");
             console.log(currentLocation);
+            if (currentLocation) {
+                setRegion({
+                    latitude: currentLocation.coords.latitude,
+                    longitude: currentLocation.coords.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                });
+            }
         };
         getPermissions();
     }, []);
 
-    const geocode = async () => {
-        try {
-            const geocodedLocation = await Location.geocodeAsync(address);
-            console.log("Geocoded Address:");
-            console.log(geocodedLocation);
-        } catch (error) {
-            console.error("Error geocoding address:", error)
+    const centerMapOnLocation = () => {
+        if (location && mapRef.current) {
+            mapRef.current.animateToRegion({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
+            });
         }
     };
 
-    const reverseGeocode = async () => {
-        if (location) {
-            try {
-                const reverseGeocodedAddress = await Location.reverseGeocodeAsync({
-                    longitude: location.coords.longitude,
-                    latitude: location.coords.latitude
-                });
-                console.log("Reverse Geocoded:");
-                console.log(reverseGeocodedAddress);
-            } catch (error) {
-                console.error("Error reverse geocoding location:", error);
-            }
-        } else {
-            console.log("Location not available");
+    const zoomIn = () => {
+        if (mapRef.current) {
+            mapRef.current.animateToRegion({
+                ...region,
+                latitudeDelta: region.latitudeDelta / 2,
+                longitudeDelta: region.longitudeDelta / 2,
+            });
         }
     };
 
+    const zoomOut = () => {
+        if (mapRef.current) {
+            mapRef.current.animateToRegion({
+                ...region,
+                latitudeDelta: region.latitudeDelta * 2,
+                longitudeDelta: region.longitudeDelta * 2,
+            });
+        }
+    };
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View style={styles.mapContainer}>
                 <MapView
+                    ref={mapRef}
                     style={styles.map}
-                    region={location ? {
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    } : INITIAL_REGION}
+                    initialRegion={INITIAL_REGION}
+                    region={region}
+                    onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
                 >
                     {location && (
                         <Marker
@@ -95,6 +102,24 @@ export default function IOSMap() {
                         />
                     )}
                 </MapView>
+                <TouchableOpacity style={styles.centerButton} onPress={centerMapOnLocation}>
+                    <Image
+                        source={require('@/assets/images/location_target.png')}
+                        style={{width:25, height:25}}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.zoomButton} onPress={zoomOut}>
+                    <Image
+                        source={require('@/assets/images/zoomOut.png')}
+                        style={{width:20, height:20}}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.zoomButton, {bottom: 100}]} onPress={zoomIn}>
+                    <Image
+                        source={require('@/assets/images/zoomIn.png')}
+                        style={{width:25, height:25}}
+                    />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -102,13 +127,10 @@ export default function IOSMap() {
 
 const styles = StyleSheet.create({
     map: {
-        // flex: 1,
         width: "100%",
         height: "100%",
-        padding: 10,
     },
     container: {
-        // flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
@@ -117,10 +139,41 @@ const styles = StyleSheet.create({
         left: -3,
     },
     mapContainer: {
-        // flex: 1,
         width: "100%",
         height: "100%",
         borderRadius: 15,
         overflow: "hidden",
+    },
+    centerButton: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        width: 30,
+        height: 30,
+        borderRadius: 25,
+        backgroundColor: colors.primary_light,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    zoomButton: {
+        position: 'absolute',
+        bottom: 60,
+        right: 20,
+        width: 30,
+        height: 30,
+        borderRadius: 25,
+        backgroundColor: colors.primary_light,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
     },
 });

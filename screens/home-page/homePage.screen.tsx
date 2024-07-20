@@ -208,12 +208,12 @@ export default function HomePageScreen() {
                     </View>
                 </View>
 
-                {/*<View style={styles.buttonContainer}>*/}
-                {/*    <Button title="Go Back"*/}
-                {/*            color={colors.secondary_light}*/}
-                {/*            onPress={() => router.back()}*/}
-                {/*    />*/}
-                {/*</View>*/}
+                <View style={styles.buttonContainer}>
+                    <Button title="Go Back"
+                            color={colors.secondary_light}
+                            onPress={() => router.back()}
+                    />
+                </View>
             </SafeAreaView>
         </LinearGradient>
     )
@@ -251,9 +251,9 @@ export const styles = StyleSheet.create({
         // flex: 1,
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        borderStyle: "solid",
-        borderWidth: 0.5,
-        borderColor: colors.secondary_light,
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.secondary_light,
         width: wp("100%"),
         height: hp("61%"),
         position: "relative",
@@ -311,10 +311,10 @@ export const styles = StyleSheet.create({
         fontSize: 20,
     },
     home_page_bottom: {
-        borderStyle: "solid",
-        borderWidth: 0.5,
-        borderColor: colors.secondary_light,
-        margin: 5,
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.secondary_light,
+        // margin: 5,
         width: wp("100%"),
         marginLeft: "auto",
         marginRight: "auto",
