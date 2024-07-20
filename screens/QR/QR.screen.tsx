@@ -4,6 +4,8 @@ import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
+import QRCodeGenerator from '@/components/Qrcode/Qrcode'; // Adjust the path as necessary
+
 
 export default function QRScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -15,18 +17,19 @@ export default function QRScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+    // details for the Qr code
+    const userID = "12345";
+    const vehicleID = "67890";
+    const driverVehicleID = "65234";
+    const entryTime = new Date().toISOString();
 
     return (
         <LinearGradient
-            colors={[colors.white, colors.white]}
+            colors={[colors.secondary_light, colors.secondary_light]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
-                <View style={styles.title}>
-                    <Text>
-                        QRScreen
-                    </Text>
-                </View>
+                <QRCodeGenerator userID={userID} vehicleID={vehicleID} entryTime={entryTime} driverVehicleID={driverVehicleID}  />
                 <View style={styles.buttonContainer}>
                     <Button title="Go Back"
                             color={"#000000"}
@@ -44,10 +47,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-    },
-    title: {
-        position: "absolute",
-        top: 60,
     },
     buttonContainer: {
         position: "absolute",
