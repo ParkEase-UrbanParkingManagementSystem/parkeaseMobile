@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import { View, TextInput, StyleSheet, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
@@ -46,7 +46,7 @@ export default function IOSMap() {
             console.log("Geocoded Address:");
             console.log(geocodedLocation);
         } catch (error) {
-            console.error("Error geocoding address:", error);
+            console.error("Error geocoding address:", error)
         }
     };
 
@@ -70,27 +70,35 @@ export default function IOSMap() {
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
-            {location ? (
+            <View style={styles.mapContainer}>
                 <MapView
                     style={styles.map}
-                    region={{
+                    region={location ? {
                         latitude: location.coords.latitude,
                         longitude: location.coords.longitude,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421,
-                    }}
+                    } : INITIAL_REGION}
                 >
-                    <Marker
-                        coordinate={{
-                            latitude: location.coords.latitude,
-                            longitude: location.coords.longitude,
-                        }}
-                        title="You are here"
-                    />
+                    {location && (
+                        <Marker
+                            coordinate={{
+                                latitude: location.coords.latitude,
+                                longitude: location.coords.longitude,
+                            }}
+                            title="You are here"
+                        />
+                    )}
                 </MapView>
-            ) : (
-                <View style={styles.map} />
-            )}
+            </View>
+            {/*<TextInput*/}
+            {/*    placeholder='Address'*/}
+            {/*    value={address}*/}
+            {/*    onChangeText={setAddress}*/}
+            {/*    style={styles.input}*/}
+            {/*/>*/}
+            {/*<Button title="Geocode Address" onPress={geocode} />*/}
+            {/*<Button title="Reverse Geocode Current Location" onPress={reverseGeocode} />*/}
         </View>
     );
 }
@@ -99,7 +107,7 @@ const styles = StyleSheet.create({
     map: {
         flex: 1,
         width: "100%",
-        height: "50%", // Adjust height as needed
+        height: "100%",
     },
     container: {
         flex: 1,
@@ -107,4 +115,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    mapContainer: {
+        flex: 1,
+        width: "100%",
+        height: "50%",
+        borderRadius: 20,
+        overflow: 'hidden',
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 10,
+        width: '80%',
+        padding: 10,
+    }
 });

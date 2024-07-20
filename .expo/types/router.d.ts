@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { TextProps, GestureResponderEvent } from 'react-native';
 
 export namespace ExpoRouter {
-  type StaticRoutes = `/` | `/(routes)/add-vehicle` | `/(routes)/choose-vehicle` | `/(routes)/forgot-password` | `/(routes)/home-page` | `/(routes)/login` | `/(routes)/onboarding` | `/(routes)/parking-lot` | `/(routes)/profile` | `/(routes)/sign-up` | `/(routes)/verifyAccount` | `/(routes)/welcome-intro` | `/_sitemap` | `/add-vehicle` | `/choose-vehicle` | `/forgot-password` | `/home-page` | `/login` | `/onboarding` | `/parking-lot` | `/profile` | `/sign-up` | `/verifyAccount` | `/welcome-intro`;
+  type StaticRoutes = `/` | `/(routes)/QR` | `/(routes)/add-vehicle` | `/(routes)/choose-vehicle` | `/(routes)/forgot-password` | `/(routes)/home-page` | `/(routes)/login` | `/(routes)/onboarding` | `/(routes)/parking-lot` | `/(routes)/profile` | `/(routes)/sign-up` | `/(routes)/verifyAccount` | `/(routes)/welcome-intro` | `/QR` | `/_sitemap` | `/add-vehicle` | `/choose-vehicle` | `/forgot-password` | `/home-page` | `/login` | `/onboarding` | `/parking-lot` | `/profile` | `/sign-up` | `/verifyAccount` | `/welcome-intro`;
   type DynamicRoutes<T extends string> = never;
   type DynamicRouteTemplate = never;
 

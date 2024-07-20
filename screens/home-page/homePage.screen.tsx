@@ -21,6 +21,7 @@ export default function HomePageScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+    let plateNo = "CAQ-1628"
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
@@ -54,9 +55,25 @@ export default function HomePageScreen() {
                             Locate Parking Lots Near you
                         </Text>
                     </View>
-                    <View style={styles.map}>
+                    <View style={styles.mapContainer}>
                         <IOSMap/>
                     </View>
+                            <TouchableOpacity
+                                onPress={() => router.push("/(routes)/QR")}
+                                style={styles.currentVehicle}
+                            >
+                                <View style={styles.QRContainer}>
+                                    <Image
+                                        source={require('@/assets/images/QR_icon.png')}
+                                        style={[styles.icon, {marginRight: 20}]}
+                                    />
+                                </View>
+                                <View style={styles.plateNoContainer}>
+                                    <Text style={styles.plateNo}>
+                                        {plateNo}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
                 </View>
                     <View style={styles.buttonContainer}>
                         <Button title="Go Back"
@@ -100,7 +117,7 @@ export const styles = StyleSheet.create({
     home_page_mid: {
         // flex: 1,
         alignItems: "flex-start",
-        justifyContent: "flex-start",
+        justifyContent: "center",
         // borderStyle: "solid",
         // borderWidth: 0.5,
         // borderColor: colors.secondary_light,
@@ -121,9 +138,44 @@ export const styles = StyleSheet.create({
         width: wp("9%"),
         height: hp("4%"),
     },
-    map: {
-        width: wp("100%"),
-        height: hp("76%"),
+    mapContainer: {
+        width: wp("96%"),
+        height: hp("60%"),
+        margin: 10,
+    },
+    currentVehicle: {
+        display: "flex",
+        flexDirection: "row",
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.primary,
+        padding: 10,
+        maxWidth: "auto",
+        marginLeft: "auto",
+        marginRight: "auto",
+        bottom: 80,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 10,
+        backgroundColor: colors.secondary,
+        opacity: 0.8,
+        borderRadius: 10
+
+    },
+    QRContainer : {
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.primary,
+        width: 40
+    },
+    plateNoContainer: {
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.primary,
+    },
+    plateNo: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 20,
     },
 
 });
