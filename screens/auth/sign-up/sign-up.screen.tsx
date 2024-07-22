@@ -121,7 +121,7 @@ export default function SignUpScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.tertiary,"white"]}
+            colors={[colors.secondary_light, colors.primary_light]}
             style={{ flex: 1}}
             start={{ x: 0.5, y: 1 }}
             end={{x: 0.5, y: 0 }}

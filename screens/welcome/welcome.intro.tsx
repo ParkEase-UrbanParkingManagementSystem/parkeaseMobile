@@ -31,7 +31,7 @@ export default function WelcomeIntroScreen() {
     }
     const renderItem = ({ item }: { item: onboardingSwiperDataType }) => (
         <LinearGradient
-            colors={[colors.white, colors.white]}
+            colors={[colors.secondary_light, colors.primary_light]}
             style={{ flex: 1, paddingHorizontal: 16 }}
             start={{ x: 0, y: 0 }}
             end={{x: 1 , y: 1 }}

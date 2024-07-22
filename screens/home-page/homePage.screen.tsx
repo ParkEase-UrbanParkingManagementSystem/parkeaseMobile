@@ -92,7 +92,7 @@ export default function HomePageScreen() {
                             <View style={styles.imageContainer}>
                                 <Image
                                     style={styles.image}
-                                    source={require("@/assets/ParkingLots/nugegodaSM.jpg")}
+                                    source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}
                                 />
                                 <Text style={[styles.status, { color: "red" }]}>
                                     Closed

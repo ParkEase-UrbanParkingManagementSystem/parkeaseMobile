@@ -21,7 +21,7 @@ export default function ChooseVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.white]}
+            colors={[colors.secondary_light, colors.primary_light]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
