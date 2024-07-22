@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button} from "react-native";
+import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,21 +18,58 @@ export default function parkingLotScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.white, colors.white]}
+            colors={[colors.secondary_light, colors.white]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
-                <View style={styles.title}>
-                    <Text>
-                        parkingLotScreen
-                    </Text>
+                <View style={styles.topContainer}>
+                    {/*<View style={styles.ScrollViewConatiner}>*/}
+                        <ScrollView horizontal style={styles.imageScrollView}>
+                            <View style={styles.imageContainer}>
+
+                            </View>
+                        </ScrollView>
+                    {/*</View>*/}
+                    <View style={styles.name}>
+
+                    </View>
+                    <View style={styles.des}>
+
+                    </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
-                            color={"#000000"}
-                            onPress={() => router.back()}
+                <View style={styles.MidContainer}>
+                    <View style={styles.capacities}>
+                        <View style={styles.cap}>
+                            <Image/>
+                            <Text></Text>
+                        </View>
+                    </View>
+                    <View style={styles.reviews}>
+                        <ScrollView style={styles.reviewsScrollView}>
+                            <View style={styles.review}>
+                                {/*<Text></Text> name and data*/}
+                                {/*<Text></Text> review*/}
+                                {/*<View></View> stars*/}
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+                <View style={styles.BottomContainer}>
+                    <Button
+                        title="Back to Home"
+                        onPress={() => router.back()}
+                    />
+                    <Button
+                        title="Navigate"
+                        // onPress={() => router.back()}
                     />
                 </View>
+                {/*<View style={styles.buttonContainer}>*/}
+                {/*    <Button title="Go Back"*/}
+                {/*            color={"#000000"}*/}
+                {/*            onPress={() => router.back()}*/}
+                {/*    />*/}
+                {/*</View>*/}
             </SafeAreaView>
         </LinearGradient>
     )
@@ -45,12 +82,44 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    title: {
-        position: "absolute",
-        top: 60,
-    },
     buttonContainer: {
         position: "absolute",
         bottom: 30,
+    },
+    topContainer: {
+
+    },
+    imageScrollView: {
+
+    },
+    imageContainer: {
+
+    },
+    name: {
+
+    },
+    des: {
+
+    },
+    MidContainer: {
+
+    },
+    capacities: {
+
+    },
+    cap: {
+
+    },
+    reviews: {
+
+    },
+    reviewsScrollView: {
+
+    },
+    review: {
+
+    },
+    BottomContainer: {
+
     },
 });
