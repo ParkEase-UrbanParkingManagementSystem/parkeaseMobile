@@ -7,6 +7,7 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React from "react";
+import StarRating from '@/components/rating/StarRating';
 
 export default function parkingLotScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -18,10 +19,59 @@ export default function parkingLotScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+    // function to format date
+    const formatDate = (date: Date): string => {
+        const day = date.getDate();
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
 
+        return `${day} ${month} ${year}`;
+    };
+
+    interface review {
+        name: string;
+        rating: number;
+        text: string;
+        date: Date;
+    }
+    // hard coded data for reviews
+    let reviews: review[] = [
+        {
+            name: "Saman Rathnayake",
+            rating: 2,
+            text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            date: new Date('2024-07-20'),
+
+        },
+        {
+            name: "Chethiya Wanigarathne",
+            rating: 3,
+            text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            date: new Date('2024-04-12'),
+
+        },
+        {
+            name: "Inuka Weerasekara",
+            rating: 4,
+            text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            date: new Date('2024-04-12'),
+
+        },
+        {
+            name: "Nipul Vithanage",
+            rating: 5,
+            text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley",
+            date: new Date('2024-04-12'),
+
+        },
+    ]
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.primary_light ]}
+            colors={[colors.secondary_light, colors.secondary_light ]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
@@ -104,25 +154,30 @@ export default function parkingLotScreen() {
                             <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
                         </View>
                     </View>
-                    <View style={styles.reviews}>
-                        <ScrollView style={styles.reviewsScrollView}>
-                            <View style={styles.review}>
-                                {/*<Text></Text> name and data*/}
-                                {/*<Text></Text> review*/}
-                                {/*<View></View> stars*/}
+                    <ScrollView style={styles.reviewsScrollView}>
+                        {reviews.map((review, index) => (
+                            <View key={index} style={styles.review}>
+                                <View style={styles.header}>
+                                    <Text style={{ fontFamily: "Nunito_700Bold" }}>{review.name}</Text>
+                                    <Text style={{ fontFamily: "Raleway_700Bold" }}>{formatDate(review.date)}</Text>
+                                </View>
+                                <View style={styles.body}>
+                                    <Text style={{ fontFamily: "Nunito_400Regular", marginBottom: 5}}>{review.text}</Text>
+                                    <StarRating rating={review.rating} />
+                                </View>
                             </View>
-                        </ScrollView>
-                    </View>
+                        ))}
+                    </ScrollView>
                 </View>
                 <View style={styles.BottomContainer}>
-                    {/*<Button*/}
-                    {/*    title="Back to Home"*/}
-                    {/*    onPress={() => router.back()}*/}
-                    {/*/>*/}
-                    {/*<Button*/}
-                    {/*    title="Navigate"*/}
-                    {/*    // onPress={() => router.back()}*/}
-                    {/*/>*/}
+                    <Button
+                        title="Back to Home"
+                        onPress={() => router.back()}
+                    />
+                    <Button
+                        title="Navigate"
+                        // onPress={() => router.back()}
+                    />
                 </View>
                 {/*<View style={styles.buttonContainer}>*/}
                 {/*    <Button title="Go Back"*/}
@@ -187,8 +242,8 @@ export const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: colors.primary,
 
-        marginTop: 150,
-        gap: 0
+        marginTop: 380,
+        gap: 10
     },
     capacities: {
         // borderStyle: "solid",
@@ -209,22 +264,47 @@ export const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: wp("1%"),
 
-        borderRightWidth: 1,
-        borderRightColor: "black",
+        // borderRightWidth: 1,
+        // borderRightColor: "gray",
 
     },
     vehicleIcon: {
-        width: 45,
-        height: 45
-    },
-    reviews: {
-
+        width: 40,
+        height: 40
     },
     reviewsScrollView: {
-
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: colors.primary,
+        padding: 10,
+        height: 250,
+        backgroundColor: colors.primary_light,
+        margin: 2,
+        borderRadius: 5,
     },
     review: {
-
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: colors.primary,
+        marginBottom: 8,
+        padding: 5,
+        backgroundColor: colors.white,
+        borderRadius: 10,
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+    header: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingBottom: 5,
+        marginLeft: 8
+    },
+    body: {
+        paddingHorizontal: 10,
     },
     BottomContainer: {
 
