@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import React from "react";
 
 export default function parkingLotScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -53,8 +54,54 @@ export default function parkingLotScreen() {
                 <View style={styles.MidContainer}>
                     <View style={styles.capacities}>
                         <View style={styles.cap}>
-                            <Image/>
-                            <Text></Text>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/bicycle_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
+                        </View>
+                        <View style={styles.cap}>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/bike_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
+                        </View>
+                        <View style={styles.cap}>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/bus_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
+                        </View>
+                    </View>
+                    <View style={styles.capacities}>
+                        <View style={styles.cap}>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/car_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
+                        </View>
+                        <View style={styles.cap}>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/lorry_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
+                        </View>
+                        <View style={styles.cap}>
+                            <Image
+                                style={styles.vehicleIcon}
+                                source={require("@/assets/images/tuktuk_side.png")}
+                            />
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "green"}}> : 200</Text>
+                            <Text style={{fontFamily: "Raleway_700Bold", fontSize: 18, color: "black"}}>/250</Text>
                         </View>
                     </View>
                     <View style={styles.reviews}>
@@ -68,14 +115,14 @@ export default function parkingLotScreen() {
                     </View>
                 </View>
                 <View style={styles.BottomContainer}>
-                    <Button
-                        title="Back to Home"
-                        onPress={() => router.back()}
-                    />
-                    <Button
-                        title="Navigate"
-                        // onPress={() => router.back()}
-                    />
+                    {/*<Button*/}
+                    {/*    title="Back to Home"*/}
+                    {/*    onPress={() => router.back()}*/}
+                    {/*/>*/}
+                    {/*<Button*/}
+                    {/*    title="Navigate"*/}
+                    {/*    // onPress={() => router.back()}*/}
+                    {/*/>*/}
                 </View>
                 {/*<View style={styles.buttonContainer}>*/}
                 {/*    <Button title="Go Back"*/}
@@ -110,9 +157,9 @@ export const styles = StyleSheet.create({
         top: 55,
     },
     imageScrollView: {
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: colors.primary,
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.primary,
         margin: 5,
         borderRadius: 10,
     },
@@ -130,13 +177,45 @@ export const styles = StyleSheet.create({
     des: {
     },
     MidContainer: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "center",
 
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.primary,
+
+        marginTop: 150,
+        gap: 0
     },
     capacities: {
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.primary,
 
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: wp("100%"),
     },
     cap: {
+        display: "flex",
+        flexDirection: "row",
+        maxWidth: "auto",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: wp("1%"),
 
+        borderRightWidth: 1,
+        borderRightColor: "black",
+
+    },
+    vehicleIcon: {
+        width: 45,
+        height: 45
     },
     reviews: {
 
