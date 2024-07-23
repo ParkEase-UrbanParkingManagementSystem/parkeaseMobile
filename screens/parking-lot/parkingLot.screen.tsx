@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
+import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Dimensions, ScrollView} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,8 +6,9 @@ import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
-import React from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import StarRating from '@/components/rating/StarRating';
+import AutoScroller from '@/components/ScrollView/AutoScroller';
 
 export default function parkingLotScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -76,22 +77,24 @@ export default function parkingLotScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.topContainer}>
-                    {/*<View style={styles.ScrollViewConatiner}>*/}
-                        <ScrollView horizontal style={styles.imageScrollView}>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={styles.parkingLotImage}
-                                    source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}
-                                />
-                            </View>
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={styles.parkingLotImage}
-                                    source={require("@/assets/ParkingLots/nugegodaSM_2.jpg")}
-                                />
-                            </View>
-                        </ScrollView>
-                    {/*</View>*/}
+                        {/*<ScrollView horizontal style={styles.imageScrollView}>*/}
+                        {/*    <View style={styles.imageContainer}>*/}
+                        {/*        <Image*/}
+                        {/*            style={styles.parkingLotImage}*/}
+                        {/*            source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}*/}
+                        {/*        />*/}
+                        {/*    </View>*/}
+                        {/*    <View style={styles.imageContainer}>*/}
+                        {/*        <Image*/}
+                        {/*            style={styles.parkingLotImage}*/}
+                        {/*            source={require("@/assets/ParkingLots/nugegodaSM_2.jpg")}*/}
+                        {/*        />*/}
+                        {/*    </View>*/}
+                        {/*</ScrollView>*/}
+                    <AutoScroller/>
+                    <View style={styles.status}>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 12, color: "red"}}>Closed</Text>
+                    </View>
                     <View style={styles.name}>
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 25}}>Nugegoda Super Market</Text>
                     </View>
@@ -170,21 +173,19 @@ export default function parkingLotScreen() {
                     </ScrollView>
                 </View>
                 <View style={styles.BottomContainer}>
-                    <Button
-                        title="Back to Home"
+                    <TouchableOpacity
                         onPress={() => router.back()}
-                    />
-                    <Button
-                        title="Navigate"
+                        style={{backgroundColor: colors.secondary, padding:5, borderRadius: 5}}
+                    >
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14}}>Back to Home</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         // onPress={() => router.back()}
-                    />
+                        style={{backgroundColor: colors.primary, padding:5, borderRadius: 5}}
+                    >
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14, color: colors.white}}>Navigate</Text>
+                    </TouchableOpacity>
                 </View>
-                {/*<View style={styles.buttonContainer}>*/}
-                {/*    <Button title="Go Back"*/}
-                {/*            color={"#000000"}*/}
-                {/*            onPress={() => router.back()}*/}
-                {/*    />*/}
-                {/*</View>*/}
             </SafeAreaView>
         </LinearGradient>
     )
@@ -211,20 +212,8 @@ export const styles = StyleSheet.create({
         position: "absolute",
         top: 55,
     },
-    imageScrollView: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
-        // borderColor: colors.primary,
-        margin: 5,
-        borderRadius: 10,
-    },
-    imageContainer: {
+    status: {
 
-    },
-    parkingLotImage: {
-        // width: "100%",
-        width: wp("100%"),
-        height: wp("100%"),
     },
     name: {
 
@@ -307,6 +296,16 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     BottomContainer: {
-
+        display: "flex",
+        flexDirection: "row",
+        position: "absolute",
+        bottom: 40,
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.primary,
+        width: wp("100%"),
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: wp("15%"),
     },
 });
