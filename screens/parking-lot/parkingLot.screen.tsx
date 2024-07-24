@@ -196,7 +196,7 @@ export const styles = StyleSheet.create({
     firstContainer: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "flex-start",
     },
     buttonContainer: {
         position: "absolute",
@@ -231,7 +231,7 @@ export const styles = StyleSheet.create({
         // borderWidth: 1,
         // borderColor: colors.primary,
 
-        marginTop: 380,
+        marginTop: 430,
         gap: 10
     },
     capacities: {

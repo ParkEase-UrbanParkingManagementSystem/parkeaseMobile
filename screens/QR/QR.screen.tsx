@@ -31,7 +31,7 @@ export default function QRScreen() {
             <SafeAreaView style={styles.firstContainer}>
                 <QRCodeGenerator userID={userID} vehicleID={vehicleID} entryTime={entryTime} driverVehicleID={driverVehicleID}  />
                 <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
+                    <Button title="Done"
                             color={"#000000"}
                             onPress={() => router.back()}
                     />
