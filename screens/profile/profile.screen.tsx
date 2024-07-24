@@ -1,10 +1,11 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button} from "react-native";
+import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import React from "react";
 
 export default function profileScreen() {
     let [fontsLoaded, fontError] = useFonts({
@@ -73,13 +74,92 @@ export default function profileScreen() {
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Activity</Text>
                     </TouchableOpacity>
                 </View>
-
-                <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
-                            color={"#000000"}
-                            onPress={() => router.back()}
-                    />
-                </View>
+                <ScrollView style={styles.scrollView}>
+                    <TouchableOpacity style={styles.main}>
+                        <View style={styles.left}>
+                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Top-up your Park-Points</Text>
+                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>On the other hand, we denounce with righteous</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <Image
+                                source={require("@/assets/images/parkPoints.png")}
+                                style={{width: 35, height: 35}}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.main}>
+                        <View style={styles.left}>
+                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Try ParkEase Pro</Text>
+                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Unlock huge discounts on parks</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <Image
+                                source={require("@/assets/images/premium.png")}
+                                style={{width: 35, height: 35}}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.main}>
+                        <View style={styles.left}>
+                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Safety checkup</Text>
+                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Boost your safety profile by turning on additional features</Text>
+                        </View>
+                        <View style={styles.right}>
+                            <Image
+                                source={require("@/assets/images/premium.png")}
+                                style={{width: 35, height: 35}}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/settingsIcon.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Acuount Settings</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/message.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Messages</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/business.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Lets talk business</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/logOutIcon.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Log Out</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/deleteIcon.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Delete account</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/PandP.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Privacy and Policy</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+                <TouchableOpacity
+                    onPress={() => router.back()}
+                    style={{backgroundColor: colors.secondary, padding:5, borderRadius: 5}}
+                >
+                    <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14}}>Back to Home</Text>
+                </TouchableOpacity>
             </SafeAreaView>
         </LinearGradient>
     )
@@ -135,6 +215,7 @@ export const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         gap: 35,
+        marginBottom: 10
     },
     button: {
         display: "flex",
@@ -149,11 +230,52 @@ export const styles = StyleSheet.create({
         padding: 10,
         gap: 10,
         width: wp("25%"),
-        backgroundColor: "#efefef",
+        backgroundColor: "#BCBDBF",
     },
     quickAccessIcon: {
         width: 35,
         height: 30,
+    },
+    scrollView: {
+        // borderStyle: "solid",
+        // borderColor: "#2467EC",
+        // borderWidth: 1,
+
+        // flex: 1,
+        width: wp("99%"),
+
+    },
+    main: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: "#BCBDBF",
+        padding: 10,
+        margin: 5,
+        borderRadius: 7,
+    },
+    left: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "center",
+    },
+    right: {
+
+    },
+    sub: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        // backgroundColor: "#BCBDBF",
+        padding: 10,
+        // margin: 5,
+        borderRadius: 7,
+        gap: 20,
+        marginLeft: 20,
+
     },
     buttonContainer: {
         position: "absolute",
