@@ -70,7 +70,7 @@ export default function AddVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.primary_light]}
+            colors={[colors.secondary_light, colors.secondary_light ]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>

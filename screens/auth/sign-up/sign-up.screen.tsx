@@ -6,7 +6,8 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    ActivityIndicator, SafeAreaView,
+    ActivityIndicator,
+    SafeAreaView,
 } from "react-native";
 import {
     AntDesign,
@@ -35,19 +36,20 @@ import { SERVER_URI } from "@/utils/uri";
 import { Toast } from "react-native-toast-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import colors from "../../../constants/Colors"
-import {white} from "colorette";
-import {color} from "ansi-fragments";
+import colors from "../../../constants/Colors";
 
 export default function SignUpScreen() {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
     const [userInfo, setUserInfo] = useState({
-        name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
+        nic: "",
+        contact_no: ""
     });
-    const [required, setRequired] = useState("");
+    const [required, setRequired] = useState(false);
     const [error, setError] = useState({
         password: "",
     });
@@ -97,9 +99,11 @@ export default function SignUpScreen() {
             setUserInfo({ ...userInfo, password: value });
         }
     };
+
     const handleSignUp = async () => {
         // router.push("(routes)/verifyAccount")
-    }
+    };
+
     // const handleSignUp = async () => {
     //     await axios
     //         .post(`${SERVER_URI}/login`, {
@@ -122,9 +126,9 @@ export default function SignUpScreen() {
     return (
         <LinearGradient
             colors={[colors.secondary_light, colors.primary_light]}
-            style={{ flex: 1}}
+            style={{ flex: 1 }}
             start={{ x: 0.5, y: 1 }}
-            end={{x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 0 }}
         >
             <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView>
@@ -139,80 +143,37 @@ export default function SignUpScreen() {
                         Create an account and start parking in no time
                     </Text>
                     <View style={styles.inputContainer}>
-    {/*name field*/}
-                        <View style={{marginTop:15}}>
-                            <TextInput
-                                style={styles.input}
-                                keyboardType="default"
-                                value={userInfo.name}
-                                placeholder="User Name"
-                                onChangeText={(value) =>
-                                    setUserInfo({ ...userInfo, name: value })
-                                }
-                            />
-                            <AntDesign
-                                style={{ position: "absolute", left: 26, top: 17.8 }}
-                                name="user"
-                                size={20}
-                                color={"#A1A1A1"}
-                            />
-                            {required && (
-                                <View style={styles.errorContainer}>
-                                    <Entypo name="cross" size={18} color={"red"} />
-                                </View>
-                            )}
-    {/*email field*/}
-                        <View style={{marginTop:15}}>
-                            <TextInput
-                                style={styles.input}
-                                keyboardType="email-address"
-                                value={userInfo.email}
-                                placeholder="Email Address"
-                                onChangeText={(value) =>
-                                    setUserInfo({ ...userInfo, email: value })
-                                }
-                            />
-                            <Fontisto
-                                style={{ position: "absolute", left: 26, top: 17.8 }}
-                                name="email"
-                                size={20}
-                                color={"#A1A1A1"}
-                            />
-                            {required && (
-                                <View style={styles.errorContainer}>
-                                    <Entypo name="cross" size={18} color={"red"} />
-                                </View>
-                            )}
-    {/*contact no field*/}
-                            <View style={{marginTop:15}}>
+                        <ScrollView>
+                            {/* email field */}
+                            <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
-                                    keyboardType="phone-pad"
+                                    keyboardType="email-address"
                                     value={userInfo.email}
-                                    placeholder="Phone No"
+                                    placeholder="Email Address"
                                     onChangeText={(value) =>
                                         setUserInfo({ ...userInfo, email: value })
                                     }
                                 />
-                                <Fontisto
-                                    style={{ position: "absolute", left: 26, top: 17.8 }}
-                                    name="phone"
-                                    size={20}
-                                    color={"#A1A1A1"}
-                                />
+                                {/*<Fontisto*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="email"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
                                     </View>
                                 )}
                             </View>
-        {/*password field*/}
+                            {/* password field */}
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
-                                    defaultValue=""
+                                    value={userInfo.password}
                                     placeholder="Password"
                                     onChangeText={handlePasswordValidation}
                                 />
@@ -230,12 +191,12 @@ export default function SignUpScreen() {
                                         <Ionicons name="eye-outline" size={23} color={"#747474"} />
                                     )}
                                 </TouchableOpacity>
-                                <SimpleLineIcons
-                                    style={styles.icon2}
-                                    name="lock"
-                                    size={20}
-                                    color={"#A1A1A1"}
-                                />
+                                {/*<SimpleLineIcons*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="lock"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
                             </View>
                             {error.password && (
                                 <View style={[styles.errorContainer, { top: 145 }]}>
@@ -245,73 +206,164 @@ export default function SignUpScreen() {
                                     </Text>
                                 </View>
                             )}
-
-                            <TouchableOpacity
-                                style={{
-                                    padding: 16,
-                                    borderRadius: 8,
-                                    marginHorizontal: 16,
-                                    backgroundColor: colors.primary,
-                                    marginTop: 15,
-                                }}
-                                onPress={handleSignUp}
-                            >
-                                {buttonSpinner ? (
-                                    <ActivityIndicator size="small" color={"white"} />
-                                ) : (
-                                    <Text
-                                        style={{
-                                            color: "white",
-                                            textAlign: "center",
-                                            fontSize: 16,
-                                            fontFamily: "Raleway_700Bold",
-                                        }}
-                                    >
-                                        Sign Up
-                                    </Text>
-                                )}
-                            </TouchableOpacity>
-
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    marginTop: 20,
-                                    gap: 10,
-                                }}
-                            >
-                                <TouchableOpacity>
-                                    <FontAwesome name="google" size={30} />
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <FontAwesome name="github" size={30} />
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={styles.signupRedirect}>
-                                <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>
-                                    Already have an account?
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => router.push("/(routes)/login")}
-                                >
-                                    <Text
-                                        style={{
-                                            fontSize: 18,
-                                            fontFamily: "Raleway_600SemiBold",
-                                            color: "#2467EC",
-                                            marginLeft: 5,
-                                        }}
-                                    >
-                                        Login
-                                    </Text>
-                                        </TouchableOpacity>
+                            {/* first name field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={userInfo.first_name}
+                                    placeholder="First Name"
+                                    onChangeText={(value) =>
+                                        setUserInfo({ ...userInfo, first_name: value })
+                                    }
+                                />
+                                {/*<AntDesign*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="user"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
                                     </View>
-                                </View>
+                                )}
                             </View>
+                            {/* last name field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={userInfo.last_name}
+                                    placeholder="Last Name"
+                                    onChangeText={(value) =>
+                                        setUserInfo({ ...userInfo, last_name: value })
+                                    }
+                                />
+                                {/*<AntDesign*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="user"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* nic field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={userInfo.nic}
+                                    placeholder="NIC Number"
+                                    onChangeText={(value) =>
+                                        setUserInfo({ ...userInfo, nic: value })
+                                    }
+                                />
+                                {/*<Fontisto*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="phone"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* contact no field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="phone-pad"
+                                    value={userInfo.contact_no}
+                                    placeholder="Contact No"
+                                    onChangeText={(value) =>
+                                        setUserInfo({ ...userInfo, contact_no: value })
+                                    }
+                                />
+                                {/*<Fontisto*/}
+                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
+                                {/*    name="phone"*/}
+                                {/*    size={20}*/}
+                                {/*    color={"#A1A1A1"}*/}
+                                {/*/>*/}
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                        </ScrollView>
+
+                        <TouchableOpacity
+                            style={{
+                                padding: 16,
+                                borderRadius: 8,
+                                marginHorizontal: 16,
+                                backgroundColor: colors.primary,
+                                marginTop: 15,
+                            }}
+                            onPress={handleSignUp}
+                        >
+                            {buttonSpinner ? (
+                                <ActivityIndicator size="small" color={"white"} />
+                            ) : (
+                                <Text
+                                    style={{
+                                        color: "white",
+                                        textAlign: "center",
+                                        fontSize: 16,
+                                        fontFamily: "Raleway_700Bold",
+                                    }}
+                                >
+                                    Sign Up
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                marginTop: 20,
+                                gap: 10,
+                            }}
+                        >
+                            <TouchableOpacity>
+                                <FontAwesome name="google" size={30} />
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <FontAwesome name="github" size={30} />
+                            </TouchableOpacity>
                         </View>
-                    </ScrollView>
+
+                        <View style={styles.signupRedirect}>
+                            <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>
+                                Already have an account?
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => router.push("/(routes)/login")}
+                            >
+                                <Text
+                                    style={{
+                                        fontSize: 18,
+                                        fontFamily: "Raleway_600SemiBold",
+                                        color: "#2467EC",
+                                        marginLeft: 5,
+                                    }}
+                                >
+                                    Login
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ScrollView>
             </SafeAreaView>
         </LinearGradient>
     );
@@ -323,7 +375,7 @@ const styles = StyleSheet.create({
         height: 250,
         alignSelf: "center",
         marginTop: 25,
-        marginBottom: 25
+        marginBottom: 25,
     },
     welcomeText: {
         textAlign: "center",
@@ -338,13 +390,13 @@ const styles = StyleSheet.create({
     inputContainer: {
         marginHorizontal: 16,
         marginTop: 30,
-        rowGap: 30,
+        rowGap: 0,
     },
     input: {
         height: 55,
         marginHorizontal: 25,
         borderRadius: 8,
-        paddingLeft: 35,
+        paddingLeft: 40,
         fontSize: 16,
         backgroundColor: "white",
         color: "#A1A1A1",
@@ -360,12 +412,6 @@ const styles = StyleSheet.create({
         top: 17.8,
         marginTop: -2,
     },
-    forgotSection: {
-        marginHorizontal: 16,
-        textAlign: "right",
-        fontSize: 16,
-        marginTop: 10,
-    },
     signupRedirect: {
         flexDirection: "row",
         marginHorizontal: 16,
@@ -380,6 +426,4 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 60,
     },
-
-
 });
