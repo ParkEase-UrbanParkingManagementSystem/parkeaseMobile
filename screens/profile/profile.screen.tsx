@@ -55,7 +55,7 @@ export default function profileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        // onPress={() => router.push("/(routes)/")}
+                        onPress={() => router.push("/(routes)/payment")}
                     >
                         <Image
                             style={styles.quickAccessIcon}
@@ -65,7 +65,7 @@ export default function profileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        // onPress={() => router.push("/(routes)/")}
+                        // onPress={() => router.push("/(routes)/payment")}
                     >
                         <Image
                             style={styles.quickAccessIcon}
