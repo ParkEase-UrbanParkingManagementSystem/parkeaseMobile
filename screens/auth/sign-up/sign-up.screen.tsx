@@ -31,6 +31,8 @@ import {
 } from "@expo-google-fonts/nunito";
 import { useState } from "react";
 import { router } from "expo-router";
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import axios from "axios";
 import { SERVER_URI } from "@/utils/uri";
 import { Toast } from "react-native-toast-notifications";
@@ -41,18 +43,23 @@ import colors from "../../../constants/Colors";
 export default function SignUpScreen() {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-        nic: "",
-        contact_no: ""
-    });
     const [required, setRequired] = useState(false);
     const [error, setError] = useState({
         password: "",
     });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [nic, setNic] = useState('');
+    const [contact, setContact] = useState('');
+    const [addressNo, setAddressNo] = useState('');
+    const [street1, setStreet1] = useState('');
+    const [street2, setStreet2] = useState('');
+    const [city, setCity] = useState('');
+    const [district, setDistrict] = useState('');
+    const [loading, setLoading] = useState(false);
+
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_600SemiBold,
@@ -78,60 +85,81 @@ export default function SignUpScreen() {
                 ...error,
                 password: "Write at least one special character",
             });
-            setUserInfo({ ...userInfo, password: "" });
+            setPassword("" );
         } else if (!passwordOneNumber.test(password)) {
             setError({
                 ...error,
                 password: "Write at least one number",
             });
-            setUserInfo({ ...userInfo, password: "" });
+            setPassword("" );
         } else if (!passwordSixValue.test(password)) {
             setError({
                 ...error,
                 password: "Write at least 6 characters",
             });
-            setUserInfo({ ...userInfo, password: "" });
+            setPassword("" );
         } else {
             setError({
                 ...error,
                 password: "",
             });
-            setUserInfo({ ...userInfo, password: value });
+            setPassword(value );
         }
     };
 
     const handleSignUp = async () => {
-        // router.push("(routes)/verifyAccount")
-    };
+        setLoading(true);
+        try {
+            const body = {
+                email,
+                password,
+                fname,
+                lname,
+                nic,
+                contact,
+                addressNo,
+                street1,
+                street2,
+                city,
+                district,
+            };
 
-    // const handleSignUp = async () => {
-    //     await axios
-    //         .post(`${SERVER_URI}/login`, {
-    //             email: userInfo.email,
-    //             password: userInfo.password,
-    //         })
-    //         .then(async (res) => {
-    //             await AsyncStorage.setItem("access_token", res.data.accessToken);
-    //             await AsyncStorage.setItem("refresh_token", res.data.refreshToken);
-    //             router.push("/(tabs)");
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             Toast.show("Email or password is not correct!", {
-    //                 type: "danger",
-    //             });
-    //         });
-    // };
+            const response = await fetch(`http://localhost:5001/auth/registerDriver`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
+
+            if (response.ok) {
+                alert('Registration successful. Please log in.');
+                router.push('/login'); // Navigate to the login screen
+            } else {
+                alert('Registration failed. Please try again.');
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(error.message);
+                alert('An error occurred: ' + error.message);
+            } else {
+                console.error('Unexpected error:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.primary_light]}
+            colors={[colors.primary_light, colors.primary_light]}
             style={{ flex: 1 }}
             start={{ x: 0.5, y: 1 }}
             end={{ x: 0.5, y: 0 }}
         >
             <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView>
+                <View>
                     <Image
                         style={styles.signInImage}
                         source={require("@/assets/sign-in/signin.webp")}
@@ -143,24 +171,19 @@ export default function SignUpScreen() {
                         Create an account and start parking in no time
                     </Text>
                     <View style={styles.inputContainer}>
-                        <ScrollView>
+                        <ScrollView contentContainerStyle={{}} style={{ height: hp("32%")}}>
+                            <Text style={{fontFamily:"Nunito_700Bold", fontSize: 15, marginHorizontal:25}}>Personal Details</Text>
                             {/* email field */}
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="email-address"
-                                    value={userInfo.email}
+                                    value={email}
                                     placeholder="Email Address"
                                     onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, email: value })
+                                        setEmail(value)
                                     }
                                 />
-                                {/*<Fontisto*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="email"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
@@ -173,7 +196,7 @@ export default function SignUpScreen() {
                                     style={styles.input}
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
-                                    value={userInfo.password}
+                                    value={password}
                                     placeholder="Password"
                                     onChangeText={handlePasswordValidation}
                                 />
@@ -182,21 +205,11 @@ export default function SignUpScreen() {
                                     onPress={() => setPasswordVisible(!isPasswordVisible)}
                                 >
                                     {isPasswordVisible ? (
-                                        <Ionicons
-                                            name="eye-off-outline"
-                                            size={23}
-                                            color={"#747474"}
-                                        />
+                                        <Ionicons name="eye-off-outline" size={23} color={"#747474"} />
                                     ) : (
                                         <Ionicons name="eye-outline" size={23} color={"#747474"} />
                                     )}
                                 </TouchableOpacity>
-                                {/*<SimpleLineIcons*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="lock"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
                             </View>
                             {error.password && (
                                 <View style={[styles.errorContainer, { top: 145 }]}>
@@ -211,18 +224,12 @@ export default function SignUpScreen() {
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="default"
-                                    value={userInfo.first_name}
+                                    value={fname}
                                     placeholder="First Name"
                                     onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, first_name: value })
+                                        setFname(value)
                                     }
                                 />
-                                {/*<AntDesign*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="user"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
@@ -234,18 +241,12 @@ export default function SignUpScreen() {
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="default"
-                                    value={userInfo.last_name}
+                                    value={lname}
                                     placeholder="Last Name"
                                     onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, last_name: value })
+                                        setLname(value)
                                     }
                                 />
-                                {/*<AntDesign*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="user"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
@@ -257,18 +258,12 @@ export default function SignUpScreen() {
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="default"
-                                    value={userInfo.nic}
+                                    value={nic}
                                     placeholder="NIC Number"
                                     onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, nic: value })
+                                        setNic(value)
                                     }
                                 />
-                                {/*<Fontisto*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="phone"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
@@ -280,18 +275,100 @@ export default function SignUpScreen() {
                                 <TextInput
                                     style={styles.input}
                                     keyboardType="phone-pad"
-                                    value={userInfo.contact_no}
+                                    value={contact}
                                     placeholder="Contact No"
                                     onChangeText={(value) =>
-                                        setUserInfo({ ...userInfo, contact_no: value })
+                                        setContact(value)
                                     }
                                 />
-                                {/*<Fontisto*/}
-                                {/*    style={{ position: "absolute", left: 35, top: 17.8 }}*/}
-                                {/*    name="phone"*/}
-                                {/*    size={20}*/}
-                                {/*    color={"#A1A1A1"}*/}
-                                {/*/>*/}
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+
+                            {/*address*/}
+                            <Text style={{fontFamily:"Nunito_700Bold", fontSize: 15, marginHorizontal:25, marginTop: 20}}>Address Details</Text>
+                            {/* addressNo field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={addressNo}
+                                    placeholder="Address No"
+                                    onChangeText={(value) =>
+                                        setAddressNo(value)
+                                    }
+                                />
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* street1 field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={street1}
+                                    placeholder="Street 1"
+                                    onChangeText={(value) =>
+                                        setStreet1(value)
+                                    }
+                                />
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* street2 field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={street2}
+                                    placeholder="Street 2"
+                                    onChangeText={(value) =>
+                                        setStreet2(value)
+                                    }
+                                />
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* city field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={city}
+                                    placeholder="City"
+                                    onChangeText={(value) =>
+                                        setCity(value)
+                                    }
+                                />
+                                {required && (
+                                    <View style={styles.errorContainer}>
+                                        <Entypo name="cross" size={18} color={"red"} />
+                                    </View>
+                                )}
+                            </View>
+                            {/* district field */}
+                            <View style={{ marginTop: 15 }}>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="default"
+                                    value={district}
+                                    placeholder="District"
+                                    onChangeText={(value) =>
+                                        setDistrict(value)
+                                    }
+                                />
                                 {required && (
                                     <View style={styles.errorContainer}>
                                         <Entypo name="cross" size={18} color={"red"} />
@@ -363,7 +440,7 @@ export default function SignUpScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </ScrollView>
+                </View>
             </SafeAreaView>
         </LinearGradient>
     );
@@ -388,7 +465,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     inputContainer: {
-        marginHorizontal: 16,
+        marginHorizontal: 0,
         marginTop: 30,
         rowGap: 0,
     },
