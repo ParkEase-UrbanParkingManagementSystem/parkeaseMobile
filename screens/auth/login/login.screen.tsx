@@ -293,6 +293,10 @@ export default function LoginScreen() {
                             title="Profile"
                             onPress={() => router.push("/(routes)/profile")}
                         />
+                        <Button
+                            title="activities"
+                            onPress={() => router.push("/(routes)/(tabs)/activities.screen")}
+                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>

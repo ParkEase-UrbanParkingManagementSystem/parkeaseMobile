@@ -1,6 +1,14 @@
-import ActivitiesScreen from '@/screens/activities/activities.screen'
-export default function UserProfile() {
+// App.tsx
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import ActivitiesScreen from '@/app/(routes)/(tabs)/_layout';
+
+const App = () => {
     return (
-        <ActivitiesScreen/>
-    )
-}
+        <NavigationContainer>
+            <ActivitiesScreen />
+        </NavigationContainer>
+    );
+};
+
+export default App;
