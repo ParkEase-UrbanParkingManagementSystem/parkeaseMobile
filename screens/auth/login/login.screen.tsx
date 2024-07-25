@@ -295,7 +295,7 @@ export default function LoginScreen() {
                         />
                         <Button
                             title="activities"
-                            onPress={() => router.push("/(routes)/(tabs)/activities.screen")}
+                            onPress={() => router.push("/(routes)/activities")}
                         />
                     </View>
                 </ScrollView>

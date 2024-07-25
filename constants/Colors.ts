@@ -6,6 +6,7 @@ export default {
     primary_light: "#D1D2D5",
     secondary: '#FFB403',
     secondary_light: '#FFEFD4FF',
+    secondary_light2: '#FFD981',
     tertiary: '#FFFFFF',
     success: '#00833D',
     error: '#FF0018',

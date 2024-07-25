@@ -1,12 +1,20 @@
 // OngoingScreen.tsx
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {LinearGradient} from "expo-linear-gradient";
+import colors from "@/constants/Colors";
 
 const OngoingScreen = () => {
     return (
-        <View style={styles.container}>
-            <Text>Ongoing Activities</Text>
-        </View>
+        <LinearGradient
+            colors={[colors.secondary_light, colors.secondary_light]}
+            style={{ flex: 1}}
+        >
+            <ScrollView style={{ flex: 1 }}>
+
+            </ScrollView>
+
+        </LinearGradient>
     );
 };
 

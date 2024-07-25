@@ -5,7 +5,7 @@ import ActivitiesScreen from '@/app/(routes)/(tabs)/_layout';
 
 const App = () => {
     return (
-        <NavigationContainer>
+        <NavigationContainer independent={true}>
             <ActivitiesScreen />
         </NavigationContainer>
     );
