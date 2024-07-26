@@ -185,9 +185,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 30,
     },
     parking: {
-        borderStyle: "solid",
-        borderWidth: 1,
-
+        // borderStyle: "solid",
+        // borderWidth: 1,
         display: 'flex',
         flexDirection: 'row',
         gap: 10,
@@ -196,6 +195,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginVertical: 5,
         width: wp("90%"),
+
+        shadowColor: "#1a2131",
+        shadowOffset: {
+            width: 0,
+            height: 7,
+        },
+        shadowOpacity:  0.21,
+        shadowRadius: 7.68,
+        elevation: 10
 
     },
     day: {

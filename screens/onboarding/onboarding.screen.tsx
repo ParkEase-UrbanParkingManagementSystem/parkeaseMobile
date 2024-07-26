@@ -31,11 +31,11 @@ export default function OnboardingScreen() {
    style={{flex:1, alignItems:"center", justifyContent:"center"}}
    >
       <SafeAreaView style={styles.firstContainer}>
-        <View>
-          <Image
+        <Image
             source={require('@/assets/images/ParkEase_logo.png')}
             style={[styles.logo, styles.shadowProp]}
-          />
+        />
+        <View>
           <View style={styles.dscpWrapper}>
           <Text style={[styles.dscpText, { fontFamily: "Nunito_400Regular" }]}>
             Your gateway to
@@ -62,6 +62,7 @@ export default function OnboardingScreen() {
 export const styles = StyleSheet.create({
   firstContainer: {
     alignItems: "center",
+    justifyContent: "center",
     marginTop: 50,
   },
   logo: {
