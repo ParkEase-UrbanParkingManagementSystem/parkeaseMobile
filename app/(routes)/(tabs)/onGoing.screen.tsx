@@ -1,6 +1,6 @@
 // OngoingScreen.tsx
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {LinearGradient} from "expo-linear-gradient";
 import colors from "@/constants/Colors";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
@@ -45,6 +45,10 @@ const OngoingScreen = () => {
             <ScrollView style={{ flex: 1 }}>
                 {ongoingParks.map((park, index) => (
                     <View style={styles.onGoing} key={index}>
+                        <Image
+                            source={require('@/assets/images/pocketWatch.gif')}
+                            style={styles.icon}
+                        />
                         <View style={styles.row}>
                             <View style={styles.left}>
                                 <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>In Date</Text>
@@ -109,7 +113,7 @@ const OngoingScreen = () => {
                                 <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14}}>Report Issue</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                // onPress={() => router.back()}
+                                onPress={() => router.push("/(routes)/QR")}
                                 style={{backgroundColor: colors.primary, padding:5, borderRadius: 5}}
                             >
                                 <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14, color: colors.secondary_light}}>Pay and Leave</Text>
@@ -136,9 +140,18 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         margin: 10,
-        backgroundColor: "#00e673",
+        // backgroundColor: "#00e673",
+        backgroundColor: colors.white,
         borderRadius: 15,
         padding: 10,
+        position: 'relative',
+    },
+    icon: {
+        width: 25,
+        height: 25,
+        position: 'absolute',
+        right: 20,
+        top: 8,
     },
     row: {
         // borderStyle: "solid",

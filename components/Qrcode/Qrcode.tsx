@@ -45,7 +45,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({ userID, vehicleID, en
             <Text
                 style={styles.title}
             >
-                Let Parking Warden scan this QR code to register your park
+                Let Parking Warden scan this QR code
             </Text>
         </View>
     );
