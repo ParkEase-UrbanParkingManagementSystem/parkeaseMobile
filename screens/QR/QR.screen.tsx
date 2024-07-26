@@ -35,6 +35,10 @@ export default function QRScreen() {
                             color={"#000000"}
                             onPress={() => router.back()}
                     />
+                    <Button title="View Bill"
+                            color={"#000000"}
+                            onPress={() => router.push("/(routes)/payment/bill")}
+                    />
                 </View>
             </SafeAreaView>
         </LinearGradient>
@@ -49,6 +53,8 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
     buttonContainer: {
+        flexDirection: "row",
+        gap: 30,
         position: "absolute",
         bottom: 30,
     },

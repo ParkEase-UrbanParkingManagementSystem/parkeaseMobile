@@ -55,7 +55,7 @@ export default function profileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => router.push("/(routes)/payment")}
+                        onPress={() => router.push("/(routes)/payment/paymentMethods")}
                     >
                         <Image
                             style={styles.quickAccessIcon}

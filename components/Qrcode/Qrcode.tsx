@@ -4,6 +4,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import {Raleway_700Bold, useFonts} from "@expo-google-fonts/raleway";
 import colors from "@/constants/Colors";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 interface QRCodeGeneratorProps {
     userID: string;
@@ -39,7 +40,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({ userID, vehicleID, en
         <View style={styles.container}>
             <QRCode
                 value={qrValue}
-                size={395}
+                size={wp("90%")}
                 backgroundColor = {colors.secondary_light}
             />
             <Text
