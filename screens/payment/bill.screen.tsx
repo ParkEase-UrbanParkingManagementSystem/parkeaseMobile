@@ -98,7 +98,7 @@ export default function profileScreen() {
                                 <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>Base Rate</Text>
                             </View>
                             <View style={styles.right}>
-                                <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>: 70 LKR (first hour)</Text>
+                                <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>: LKR 70 (first hour)</Text>
                             </View>
                         </View>
                         <View style={styles.row}>
@@ -106,7 +106,7 @@ export default function profileScreen() {
                                 <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>Additional fees</Text>
                             </View>
                             <View style={styles.right}>
-                                <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>: 70 LKR</Text>
+                                <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>: LKR 70</Text>
                                 <TouchableOpacity
                                     // onPress={() => router.push("/(routes)/info")}
                                 >
@@ -122,7 +122,7 @@ export default function profileScreen() {
                                 <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>Total</Text>
                             </View>
                             <View style={styles.right}>
-                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>: 140 LKR</Text>
+                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>: LKR 140</Text>
                             </View>
                         </View>
                     </View>
@@ -151,7 +151,7 @@ export default function profileScreen() {
                             <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14}}>Report Issue</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => router.push("/(routes)/QR")}
+                            // onPress={() => router.push("/(routes)/QR")}
                             style={{backgroundColor: colors.primary, padding:5, borderRadius: 5}}
                         >
                             <Text style={{fontFamily: "Nunito_700Bold", fontSize: 14, color: colors.secondary_light}}>Pay and Leave</Text>

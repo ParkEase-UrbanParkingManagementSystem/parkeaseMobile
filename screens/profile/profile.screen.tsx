@@ -26,7 +26,7 @@ export default function profileScreen() {
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.header}>
                     <View style={styles.name}>
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 30}}>Chethiya Wanigarathne</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>Chethiya Wanigarathne</Text>
                         <View style={styles.rating}>
                             <Image
                                 style={styles.starIcon}
@@ -55,7 +55,7 @@ export default function profileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => router.push("/(routes)/payment/paymentMethods")}
+                        onPress={() => router.push("/(routes)/payment/wallet")}
                     >
                         <Image
                             style={styles.quickAccessIcon}
@@ -192,7 +192,7 @@ export const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#2467EC",
         borderWidth: 1,
-        maxWidth: "23%",
+        maxWidth: "26%",
         padding: 8,
         backgroundColor: colors.secondary,
         borderRadius: 10
