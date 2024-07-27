@@ -7,6 +7,7 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useState} from "react";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PaymentOptions from "@/components/payment/PaymentOptions";
 
 type PaymentMethod = {
     id: string;
@@ -101,29 +102,8 @@ export default function PaymentScreen() {
                     <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Payment Methods</Text>
                 </View>
                 <View style={styles.paymentMethodsContainer}>
-                    {paymentMethods.map(method => (
-                        <TouchableOpacity
-                            style={styles.option}
-                            key={method.id}
-                            onPress={() => selectMethod(method.id)}
-                        >
-                            <View style={styles.left}>
-                                <Image
-                                    source={method.image}
-                                    style={{width: 40, height: 40}}
-                                />
-                            </View>
-                            <View style={styles.mid}>
-                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>{method.name}</Text>
-                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 12}}>{method.number}</Text>
-                            </View>
-                            <View style={[styles.right, {position: "absolute", right: 5, top: 15}]}>
-                                {selectedMethod === method.id && (
-                                    <Icon name="check" size={20} color="green" />
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                    ))}
+                    <PaymentOptions/>
+                </View>
                     <TouchableOpacity
                         style={styles.option}
                     >
@@ -150,10 +130,9 @@ export default function PaymentScreen() {
                             />
                         </View>
                         <View style={styles.mid}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add payment method</Text>
+                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add voucher code</Text>
                         </View>
                     </TouchableOpacity>
-                </View>
             </SafeAreaView>
         </LinearGradient>
     )

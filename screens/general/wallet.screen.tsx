@@ -6,31 +6,31 @@ import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useState} from "react";
-import Icon from 'react-native-vector-icons/FontAwesome';
+import PaymentOptions from '@/components/payment/PaymentOptions'
 
-type PaymentMethod = {
-    id: string;
-    name: string;
-    number: string;
-    image: any;
-};
-
-const paymentMethods: PaymentMethod[] = [
-    { id: '1', name: 'Credit Card', number: '••••1022', image: require('@/assets/images/visa.png') },
-    { id: '2', name: 'Debit Card', number: '••••4725', image: require('@/assets/images/amex.png') },
-    { id: '3', name: 'PayPark', number: 'LKR 1750.00', image: require('@/assets/images/wallet.png') },
-    { id: '4', name: 'Cash', number: "", image: require('@/assets/images/cash.png') },
-];
+// type PaymentMethod = {
+//     id: string;s
+//     name: string;
+//     number: string;
+//     image: any;
+// };
+//
+// const paymentMethods: PaymentMethod[] = [
+//     { id: '1', name: 'Credit Card', number: '••••1022', image: require('@/assets/images/visa.png') },
+//     { id: '2', name: 'Debit Card', number: '••••4725', image: require('@/assets/images/amex.png') },
+//     { id: '3', name: 'PayPark', number: 'LKR 1750.00', image: require('@/assets/images/wallet.png') },
+//     { id: '4', name: 'Cash', number: "", image: require('@/assets/images/cash.png') },
+// ];
 
 
 export default function WalletScreen() {
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-
-    const selectMethod = (id: string) => {
-        setSelectedMethod(id);
-    };
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    // const [isEnabled, setIsEnabled] = useState(false);
+    // const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+    //
+    // const selectMethod = (id: string) => {
+    //     setSelectedMethod(id);
+    // };
+    // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -87,73 +87,80 @@ export default function WalletScreen() {
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 12}}>LKR 145.00</Text>
                     </View>
                     <View style={styles.right}>
-                        <Text>{isEnabled ? "Enabled" : "Disabled"}</Text>
-                        <Switch
-                            trackColor={{ false: colors.primary, true: colors.secondary }}
-                            thumbColor={isEnabled ? colors.primary : "#f4f3f4"}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={toggleSwitch}
-                            value={isEnabled}
-                        />
+                        {/*<Text>{isEnabled ? "Enabled" : "Disabled"}</Text>*/}
+                        {/*<Switch*/}
+                        {/*    trackColor={{ false: colors.primary, true: colors.secondary }}*/}
+                        {/*    thumbColor={isEnabled ? colors.primary : "#f4f3f4"}*/}
+                        {/*    ios_backgroundColor="#3e3e3e"*/}
+                        {/*    onValueChange={toggleSwitch}*/}
+                        {/*    value={isEnabled}*/}
+                        {/*/>*/}
                     </View>
                 </View>
                 <View style={styles.sub_title}>
                     <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Payment Methods</Text>
                 </View>
                 <View style={styles.paymentMethodsContainer}>
-                    {paymentMethods.map(method => (
-                        <TouchableOpacity
-                            style={styles.option}
-                            key={method.id}
-                            onPress={() => selectMethod(method.id)}
-                        >
-                            <View style={styles.left}>
-                                <Image
-                                    source={method.image}
-                                    style={{width: 40, height: 40}}
-                                />
-                            </View>
-                            <View style={styles.mid}>
-                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>{method.name}</Text>
-                                <Text style={{fontFamily: "Nunito_700Bold", fontSize: 12}}>{method.number}</Text>
-                            </View>
-                            <View style={[styles.right, {position: "absolute", right: 5, top: 15}]}>
-                                {selectedMethod === method.id && (
-                                    <Icon name="check" size={20} color="green" />
-                                )}
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                    <TouchableOpacity
-                        style={styles.option}
-                    >
-                        <View style={styles.left}>
-                            <Image
-                                source={require('@/assets/images/add.png')}
-                                style={{width: 20, height: 20}}
-                            />
-                        </View>
-                        <View style={styles.mid}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add payment method</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <View style={styles.sub_title}>
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Vouchers</Text>
-                    </View>
-                    <TouchableOpacity
-                        style={styles.option}
-                    >
-                        <View style={styles.left}>
-                            <Image
-                                source={require('@/assets/images/add.png')}
-                                style={{width: 20, height: 20}}
-                            />
-                        </View>
-                        <View style={styles.mid}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add payment method</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <PaymentOptions/>
                 </View>
+                <TouchableOpacity
+                    style={styles.option}
+                >
+                    <View style={styles.left}>
+                        <Image
+                            source={require('@/assets/images/add.png')}
+                            style={{width: 20, height: 20}}
+                        />
+                    </View>
+                    <View style={styles.mid}>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add payment method</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.sub_title}>
+                    <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Vouchers</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.option}
+                >
+                    <View style={styles.left}>
+                        <Image
+                            source={require('@/assets/images/add.png')}
+                            style={{width: 20, height: 20}}
+                        />
+                    </View>
+                    <View style={styles.mid}>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add voucher code</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={styles.sub_title}>
+                    <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Promotions</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.option}
+                >
+                    <View style={styles.left}>
+                        <Image
+                            source={require('@/assets/images/promotion.png')}
+                            style={{width: 20, height: 20}}
+                        />
+                    </View>
+                    <View style={styles.mid}>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Promotions</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.option}
+                >
+                    <View style={styles.left}>
+                        <Image
+                            source={require('@/assets/images/add.png')}
+                            style={{width: 20, height: 20}}
+                        />
+                    </View>
+                    <View style={styles.mid}>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add promo code</Text>
+                    </View>
+                </TouchableOpacity>
             </SafeAreaView>
         </LinearGradient>
     )
