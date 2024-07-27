@@ -1,26 +1,21 @@
-import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Modal } from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from '../../constants/Colors';
+import colors from '../../constants/Colors'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import PaymentOptions from '@/components/payment/PaymentOptions';
+import React, { useState } from "react";
+import PaymentOptions from '@/components/payment/PaymentOptions'
 import PaymentMethodForm from '@/components/payment/PaymentMethodForm';
 
 export default function WalletScreen() {
-    let [fontsLoaded, fontError] = useFonts({
+    const [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
         Nunito_700Bold
     });
 
-    const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-
-    const selectMethod = (id: string) => {
-        setSelectedMethod(id);
-    };
 
     const handleAddPaymentMethod = () => {
         setIsModalVisible(true);
@@ -35,31 +30,18 @@ export default function WalletScreen() {
     }
 
     return (
-        <LinearGradient
-            colors={[colors.white, colors.white]}
-            style={{ flex: 1 }}
-        >
+        <LinearGradient colors={[colors.white, colors.white]} style={{ flex: 1 }}>
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.title}>
                     <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 25 }}>Wallet</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={[styles.mode, { backgroundColor: colors.primary_light }]}
-                    >
-                        <Image
-                            source={require('@/assets/images/personal.png')}
-                            style={{ width: 15, height: 15 }}
-                        />
+                    <TouchableOpacity style={[styles.mode, { backgroundColor: colors.primary_light }]}>
+                        <Image source={require('@/assets/images/personal.png')} style={{ width: 15, height: 15 }} />
                         <Text>Personal</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.mode, { backgroundColor: colors.secondary_light2 }]}
-                    >
-                        <Image
-                            source={require('@/assets/images/business_bag.png')}
-                            style={{ width: 15, height: 15 }}
-                        />
+                    <TouchableOpacity style={[styles.mode, { backgroundColor: colors.secondary_light2 }]}>
+                        <Image source={require('@/assets/images/business_bag.png')} style={{ width: 15, height: 15 }} />
                         <Text>Business</Text>
                     </TouchableOpacity>
                 </View>
@@ -68,14 +50,13 @@ export default function WalletScreen() {
                 </View>
                 <View style={styles.option}>
                     <View style={styles.left}>
-                        <Image
-                            source={require('@/assets/images/ParkEase_logo.png')}
-                            style={{ width: 40, height: 40 }}
-                        />
+                        <Image source={require('@/assets/images/ParkEase_logo.png')} style={{ width: 40, height: 40 }} />
                     </View>
                     <View style={styles.mid}>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Park Points</Text>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 12 }}>LKR 145.00</Text>
+                    </View>
+                    <View style={styles.right}>
                     </View>
                 </View>
                 <View style={styles.sub_title}>
@@ -84,38 +65,23 @@ export default function WalletScreen() {
                 <View style={styles.paymentMethodsContainer}>
                     <PaymentOptions />
                 </View>
-                <TouchableOpacity
-                    style={styles.option}
-                    onPress={handleAddPaymentMethod}
-                >
+                <TouchableOpacity style={styles.option} onPress={handleAddPaymentMethod}>
                     <View style={styles.left}>
-                        <Image
-                            source={require('@/assets/images/add.png')}
-                            style={{ width: 20, height: 20 }}
-                        />
+                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
                     </View>
                     <View style={styles.mid}>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Add payment method</Text>
                     </View>
                 </TouchableOpacity>
-                <Modal
-                    visible={isModalVisible}
-                    animationType="slide"
-                    onRequestClose={closeModal}
-                >
+                <Modal visible={isModalVisible} animationType="slide" onRequestClose={closeModal}>
                     <PaymentMethodForm onClose={closeModal} />
                 </Modal>
                 <View style={styles.sub_title}>
                     <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 20 }}>Vouchers</Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.option}
-                >
+                <TouchableOpacity style={styles.option}>
                     <View style={styles.left}>
-                        <Image
-                            source={require('@/assets/images/add.png')}
-                            style={{ width: 20, height: 20 }}
-                        />
+                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
                     </View>
                     <View style={styles.mid}>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Add voucher code</Text>
@@ -124,27 +90,17 @@ export default function WalletScreen() {
                 <View style={styles.sub_title}>
                     <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 20 }}>Promotions</Text>
                 </View>
-                <TouchableOpacity
-                    style={styles.option}
-                >
+                <TouchableOpacity style={styles.option}>
                     <View style={styles.left}>
-                        <Image
-                            source={require('@/assets/images/promotion.png')}
-                            style={{ width: 20, height: 20 }}
-                        />
+                        <Image source={require('@/assets/images/promotion.png')} style={{ width: 20, height: 20 }} />
                     </View>
                     <View style={styles.mid}>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Promotions</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.option}
-                >
+                <TouchableOpacity style={styles.option}>
                     <View style={styles.left}>
-                        <Image
-                            source={require('@/assets/images/add.png')}
-                            style={{ width: 20, height: 20 }}
-                        />
+                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
                     </View>
                     <View style={styles.mid}>
                         <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Add promo code</Text>
@@ -154,6 +110,7 @@ export default function WalletScreen() {
         </LinearGradient>
     );
 }
+
 
 // styles
 export const styles = StyleSheet.create({
