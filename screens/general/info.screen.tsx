@@ -4,8 +4,8 @@ import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import React from "react";
+import InfoList from '@/components/FlatList/InfoList'
 
 interface ListItem {
     id: string;
@@ -28,15 +28,6 @@ export default function InfoScreen() {
         { id: '2', main: 'Easy payments', sub: 'Secure and transparent payment options for a fraud-free parking experience.' },
         { id: '3', main: 'Stellar experience', sub: 'Seamless integration of QR codes for easy access and payment.' },
     ];
-    const renderItem = ({ item }: { item: ListItem }) => (
-        <View style={styles.itemContainer}>
-            <Text style={styles.boldText}>{item.id}.</Text>
-            <View style={styles.bodyContainer}>
-                <Text style={styles.boldText}>{item.main}</Text>
-                <Text style={styles.text}>{item.sub}</Text>
-            </View>
-        </View>
-    );
 
     return (
         <LinearGradient
@@ -84,19 +75,14 @@ export default function InfoScreen() {
                     {/*section 3*/}
                     <View style={styles.section}>
                         <View style={styles.header}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 23,}}>How it works</Text>
+                            <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 23 }}>How it works</Text>
                         </View>
                         <View style={styles.body}>
                             <View style={styles.textContainer}>
                                 <Text style={styles.text}>
                                     With ParkEase, the entire process from locating a parking spot to finalizing payments is streamlined, making parking stress-free for both drivers and parking wardens involved.
                                 </Text>
-                                <FlatList
-                                    data={data}
-                                    renderItem={renderItem}
-                                    keyExtractor={(item) => item.id}
-                                    contentContainerStyle={styles.listContainer}
-                                />
+                                <InfoList data={data} />
                             </View>
                         </View>
                     </View>
@@ -174,28 +160,18 @@ export const styles = StyleSheet.create({
         flex: 1,
     },
     scrollView: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
     },
     section: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
         padding: 10,
         width: "100%",
     },
     header: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
     },
     body: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
         display: "flex",
         flexDirection: "row",
     },
     textContainer: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
         width: "100%",
     },
     text: {
@@ -203,31 +179,10 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: "justify"
     },
-    listContainer: {
-        padding: 20,
-    },
-    itemContainer: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginBottom: 10,
-        gap: 5,
-    },
-    itemNumber: {
-        marginRight: 10,
-        fontWeight: 'bold',
-    },
-    bodyContainer: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
-        display: "flex",
-        flexDirection: "column",
-    },
     boldText: {
-        fontFamily: "Nunito_700Bold",
+        fontFamily: 'Nunito_700Bold',
         fontSize: 16,
-        textAlign: "justify"
+        textAlign: 'justify',
     },
 
 })
