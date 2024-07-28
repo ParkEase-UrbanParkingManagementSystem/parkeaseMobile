@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Switch} from "react-native";
+import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Switch, Modal} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,6 +8,7 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import React, {useState} from "react";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PaymentOptions from "@/components/payment/PaymentOptions";
+import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
 
 type PaymentMethod = {
     id: string;
@@ -27,6 +28,15 @@ const paymentMethods: PaymentMethod[] = [
 export default function PaymentScreen() {
     const [isEnabled, setIsEnabled] = useState(false);
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const handleAddPaymentMethod = () => {
+        setIsModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setIsModalVisible(false);
+    };
 
     const selectMethod = (id: string) => {
         setSelectedMethod(id);
@@ -104,19 +114,17 @@ export default function PaymentScreen() {
                 <View style={styles.paymentMethodsContainer}>
                     <PaymentOptions/>
                 </View>
-                    <TouchableOpacity
-                        style={styles.option}
-                    >
-                        <View style={styles.left}>
-                            <Image
-                                source={require('@/assets/images/add.png')}
-                                style={{width: 20, height: 20}}
-                            />
-                        </View>
-                        <View style={styles.mid}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Add payment method</Text>
-                        </View>
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.option} onPress={handleAddPaymentMethod}>
+                    <View style={styles.left}>
+                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
+                    </View>
+                    <View style={styles.mid}>
+                        <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 15 }}>Add payment method</Text>
+                    </View>
+                </TouchableOpacity>
+                <Modal visible={isModalVisible} animationType="slide" onRequestClose={closeModal}>
+                    <PaymentMethodForm onClose={closeModal} />
+                </Modal>
                     <View style={styles.sub_title}>
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 20}}>Vouchers</Text>
                     </View>

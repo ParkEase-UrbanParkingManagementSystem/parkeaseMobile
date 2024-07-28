@@ -6,11 +6,10 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { View } from 'react-native';
 import { StripeProvider } from '@stripe/stripe-react-native';
+// import { Stripe } from '@stripe/stripe-react-native';
 import OnBoarding from './(routes)/onboarding';
 
-export {
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
@@ -39,7 +38,7 @@ export default function RootLayout() {
   }
 
   return (
-      <StripeProvider publishableKey="your-publishable-key">
+      <StripeProvider publishableKey="pk_test_51Pg52IClnSyidEOPK1f04a5vNTnlRICySgtJJmDG1zAoQ9TqGdljELayqUxiftG167OddlpS1aM6CWXOyZB03W9n000f0UJt7D">
         <RootLayoutNav />
       </StripeProvider>
   );
@@ -47,12 +46,13 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
       <>
         {isLoggedIn ? (
-            <View></View>
-        ):(
-            <Stack screenOptions={{headerShown: false}}>
+            <View />
+        ) : (
+            <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="index" />
               <Stack.Screen name="(routes)/welcome-intro/index" />
               <Stack.Screen name="(routes)/login/index" />

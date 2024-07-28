@@ -1,6 +1,5 @@
-// PaymentMethodForm.tsx
 import React, { useState } from 'react';
-import { View, Button, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
+import { View, Button, StyleSheet, Alert, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { CardField, useStripe, CardFieldInput } from '@stripe/stripe-react-native';
 
 const PaymentMethodForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -30,33 +29,44 @@ const PaymentMethodForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Add Payment Method</Text>
-            <CardField
-                postalCodeEnabled={true}
-                placeholders={{
-                    number: '4242 4242 4242 4242',
-                }}
-                cardStyle={styles.card}
-                style={styles.cardContainer}
-                onCardChange={(details) => {
-                    setCardDetails(details);
-                }}
-            />
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleAddPaymentMethod}>
-                    <Text style={styles.buttonText}>Add</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onClose}>
-                    <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Add Payment Method</Text>
+                <View style={styles.inputContainer}>
+                    <CardField
+                        postalCodeEnabled={true}
+                        placeholders={{
+                            number: '4242 4242 4242 4242',
+                        }}
+                        cardStyle={styles.card}
+                        style={styles.cardContainer}
+                        onCardChange={(details) => {
+                            setCardDetails(details);
+                        }}
+                    />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onClose}>
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleAddPaymentMethod}>
+                        <Text style={styles.buttonText}>Add</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f8f8f8',
+    },
     container: {
+        width: '90%',
         padding: 20,
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -67,17 +77,28 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     title: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        color: '#333',
+    },
+    inputContainer: {
+        marginBottom: 20,
     },
     card: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#fff',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
     },
     cardContainer: {
         height: 50,
-        marginVertical: 30,
+        marginVertical: 10,
+        borderRadius: 5,
+        borderColor: '#ccc',
+        borderWidth: 1,
     },
     buttonContainer: {
         flexDirection: 'row',
