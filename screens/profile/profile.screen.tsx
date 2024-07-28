@@ -146,7 +146,10 @@ export default function profileScreen() {
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Delete account</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.sub}>
+                    <TouchableOpacity
+                        style={styles.sub}
+                        onPress={() => router.push("/(routes)/info")}
+                    >
                         <Image
                             source={require("@/assets/images/PandP.png")}
                             style={{width: 20, height: 20}}
