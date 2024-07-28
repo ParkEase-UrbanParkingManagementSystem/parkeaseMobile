@@ -448,8 +448,8 @@ export default function SignUpScreen() {
 
 const styles = StyleSheet.create({
     signInImage: {
-        width: "80%",
-        height: 250,
+        width: "70%",
+        height: "25%",
         alignSelf: "center",
         marginTop: 25,
         marginBottom: 25,

@@ -423,8 +423,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        height: "92%",
+        height: "100%",
         left: -3,
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.white
     },
     mapContainer: {
         width: "100%",

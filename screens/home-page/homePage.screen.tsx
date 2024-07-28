@@ -53,30 +53,34 @@ export default function HomePageScreen() {
                 </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
+                        <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
+                            Hi, Pasindi
+                        </Text>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
                             Locate Parking Lots Near you
                         </Text>
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap/>
+                        <TouchableOpacity
+                            onPress={() => router.push("/(routes)/QR")}
+                            style={styles.currentVehicle}
+                        >
+                            <View style={styles.QRContainer}>
+                                <Image
+                                    source={require('@/assets/images/QR_icon.png')}
+                                    style={[styles.icon, {marginRight: 20}]}
+                                />
+                            </View>
+                            <View style={styles.plateNoContainer}>
+                                <Text style={styles.plateNo}>
+                                    {plateNo}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                            <TouchableOpacity
-                                onPress={() => router.push("/(routes)/QR")}
-                                style={styles.currentVehicle}
-                            >
-                                <View style={styles.QRContainer}>
-                                    <Image
-                                        source={require('@/assets/images/QR_icon.png')}
-                                        style={[styles.icon, {marginRight: 20}]}
-                                    />
-                                </View>
-                                <View style={styles.plateNoContainer}>
-                                    <Text style={styles.plateNo}>
-                                        {plateNo}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                    </View>
+
+                </View>
                 <View>
                     <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
                         Recently visited
@@ -273,26 +277,29 @@ export const styles = StyleSheet.create({
     },
     mapContainer: {
         width: wp("96%"),
-        height: hp("60%"),
+        height: hp("52%"),
         margin: 10,
+        position: "relative",
+        // borderStyle: "solid",
+        // borderWidth: 0.5,
+        // borderColor: colors.white,
     },
     currentVehicle: {
         display: "flex",
         flexDirection: "row",
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.primary,
+        borderStyle: "solid",
+        borderWidth: 0.5,
+        borderColor: colors.white,
         padding: 10,
-        maxWidth: "auto",
-        marginLeft: "auto",
-        marginRight: "auto",
-        bottom: 120,
+        bottom: 10,
+        alignSelf: "center",
         alignItems: "center",
         justifyContent: "flex-start",
         gap: 10,
         backgroundColor: colors.secondary,
         opacity: 0.8,
         borderRadius: 10,
+        position: "absolute",
 
     },
     QRContainer : {

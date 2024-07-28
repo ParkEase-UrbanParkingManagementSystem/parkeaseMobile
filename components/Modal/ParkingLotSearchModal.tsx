@@ -41,7 +41,7 @@ const ParkingLotSearchModal: React.FC = ( ) => {
                     Search for parking Lots
                 </Text>
             </TouchableOpacity>
-            {/*plate type selection Modal*/}
+            {/*search Modal*/}
             <Modal
                 visible = {isModalVisible}
                 animationType="slide"

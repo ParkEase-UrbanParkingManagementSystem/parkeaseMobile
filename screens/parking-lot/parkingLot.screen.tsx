@@ -77,20 +77,6 @@ export default function parkingLotScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.topContainer}>
-                        {/*<ScrollView horizontal style={styles.imageScrollView}>*/}
-                        {/*    <View style={styles.imageContainer}>*/}
-                        {/*        <Image*/}
-                        {/*            style={styles.parkingLotImage}*/}
-                        {/*            source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}*/}
-                        {/*        />*/}
-                        {/*    </View>*/}
-                        {/*    <View style={styles.imageContainer}>*/}
-                        {/*        <Image*/}
-                        {/*            style={styles.parkingLotImage}*/}
-                        {/*            source={require("@/assets/ParkingLots/nugegodaSM_2.jpg")}*/}
-                        {/*        />*/}
-                        {/*    </View>*/}
-                        {/*</ScrollView>*/}
                     <AutoScroller/>
                     <View style={styles.status}>
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 12, color: "red"}}>Closed</Text>
@@ -222,28 +208,29 @@ export const styles = StyleSheet.create({
     },
     MidContainer: {
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-
-        // borderStyle: "solid",
-        // borderWidth: 1,
-        // borderColor: colors.primary,
-
-        marginTop: 430,
-        gap: 10
+        marginTop: 390,
+        gap: 10,
+        width: wp("100%"),
+        height: wp("80%"),
+        shadowColor: "#000000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity:  0.17,
+        shadowRadius: 3.05,
+        elevation: 4
     },
     capacities: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
-        // borderColor: colors.primary,
-
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        width: wp("100%"),
+        width: "100%",
     },
     cap: {
         display: "flex",
@@ -252,24 +239,21 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: wp("1%"),
-
-        // borderRightWidth: 1,
-        // borderRightColor: "gray",
-
     },
     vehicleIcon: {
-        width: 40,
-        height: 40
+        width: 32,
+        height: 32
     },
     reviewsScrollView: {
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: colors.primary,
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: colors.primary,
         padding: 10,
         height: 250,
         backgroundColor: colors.primary_light,
         margin: 2,
         borderRadius: 5,
+
     },
     review: {
         borderStyle: "solid",

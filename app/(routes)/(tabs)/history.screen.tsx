@@ -210,14 +210,16 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         width: "27%",
+        // borderStyle: "solid",
+        // borderWidth: 1,
     },
     date: {
-        fontFamily: "Nunito_700Bold", fontSize: 60
+        fontFamily: "Nunito_700Bold", fontSize: 45
     },
     month: {
-        fontFamily: "Nunito_700Bold", fontSize: 50
+        fontFamily: "Nunito_700Bold", fontSize: 45
     },
     details: {
         display: 'flex',

@@ -26,7 +26,7 @@ export default function profileScreen() {
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.header}>
                     <View style={styles.name}>
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>Chethiya Wanigarathne</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>Pasindi Vindula</Text>
                         <View style={styles.rating}>
                             <Image
                                 style={styles.starIcon}
@@ -195,7 +195,7 @@ export const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#2467EC",
         borderWidth: 1,
-        maxWidth: "26%",
+        width: wp("20%"),
         padding: 8,
         backgroundColor: colors.secondary,
         borderRadius: 10
@@ -209,9 +209,6 @@ export const styles = StyleSheet.create({
     profilePicImage: {
         width: 50,
         height: 50,
-        borderStyle: "solid",
-        borderColor: "#000",
-        borderWidth: 1,
         borderRadius: 25,
     },
     quickAccess: {
