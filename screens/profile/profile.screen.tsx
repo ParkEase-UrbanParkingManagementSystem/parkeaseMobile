@@ -5,16 +5,50 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function profileScreen() {
-    let [fontsLoaded, fontError] = useFonts({
+    const [fontsLoaded] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
         Nunito_700Bold
-    })
+    });
 
-    if (!fontsLoaded && !fontError) {
+    const [userDetails, setUserDetails] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            const token = await AsyncStorage.getItem("token");
+            try {
+                const response = await fetch(`http://localhost:5001/driver/details`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: token || ""
+                    }
+                });
+
+                const parseRes = await response.json();
+
+                if (response.ok) {
+                    setUserDetails(parseRes.data);
+                } else {
+                    console.error("Can't get the details");
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                } else {
+                    console.log("An unexpected error occurred");
+                }
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
+
+    if (!fontsLoaded) {
         return null;
     }
 
@@ -26,7 +60,7 @@ export default function profileScreen() {
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.header}>
                     <View style={styles.name}>
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>Pasindi Vindula</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>{userDetails?.driver?.fname} {userDetails?.driver?.lname}</Text>
                         <View style={styles.rating}>
                             <Image
                                 style={styles.starIcon}

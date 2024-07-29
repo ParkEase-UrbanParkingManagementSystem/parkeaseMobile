@@ -8,22 +8,55 @@ import {responsiveWidth} from "react-native-responsive-dimensions";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import IOSMap from "@/components/Map/IOSMap";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Marker} from "react-native-maps";
 
 export default function HomePageScreen() {
-    let [fontsLoaded, fontError] = useFonts({
-        Raleway_700Bold,
-        Nunito_400Regular,
-        Nunito_700Bold
-    })
+    // let [fontsLoaded, fontError] = useFonts({
+    //     Raleway_700Bold,
+    //     Nunito_400Regular,
+    //     Nunito_700Bold
+    // })
+    //
+    // if (!fontsLoaded && !fontError) {
+    //     return null;
+    // }
+    let plateNo = "CAQ-1628";
 
-    if (!fontsLoaded && !fontError) {
-        return null;
-    }
-    let plateNo = "CAQ-1628"
+    const [userDetails, setUserDetails] = useState<any>(null);
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            const token = await AsyncStorage.getItem("token");
+            try {
+                const response = await fetch(`http://localhost:5001/driver/details`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        token: token || ""
+                    }
+                });
+
+                const parseRes = await response.json();
+
+                if (response.ok) {
+                    setUserDetails(parseRes.data);
+                } else {
+                    console.error("Can't get the details");
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log(error.message);
+                } else {
+                    console.log("An unexpected error occurred");
+                }
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
+
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
@@ -54,7 +87,7 @@ export default function HomePageScreen() {
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
-                            Hi, Pasindi
+                            Hi, {userDetails?.driver?.fname}
                         </Text>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
                             Locate Parking Lots Near you

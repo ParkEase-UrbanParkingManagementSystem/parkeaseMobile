@@ -212,7 +212,7 @@ export const styles = StyleSheet.create({
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 390,
+        marginTop: 440,
         gap: 10,
         width: wp("100%"),
         height: wp("80%"),
