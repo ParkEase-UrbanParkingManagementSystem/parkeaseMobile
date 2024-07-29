@@ -213,12 +213,6 @@ export default function HomePageScreen() {
                     </View>
                 </View>
             </SafeAreaView>
-            <View style={styles.buttonContainer}>
-                <Button title="Go Back"
-                        color={colors.secondary_light}
-                        onPress={() => router.back()}
-                />
-            </View>
         </LinearGradient>
     )
 }

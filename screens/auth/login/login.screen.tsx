@@ -39,17 +39,86 @@ import colors from "../../../constants/Colors"
 import {white} from "colorette";
 import {color} from "ansi-fragments";
 
-export default function LoginScreen() {
+export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        email: "",
-        password: "",
-    });
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [required, setRequired] = useState("");
     const [error, setError] = useState({
         password: "",
     });
+
+    const handlePasswordValidation = (value: string) => {
+        const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
+        const passwordOneNumber = /(?=.*[0-9])/;
+        const passwordSixValue = /(?=.{6,})/;
+
+        if (!passwordSpecialCharacter.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least one special character",
+            });
+            setPassword('');
+        } else if (!passwordOneNumber.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least one number",
+            });
+            setPassword('');
+        } else if (!passwordSixValue.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least 6 characters",
+            });
+            setPassword('');
+        } else {
+            setError({
+                ...error,
+                password: "",
+            });
+            setPassword(value);
+        }
+    };
+
+    const handleSignIn = async (email: string, password: string) => {
+        try {
+            const body = { email, password };
+            console.log("Sending request with body:", body);
+
+            const response = await fetch(`http://localhost:5001/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
+
+            const parseRes = await response.json();
+            console.log("Response:", parseRes); // Debugging response
+
+            if (parseRes.token) {
+                console.log("Received token:", parseRes.token); // Debugging received token
+                await AsyncStorage.setItem("token", parseRes.token);
+
+                const role_id = parseRes.role_id;
+                console.log("Role ID:", role_id); // Debugging role ID
+
+                if (role_id === 1) {
+                    router.push("/(routes)/home-page")
+                }
+                    // else if (role_id === 1) {
+                    //     navigation.navigate("Driver"); // Navigate to Driver for role 1
+                // }
+                else {
+                    alert("Login successful, but unknown role");
+                }
+            } else {
+                alert("Login failed, please check your credentials.");
+            }
+        } catch (err) {
+            // console.error("Error during login:", err.message);
+            // alert("Error during login:", err.message);
+        }
+    };
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_600SemiBold,
@@ -63,58 +132,6 @@ export default function LoginScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
-
-    const handlePasswordValidation = (value: string) => {
-        const password = value;
-        const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
-        const passwordOneNumber = /(?=.*[0-9])/;
-        const passwordSixValue = /(?=.{6,})/;
-
-        if (!passwordSpecialCharacter.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least one special character",
-            });
-            setUserInfo({ ...userInfo, password: "" });
-        } else if (!passwordOneNumber.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least one number",
-            });
-            setUserInfo({ ...userInfo, password: "" });
-        } else if (!passwordSixValue.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least 6 characters",
-            });
-            setUserInfo({ ...userInfo, password: "" });
-        } else {
-            setError({
-                ...error,
-                password: "",
-            });
-            setUserInfo({ ...userInfo, password: value });
-        }
-    };
-
-    const handleSignIn = async () => {
-        await axios
-            .post(`${SERVER_URI}/login`, {
-                email: userInfo.email,
-                password: userInfo.password,
-            })
-            .then(async (res) => {
-                await AsyncStorage.setItem("access_token", res.data.accessToken);
-                await AsyncStorage.setItem("refresh_token", res.data.refreshToken);
-                router.push("/(tabs)");
-            })
-            .catch((error) => {
-                console.log(error);
-                Toast.show("Email or password is not correct!", {
-                    type: "danger",
-                });
-            });
-    };
 
     return (
         <LinearGradient
@@ -138,12 +155,13 @@ export default function LoginScreen() {
                     <View style={styles.inputContainer}>
                         <View>
                             <TextInput
-                                style={[styles.input, { paddingLeft: 40 }]}
+                                style={styles.input}
+                                autoCapitalize="none"
                                 keyboardType="email-address"
-                                value={userInfo.email}
-                                placeholder="customer@parkease.com"
+                                value={email}
+                                placeholder="Email Address"
                                 onChangeText={(value) =>
-                                    setUserInfo({ ...userInfo, email: value })
+                                    setEmail(value)
                                 }
                             />
                             <Fontisto
@@ -160,11 +178,16 @@ export default function LoginScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
-                                    defaultValue=""
+                                    value={password}
                                     placeholder="********"
-                                    onChangeText={handlePasswordValidation}
+                                    placeholderTextColor="#747474"
+                                    // onChangeText={handlePasswordValidation}
+                                    onChangeText={(value) =>
+                                        setPassword(value)
+                                    }
                                 />
                                 <TouchableOpacity
                                     style={styles.visibleIcon}
@@ -216,7 +239,7 @@ export default function LoginScreen() {
                                     backgroundColor: colors.primary,
                                     marginTop: 15,
                                 }}
-                                onPress={handleSignIn}
+                                onPress={() => handleSignIn(email, password)}
                             >
                                 {buttonSpinner ? (
                                     <ActivityIndicator size="small" color={"white"} />
@@ -274,29 +297,6 @@ export default function LoginScreen() {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View>
-                    {/*app navigation*/}
-                    <View style={styles.appNavigation}>
-                        <Button
-                            title="Choose vehicle"
-                            onPress={() => router.push("/(routes)/choose-vehicle")}
-                        />
-                        <Button
-                            title="Add Vehicle"
-                            onPress={() => router.push("/(routes)/add-vehicle")}
-                        />
-                        <Button
-                            title="Home page"
-                            onPress={() => router.push("/(routes)/home-page")}
-                        />
-                        <Button
-                            title="Profile"
-                            onPress={() => router.push("/(routes)/profile")}
-                        />
-                        <Button
-                            title="activities"
-                            onPress={() => router.push("/(routes)/activities")}
-                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>

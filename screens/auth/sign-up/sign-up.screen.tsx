@@ -193,7 +193,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
                                     value={password}
-                                    placeholder="Password"
+                                    placeholder="********"
                                     placeholderTextColor="#747474"
                                     onChangeText={(value) =>
                                         setPassword(value)
