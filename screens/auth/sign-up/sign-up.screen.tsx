@@ -165,7 +165,7 @@ export default function SignUpScreen() {
                         Create an account and start parking in no time
                     </Text>
                     <View style={styles.inputContainer}>
-                        <ScrollView contentContainerStyle={{}} style={{ height: hp("32%")}}>
+                        <ScrollView contentContainerStyle={{}} style={{ height: hp("40%")}}>
                             <Text style={{fontFamily:"Nunito_700Bold", fontSize: 15, marginHorizontal:25}}>Personal Details</Text>
                             {/* email field */}
                             <View style={{ marginTop: 15 }}>
@@ -175,6 +175,7 @@ export default function SignUpScreen() {
                                     keyboardType="email-address"
                                     value={email}
                                     placeholder="Email Address"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setEmail(value)
                                     }
@@ -194,7 +195,7 @@ export default function SignUpScreen() {
                                     secureTextEntry={!isPasswordVisible}
                                     value={password}
                                     placeholder="********"
-                                    placeholderTextColor="#747474"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setPassword(value)
                                     }
@@ -226,6 +227,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={fname}
                                     placeholder="First Name"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setFname(value)
                                     }
@@ -244,6 +246,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={lname}
                                     placeholder="Last Name"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setLname(value)
                                     }
@@ -262,6 +265,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={nic}
                                     placeholder="NIC Number"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setNic(value)
                                     }
@@ -280,6 +284,7 @@ export default function SignUpScreen() {
                                     keyboardType="phone-pad"
                                     value={contact}
                                     placeholder="Contact No"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setContact(value)
                                     }
@@ -301,6 +306,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={addressNo}
                                     placeholder="Address No"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setAddressNo(value)
                                     }
@@ -319,6 +325,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={street1}
                                     placeholder="Street 1"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setStreet1(value)
                                     }
@@ -337,6 +344,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={street2}
                                     placeholder="Street 2"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setStreet2(value)
                                     }
@@ -355,6 +363,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={city}
                                     placeholder="City"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setCity(value)
                                     }
@@ -373,6 +382,7 @@ export default function SignUpScreen() {
                                     keyboardType="default"
                                     value={district}
                                     placeholder="District"
+                                    placeholderTextColor = "#D1D2D5"
                                     onChangeText={(value) =>
                                         setDistrict(value)
                                     }
@@ -456,8 +466,8 @@ export default function SignUpScreen() {
 
 const styles = StyleSheet.create({
     signInImage: {
-        width: "70%",
-        height: "25%",
+        width: "50%",
+        height: "20%",
         alignSelf: "center",
         marginTop: 25,
         marginBottom: 25,

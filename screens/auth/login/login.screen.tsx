@@ -103,7 +103,7 @@ export default function LoginScreen(message?: any) {
                 console.log("Role ID:", role_id); // Debugging role ID
 
                 if (role_id === 1) {
-                    router.push("/(routes)/home-page")
+                    router.push("/(routes)/choose-vehicle")
                 }
                     // else if (role_id === 1) {
                     //     navigation.navigate("Driver"); // Navigate to Driver for role 1
@@ -135,7 +135,7 @@ export default function LoginScreen(message?: any) {
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.primary_light]}
+            colors={[colors.secondary_light, colors.secondary_light]}
             style={{ flex: 1}}
             start={{ x: 0.5, y: 1 }}
             end={{x: 0.5, y: 0 }}
@@ -160,6 +160,7 @@ export default function LoginScreen(message?: any) {
                                 keyboardType="email-address"
                                 value={email}
                                 placeholder="Email Address"
+                                placeholderTextColor = "#D1D2D5"
                                 onChangeText={(value) =>
                                     setEmail(value)
                                 }
@@ -183,7 +184,7 @@ export default function LoginScreen(message?: any) {
                                     secureTextEntry={!isPasswordVisible}
                                     value={password}
                                     placeholder="********"
-                                    placeholderTextColor="#747474"
+                                    placeholderTextColor = "#D1D2D5"
                                     // onChangeText={handlePasswordValidation}
                                     onChangeText={(value) =>
                                         setPassword(value)
