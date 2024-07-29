@@ -32,11 +32,6 @@ import {
 import { useState } from "react";
 import { router } from "expo-router";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
-import axios from "axios";
-import { SERVER_URI } from "@/utils/uri";
-import { Toast } from "react-native-toast-notifications";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import colors from "../../../constants/Colors";
 
@@ -74,38 +69,37 @@ export default function SignUpScreen() {
         return null;
     }
 
-    const handlePasswordValidation = (value: string) => {
-        const password = value;
-        const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
-        const passwordOneNumber = /(?=.*[0-9])/;
-        const passwordSixValue = /(?=.{6,})/;
-
-        if (!passwordSpecialCharacter.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least one special character",
-            });
-            setPassword("" );
-        } else if (!passwordOneNumber.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least one number",
-            });
-            setPassword("" );
-        } else if (!passwordSixValue.test(password)) {
-            setError({
-                ...error,
-                password: "Write at least 6 characters",
-            });
-            setPassword("" );
-        } else {
-            setError({
-                ...error,
-                password: "",
-            });
-            setPassword(value );
-        }
-    };
+    // const handlePasswordValidation = (value: string) => {
+    //     const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
+    //     const passwordOneNumber = /(?=.*[0-9])/;
+    //     const passwordSixValue = /(?=.{6,})/;
+    //
+    //     if (!passwordSpecialCharacter.test(value)) {
+    //         setError({
+    //             ...error,
+    //             password: "Write at least one special character",
+    //         });
+    //         setPassword('');
+    //     } else if (!passwordOneNumber.test(value)) {
+    //         setError({
+    //             ...error,
+    //             password: "Write at least one number",
+    //         });
+    //         setPassword('');
+    //     } else if (!passwordSixValue.test(value)) {
+    //         setError({
+    //             ...error,
+    //             password: "Write at least 6 characters",
+    //         });
+    //         setPassword('');
+    //     } else {
+    //         setError({
+    //             ...error,
+    //             password: "",
+    //         });
+    //         setPassword(value);
+    //     }
+    // };
 
     const handleSignUp = async () => {
         setLoading(true);
@@ -134,7 +128,7 @@ export default function SignUpScreen() {
 
             if (response.ok) {
                 alert('Registration successful. Please log in.');
-                router.push('/login'); // Navigate to the login screen
+                router.push("/(routes)/login")
             } else {
                 alert('Registration failed. Please try again.');
             }
@@ -177,6 +171,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="email-address"
                                     value={email}
                                     placeholder="Email Address"
@@ -194,25 +189,29 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     secureTextEntry={!isPasswordVisible}
                                     value={password}
                                     placeholder="Password"
-                                    onChangeText={handlePasswordValidation}
+                                    placeholderTextColor="#747474"
+                                    onChangeText={(value) =>
+                                        setPassword(value)
+                                    }
                                 />
                                 <TouchableOpacity
                                     style={styles.visibleIcon}
                                     onPress={() => setPasswordVisible(!isPasswordVisible)}
                                 >
                                     {isPasswordVisible ? (
-                                        <Ionicons name="eye-off-outline" size={23} color={"#747474"} />
+                                        <Ionicons name="eye-off-outline" size={23} color="#747474" />
                                     ) : (
-                                        <Ionicons name="eye-outline" size={23} color={"#747474"} />
+                                        <Ionicons name="eye-outline" size={23} color="#747474" />
                                     )}
                                 </TouchableOpacity>
                             </View>
                             {error.password && (
-                                <View style={[styles.errorContainer, { top: 145 }]}>
+                                <View style={[styles.errorContainer, { top: 143, left: 15 }]}>
                                     <Entypo name="cross" size={18} color={"red"} />
                                     <Text style={{ color: "red", fontSize: 11, marginTop: -1 }}>
                                         {error.password}
@@ -223,6 +222,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={fname}
                                     placeholder="First Name"
@@ -240,6 +240,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={lname}
                                     placeholder="Last Name"
@@ -257,6 +258,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={nic}
                                     placeholder="NIC Number"
@@ -274,6 +276,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="phone-pad"
                                     value={contact}
                                     placeholder="Contact No"
@@ -294,6 +297,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={addressNo}
                                     placeholder="Address No"
@@ -311,6 +315,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={street1}
                                     placeholder="Street 1"
@@ -328,6 +333,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={street2}
                                     placeholder="Street 2"
@@ -345,6 +351,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={city}
                                     placeholder="City"
@@ -362,6 +369,7 @@ export default function SignUpScreen() {
                             <View style={{ marginTop: 15 }}>
                                 <TextInput
                                     style={styles.input}
+                                    autoCapitalize="none"
                                     keyboardType="default"
                                     value={district}
                                     placeholder="District"
