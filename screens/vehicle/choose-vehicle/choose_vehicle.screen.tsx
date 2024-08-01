@@ -21,15 +21,15 @@ export default function ChooseVehicleScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.primary_light]}
+            colors={[colors.secondary_light, colors.secondary_light]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
-                <View style={styles.title}>
-                    <Text>
-                        choose your vehicle
-                    </Text>
-                </View>
+                {/*<View style={styles.title}>*/}
+                {/*    <Text>*/}
+                {/*        choose your vehicle*/}
+                {/*    </Text>*/}
+                {/*</View>*/}
                 <View style={styles.PlateNoContainer}>
                     <Text style={styles.plateNo}>
                         CAQ - 1628
@@ -160,12 +160,12 @@ export default function ChooseVehicleScreen() {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
-                            color={colors.primary_light}
-                            onPress={() => router.back()}
-                    />
-                </View>
+                {/*<View style={styles.buttonContainer}>*/}
+                {/*    <Button title="Go Back"*/}
+                {/*            color={colors.primary_light}*/}
+                {/*            onPress={() => router.back()}*/}
+                {/*    />*/}
+                {/*</View>*/}
             </SafeAreaView>
         </LinearGradient>
     )
@@ -249,7 +249,7 @@ export const styles = StyleSheet.create({
         top: 440,
         width: wp("95%"),
         height: hp("36%"),
-        backgroundColor: colors.secondary_light,
+        backgroundColor: colors.primary_light,
         padding: 10,
         borderRadius: hp("2%"),
     },
@@ -265,7 +265,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 10,
-        backgroundColor: colors.primary_light,
+        backgroundColor: colors.secondary_light,
         borderRadius: hp("2%"),
         marginBottom: 10
     },

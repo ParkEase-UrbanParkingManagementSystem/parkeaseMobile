@@ -9,14 +9,11 @@ import {Nunito_400Regular, Nunito_700Bold} from "@expo-google-fonts/nunito";
 import ParkingLotSearchBox from "@/components/SearchBox/ParkingLotSearchBox";
 
 const data = [
-    'Broadway Parking Hub',
-    'Empire State Parking',
-    'Central Park Garage',
-    'Hudson River Parking',
-    'Times Square Lot',
-    'Brooklyn Bridge Parking',
-    'SoHo Parking Plaza',
+    'Nugegoda Super Market',
     'Liberty Street Garage',
+    'University of Colombo',
+    'liberty Plaza',
+    'Colombo Municipal Council'
 ];
 
 const ParkingLotSearchModal: React.FC = ( ) => {

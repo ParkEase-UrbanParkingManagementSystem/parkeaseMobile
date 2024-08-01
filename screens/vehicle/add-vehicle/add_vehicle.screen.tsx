@@ -141,12 +141,12 @@ export default function AddVehicleScreen() {
                         </View>
                     </View>
                 </ScrollView>
-                <View style={styles.buttonContainer}>
-                    <Button title="Go Back"
-                            color={colors.primary_light}
-                            onPress={() => router.back()}
-                    />
-                </View>
+                {/*<View style={styles.buttonContainer}>*/}
+                {/*    <Button title="Go Back"*/}
+                {/*            color={colors.primary_light}*/}
+                {/*            onPress={() => router.back()}*/}
+                {/*    />*/}
+                {/*</View>*/}
             </SafeAreaView>
         </LinearGradient>
     )
