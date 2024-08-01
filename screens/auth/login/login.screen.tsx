@@ -30,14 +30,17 @@ import {
 } from "@expo-google-fonts/nunito";
 import { useState } from "react";
 import { router } from "expo-router";
-import axios from "axios";
-import { SERVER_URI } from "@/utils/uri";
-import { Toast } from "react-native-toast-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useOAuth } from '@clerk/clerk-expo';
 
 import colors from "../../../constants/Colors"
-import {white} from "colorette";
-import {color} from "ansi-fragments";
+import {useWarmUpBrowser} from "@/hooks/useWarmUpBrowser";
+
+enum Strategy {
+    Google = 'oauth_google',
+    Apple = 'oauth_apple',
+    Facebook = 'oauth_facebook',
+}
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -48,6 +51,29 @@ export default function LoginScreen(message?: any) {
     const [error, setError] = useState({
         password: "",
     });
+    useWarmUpBrowser();
+    const { startOAuthFlow: googleAuth } = useOAuth({ strategy: 'oauth_google' });
+    const { startOAuthFlow: appleAuth } = useOAuth({ strategy: 'oauth_apple' });
+    const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: 'oauth_facebook' });
+
+    const onSelectAuth = async (strategy: Strategy) => {
+        const selectedAuth = {
+            [Strategy.Google]: googleAuth,
+            [Strategy.Apple]: appleAuth,
+            [Strategy.Facebook]: facebookAuth,
+        }[strategy];
+
+        try {
+            const { createdSessionId, setActive } = await selectedAuth();
+
+            if (createdSessionId) {
+                setActive!({ session: createdSessionId });
+                router.push("/(routes)/home-page")
+            }
+        } catch (err) {
+            console.error('OAuth error', err);
+        }
+    };
 
     const handlePasswordValidation = (value: string) => {
         const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
@@ -265,17 +291,17 @@ export default function LoginScreen(message?: any) {
                                     alignItems: "center",
                                     justifyContent: "center",
                                     marginTop: 20,
-                                    gap: 15,
+                                    gap: 25,
                                 }}
                             >
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => onSelectAuth(Strategy.Google)}>
                                     <FontAwesome name="google" size={30} />
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <FontAwesome name="apple" size={30} />
+                                <TouchableOpacity onPress={() => onSelectAuth(Strategy.Facebook)}>
+                                    <FontAwesome name="facebook" size={30} />
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <FontAwesome name="github" size={30} />
+                                <TouchableOpacity onPress={() => onSelectAuth(Strategy.Apple)}>
+                                    <FontAwesome name="apple" size={30} />
                                 </TouchableOpacity>
                             </View>
 
