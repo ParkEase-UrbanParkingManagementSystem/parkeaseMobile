@@ -26,28 +26,36 @@ export default function HomePageScreen() {
     let plateNo = "CAQ-1628";
 
     const [userDetails, setUserDetails] = useState<any>(null);
+    
     useEffect(() => {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
+            console.log("Token:", token);  // Debugging token
+
             try {
-                const response = await fetch(`http://localhost:5001/driver/details`, {
+                const response = await fetch(`http://10.22.127.128:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                        token: token || ""
+                       "token": token || ""  // Ensuring token is included correctly
                     }
                 });
 
+                console.log("Response status:", response.status);  // Debugging response status
                 const parseRes = await response.json();
+                console.log("Parsed response:", parseRes);  // Debugging parsed response
 
                 if (response.ok) {
                     setUserDetails(parseRes.data);
+                    console.log("User details set in state:", parseRes.data);  // Confirm state update
+
+                    
                 } else {
-                    console.error("Can't get the details");
+                    console.error("Error fetching details:", parseRes.message);
                 }
             } catch (error) {
                 if (error instanceof Error) {
-                    console.log(error.message);
+                    console.log("Fetch error:", error.message);
                 } else {
                     console.log("An unexpected error occurred");
                 }
@@ -87,7 +95,7 @@ export default function HomePageScreen() {
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
-                            Hi, {userDetails?.driver?.fname}
+                            Hi, {userDetails?.fname}
                         </Text>
                         <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
                             Locate Parking Lots Near you
