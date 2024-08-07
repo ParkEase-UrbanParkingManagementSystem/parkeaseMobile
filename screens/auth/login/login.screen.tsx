@@ -87,7 +87,7 @@ export default function LoginScreen(message?: any) {
             console.log("Sending request with body:", body);
 
             // const response = await fetch(`http://localhost:5001/auth/login`, {
-                const response = await fetch(`http://10.22.127.128:5000/auth/login`, {
+                const response = await fetch(`http://192.168.106.147:5000/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
@@ -104,7 +104,7 @@ export default function LoginScreen(message?: any) {
                 console.log("Role ID:", role_id); // Debugging role ID
 
                 if (role_id === 1) {
-                    router.push("/(routes)/choose-vehicle")
+                    router.push("/home-page");
                 }
                     // else if (role_id === 1) {
                     //     navigation.navigate("Driver"); // Navigate to Driver for role 1

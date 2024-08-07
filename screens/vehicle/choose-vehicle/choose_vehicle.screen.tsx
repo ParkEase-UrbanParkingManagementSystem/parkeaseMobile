@@ -1,35 +1,93 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import colors from '../../../constants/Colors'
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-// import {Simulate} from "react-dom/test-utils";
-// import abort = Simulate.abort;
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import colors from '../../../constants/Colors';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 export default function ChooseVehicleScreen() {
-    let [fontsLoaded, fontError] = useFonts({
+    let [fontsLoaded] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
         Nunito_700Bold
-    })
+    });
 
-    if (!fontsLoaded && !fontError) {
+    interface Vehicle {
+        type_id: number;
+        name: string;
+        vehicle_number: string;
+    }
+
+    interface VehicleImageProps {
+        vehicleType: number;
+    }
+
+    const VehicleImage: React.FC<VehicleImageProps> = ({ vehicleType }) => {
+        const getImageSource = (vehicleType: number) => {
+            switch (vehicleType) {
+                case 1:
+                    return require('@/assets/images/car_side.png');
+                case 2:
+                    return require('@/assets/images/bike_side.png');
+                case 3:
+                    return require('@/assets/images/tuktuk_side.png'); // Fallback image
+            }
+        };
+
+        return <Image style={styles.vehicleIcon} source={getImageSource(vehicleType)} />;
+    };
+
+    const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const token = await AsyncStorage.getItem("token");
+            console.log("Token:", token);  // Debugging token
+
+            try {
+                const response = await fetch(`http://192.168.106.147:5000/vehicle`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token || ""  // Ensuring token is included correctly
+                    }
+                });
+
+                console.log("Response status:", response.status);  // Debugging response status
+                const parseRes = await response.json();
+                console.log("Parsed response:", parseRes);  // Debugging parsed response
+
+                if (response.ok) {
+                    setVehicles(parseRes.data);
+                    console.log("Vehicle details set in state:", parseRes.data);  // Confirm state update
+                } else {
+                    console.error("Error fetching details:", parseRes.message);
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log("Fetch error:", error.message);
+                } else {
+                    console.log("An unexpected error occurred");
+                }
+            }
+        };
+
+        fetchVehicleDetails();
+    }, []);
+
+    if (!fontsLoaded) {
         return null;
     }
 
     return (
         <LinearGradient
             colors={[colors.secondary_light, colors.secondary_light]}
-            style={{flex:1}}
+            style={{ flex: 1 }}
         >
             <SafeAreaView style={styles.firstContainer}>
-                {/*<View style={styles.title}>*/}
-                {/*    <Text>*/}
-                {/*        choose your vehicle*/}
-                {/*    </Text>*/}
-                {/*</View>*/}
                 <View style={styles.PlateNoContainer}>
                     <Text style={styles.plateNo}>
                         CAQ - 1628
@@ -46,100 +104,27 @@ export default function ChooseVehicleScreen() {
                         source={require('@/assets/images/suv_side.png')}
                     />
                 </View>
+
+                <Text style={styles.listTopic}>
+                        Vehicle List
+                    </Text>
                 <View style={styles.vehicleSelectorContainer}>
+                    
                     <ScrollView style={styles.vehicleSelector}>
-                        {/*these are the registered vehicles of this user inside ParkEase*/}
-                        {/*should be loaded from the db*/}
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/bus_side.png')}
-                                />
+                        {vehicles && vehicles.map((vehicle, index) => (
+                            <View key={index} style={styles.vehicleContainer}>
+                                <View style={styles.vehicleIconContainer}>
+                                    <VehicleImage vehicleType={vehicle.type_id} />
+                                </View>
+                                <View style={styles.vehicleDetailsContainer}>
+                                    <Text style={styles.vehicleRegNo}>{vehicle.name}</Text>
+                                    <Text style={styles.vehicleName_2}>{vehicle.vehicle_number}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.selectButton}>
+                                    <Text style={{ color: colors.white }}>Select</Text>
+                                </TouchableOpacity>
                             </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>NB - 1234</Text>
-                                <Text style={styles.vehicleName_2}>Mitsubishi Fuso Rosa</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/car_side.png')}
-                                />
-                            </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>CBF - 4545</Text>
-                                <Text style={styles.vehicleName_2}>Mercedes-AMG GTC</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/jeep_side.png')}
-                                />
-                            </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>CBR - 6789</Text>
-                                <Text style={styles.vehicleName_2}>Jeep Wrangler Rubicon</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/lorry_side.png')}
-                                />
-                            </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>PH - 1628</Text>
-                                <Text style={styles.vehicleName_2}>Mitsubishi Fuso</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/tuktuk_side.png')}
-                                />
-                            </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>ABB - 8256</Text>
-                                <Text style={styles.vehicleName_2}>TVS King</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.vehicleContainer}>
-                            <View style={styles.vehicleIconContainer}>
-                                <Image
-                                    style={styles.vehicleIcon}
-                                    source={require('@/assets/images/van_side.png')}
-                                />
-                            </View>
-                            <View style={styles.vehicleDetailsContainer}>
-                                <Text style={styles.vehicleRegNo}>NB - 7245</Text>
-                                <Text style={styles.vehicleName_2}>Toyota Hiace</Text>
-                            </View>
-                            <TouchableOpacity style={styles.selectButton}>
-                                <Text style={{color: colors.white}}>Select</Text>
-                            </TouchableOpacity>
-                        </View>
+                        ))}
                     </ScrollView>
                 </View>
                 <View style={styles.actionButtonContainer}>
@@ -156,19 +141,13 @@ export default function ChooseVehicleScreen() {
                         onPress={() => router.push("/(routes)/home-page")}
                     >
                         <Text style={styles.continueText}>
-                            continue
+                            Continue
                         </Text>
                     </TouchableOpacity>
                 </View>
-                {/*<View style={styles.buttonContainer}>*/}
-                {/*    <Button title="Go Back"*/}
-                {/*            color={colors.primary_light}*/}
-                {/*            onPress={() => router.back()}*/}
-                {/*    />*/}
-                {/*</View>*/}
             </SafeAreaView>
         </LinearGradient>
-    )
+    );
 }
 
 // styles
@@ -219,8 +198,6 @@ export const styles = StyleSheet.create({
         gap: 50,
     },
     addVehicleButtonContainer: {
-        // position: "absolute",
-        // bottom: 200,
         borderRadius: hp("1%"),
         paddingHorizontal: 20,
         paddingVertical: 10,
@@ -232,8 +209,6 @@ export const styles = StyleSheet.create({
         fontWeight: "600"
     },
     continueButtonContainer: {
-        // position: "absolute",
-        // bottom: 100,
         borderRadius: hp("1%"),
         paddingHorizontal: 30,
         paddingVertical: 10,
@@ -290,12 +265,18 @@ export const styles = StyleSheet.create({
         alignItems: 'flex-start',
 
     },
-    vehicleRegNo:{
-        fontSize: 25,
+    listTopic: {
+        fontSize: 22,
+        fontWeight: "bold",
+        marginBottom: 10
+    }
+    ,
+    vehicleRegNo: {
+        fontSize: 22,
         fontWeight: "bold",
     },
     vehicleName_2: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "normal",
         color: colors.primary
     },
@@ -304,5 +285,4 @@ export const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 8,
     },
-
 });
