@@ -9,38 +9,36 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 interface QRCodeGeneratorProps {
     userID: string;
     vehicleID: string;
-    entryTime: string;
-    driverVehicleID: string;
+    
 }
 
-const generateQRCodeValue = (userID: string, vehicleID: string, entryTime: string, driverVehicleID: string): string => {
-    const data = {
-        userID: userID,
-        vehicleID: vehicleID,
-        entryTime: entryTime,
-        driverVehicleID: driverVehicleID
-    };
-    return JSON.stringify(data);
-};
+// const generateQRCodeValue = (userID: string, vehicleID: string): string => {
+//     const data = {
+//         userID: userID,
+//         vehicleID: vehicleID
+//     };
+//     return JSON.stringify(data);
+// };
 
-const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({ userID, vehicleID, entryTime, driverVehicleID }) => {
-    const qrValue = generateQRCodeValue(userID, vehicleID, entryTime, driverVehicleID);
+const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = ({ userID, vehicleID }) => {
+    // const qrValue = generateQRCodeValue(userID, vehicleID);
 
-    let [fontsLoaded, fontError] = useFonts({
+    let [fontsLoaded] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
         Nunito_700Bold
     })
 
-    if (!fontsLoaded && !fontError) {
+    if (!fontsLoaded) {
         return null;
     }
 
     return (
         <View style={styles.container}>
             <QRCode
-                value={qrValue}
-                size={wp("90%")}
+                value={`Vehicle: ${vehicleID}, User: ${userID}`}
+                size={250}
+
                 backgroundColor = {colors.secondary_light}
             />
             <Text
