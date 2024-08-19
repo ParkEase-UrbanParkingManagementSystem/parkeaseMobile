@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 
-const VehicleNameInput = () => {
+interface VehicleNameInputProps {
+    value: string;
+    onChangeText: (text: string) => void;
+}
+
+const VehicleNameInput: React.FC<VehicleNameInputProps> = ({ value, onChangeText }) => {
     const [name, setName] = useState('');
 
     return (
@@ -10,8 +15,8 @@ const VehicleNameInput = () => {
             style={styles.input}
             keyboardType="default"
             placeholder="Enter Vehicle Name"
-            value={name}
-            onChangeText={(value) => setName(value)}
+            value={value}
+            onChangeText={onChangeText}
         />
     );
 };
