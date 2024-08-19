@@ -10,10 +10,14 @@ import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import IOSMap from "@/components/Map/IOSMap";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
-import React, {useEffect, useState} from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {Marker} from "react-native-maps";
+import { VehicleContext } from '../../utils/vehicleContext';
+import QRScreen from '@/screens/QR/QR.screen'
+
 
 export default function HomePageScreen() {
+    const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext);
     // let [fontsLoaded, fontError] = useFonts({
     //     Raleway_700Bold,
     //     Nunito_400Regular,
@@ -23,17 +27,23 @@ export default function HomePageScreen() {
     // if (!fontsLoaded && !fontError) {
     //     return null;
     // }
-    let plateNo = "CAQ-1628";
+    let plateNo = selectedVehicle?.vehicle_number;
 
     const [userDetails, setUserDetails] = useState<any>(null);
+    const [showQR, setShowQR] = useState(false);
+
+    // console.log("Meka thamai selected",selectedVehicle);
+    // console.log("Meka nama",selectedVehicle?.name);
     
     useEffect(() => {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
-            console.log("Token:", token);  // Debugging token
+            // console.log("Token:", token);  // Debugging token
+
+            console.log("hellow")
 
             try {
-                const response = await fetch(`http://192.168.106.147:5000/driver/details`, {
+                const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -41,9 +51,9 @@ export default function HomePageScreen() {
                     }
                 });
 
-                console.log("Response status:", response.status);  // Debugging response status
+                // console.log("Response status:", response.status);  // Debugging response status
                 const parseRes = await response.json();
-                console.log("Parsed response:", parseRes);  // Debugging parsed response
+                // console.log("Parsed response:", parseRes);  // Debugging parsed response
 
                 if (response.ok) {
                     setUserDetails(parseRes.data);
@@ -84,7 +94,7 @@ export default function HomePageScreen() {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.iconContainer}>
-                            <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
+                            <TouchableOpacity onPress={() => router.push("/")}>
                                 <Image
                                     source={require('@/assets/images/notification.png')}
                                     style={styles.icon}
@@ -103,24 +113,31 @@ export default function HomePageScreen() {
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap/>
-                        <TouchableOpacity
-                            onPress={() => router.push("/(routes)/QR")}
-                            style={styles.currentVehicle}
-                        >
-                            <View style={styles.QRContainer}>
-                                <Image
-                                    source={require('@/assets/images/QR_icon.png')}
-                                    style={[styles.icon, {marginRight: 20}]}
-                                />
-                            </View>
-                            <View style={styles.plateNoContainer}>
-                                <Text style={styles.plateNo}>
-                                    {plateNo}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
+                        {selectedVehicle && (
+                            <TouchableOpacity
+                                onPress={() => setShowQR(!showQR)}
+                                style={styles.currentVehicle}
+                            >
+                                <View style={styles.QRContainer}>
+                                    <Image
+                                        source={require('@/assets/images/QR_icon.png')}
+                                        style={[styles.icon, { marginRight: 20 }]}
+                                    />
+                                </View>
+                                <View style={styles.plateNoContainer}>
+                                    <Text style={styles.plateNo}>
+                                        {plateNo}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
                     </View>
+                    {showQR && (
+                        <View style={styles.qrContainer}>
+                            <QRScreen userID={userDetails.driver_id} vehicleID={selectedVehicle?.vehicle_id} />
 
+                        </View>
+                    )}
                 </View>
                 <View>
                     <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
@@ -249,17 +266,27 @@ export default function HomePageScreen() {
                           </TouchableOpacity>
                       </ScrollView>
                     </View>
-                    <View style={styles.navBar}>
-
-                    </View>
                 </View>
             </SafeAreaView>
         </LinearGradient>
-    )
+    );
 }
 
 // styles
 export const styles = StyleSheet.create({
+
+    qrContainer: {
+        position: 'absolute',
+        
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     firstContainer: {
         flex: 1,
         alignItems: "flex-start",

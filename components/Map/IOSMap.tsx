@@ -323,8 +323,8 @@ export default function IOSMap() {
 
             let currentLocation = await Location.getCurrentPositionAsync({});
             setLocation(currentLocation);
-            console.log("Location:");
-            console.log(currentLocation);
+            // console.log("Location:");
+            // console.log(currentLocation);
             if (currentLocation) {
                 setRegion({
                     latitude: currentLocation.coords.latitude,
