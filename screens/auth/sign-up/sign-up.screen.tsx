@@ -32,7 +32,7 @@ import {
 import { useState } from "react";
 import { router } from "expo-router";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import { NEXT_PUBLIC_API_KEY } from '@env';
+
 import colors from "../../../constants/Colors";
 
 export default function SignUpScreen() {
@@ -118,7 +118,7 @@ export default function SignUpScreen() {
                 district,
             };
 
-                const response = await fetch(`${NEXT_PUBLIC_API_KEY}/auth/registerDriver`, {
+            const response = await fetch(`http://10.22.127.128:5000/auth/registerDriver`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -7,7 +7,6 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NEXT_PUBLIC_API_KEY } from '@env';
 
 export default function profileScreen() {
     const [fontsLoaded] = useFonts({
@@ -21,14 +20,8 @@ export default function profileScreen() {
     useEffect(() => {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
-            console.log('Token:', token);  // Debug token
-
-            if (!token) {
-                console.error("No token found");
-                return;
-            }
             try {
-                const response = await fetch(`${NEXT_PUBLIC_API_KEY}/driver/details`, {
+                const response = await fetch(`http://10.22.127.128:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -37,7 +30,6 @@ export default function profileScreen() {
                 });
 
                 const parseRes = await response.json();
-                console.log('API Response:', parseRes);  // Debug API response
 
                 if (response.ok) {
                     setUserDetails(parseRes.data);
@@ -55,10 +47,6 @@ export default function profileScreen() {
 
         fetchUserDetails();
     }, []);
-
-    if (!userDetails) {
-        return <Text>Loading...</Text>;  // Or a spinner or other loading indicator
-    }
 
     if (!fontsLoaded) {
         return null;
