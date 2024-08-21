@@ -11,7 +11,7 @@ import IOSMap from "@/components/Map/IOSMap";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
 import React, {useEffect, useState} from "react";
-import {Marker} from "react-native-maps";
+import { NEXT_PUBLIC_API_KEY } from '@env';
 
 export default function HomePageScreen() {
     // let [fontsLoaded, fontError] = useFonts({
@@ -33,7 +33,7 @@ export default function HomePageScreen() {
             console.log("Token:", token);  // Debugging token
 
             try {
-                const response = await fetch(`http://10.22.127.128:5000/driver/details`, {
+                    const response = await fetch(`${NEXT_PUBLIC_API_KEY}/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
