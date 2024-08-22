@@ -8,7 +8,7 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function profileScreen() {
+export default function ProfileScreen() {
     const [fontsLoaded] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -16,6 +16,12 @@ export default function profileScreen() {
     });
 
     const [userDetails, setUserDetails] = useState<any>(null);
+
+    const handleLogout = async () => {
+        
+        await AsyncStorage.removeItem("token");
+        router.push("/(routes)/login");
+    }
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -33,6 +39,7 @@ export default function profileScreen() {
 
                 if (response.ok) {
                     setUserDetails(parseRes.data);
+                    
                 } else {
                     console.error("Can't get the details");
                 }
@@ -60,14 +67,9 @@ export default function profileScreen() {
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.header}>
                     <View style={styles.name}>
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>{userDetails?.driver?.fname} {userDetails?.driver?.lname}</Text>
-                        <View style={styles.rating}>
-                            <Image
-                                style={styles.starIcon}
-                                source={require("@/assets/images/star.png")}
-                            />
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>4.77</Text>
-                        </View>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 26}}>{userDetails?.fname} {userDetails?.lname}</Text>
+                        <Text style={{fontFamily: "Nunito_700", fontSize: 14}}>{userDetails?.email}</Text>
+                        
                     </View>
                     <View style={styles.profilePicImageContainer}>
                         <Image
@@ -145,12 +147,21 @@ export default function profileScreen() {
                             />
                         </View>
                     </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.sub}>
+                        <Image
+                            source={require("@/assets/images/ParkingLocation.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Usage Insights</Text>
+                    </TouchableOpacity>
+
                     <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/settingsIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Acuount Settings</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Account Settings</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
@@ -166,7 +177,7 @@ export default function profileScreen() {
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Lets talk business</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.sub}>
+                    <TouchableOpacity style={styles.sub} onPress={handleLogout}>
                         <Image
                             source={require("@/assets/images/logOutIcon.png")}
                             style={{width: 20, height: 20}}
