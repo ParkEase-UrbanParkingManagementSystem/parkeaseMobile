@@ -73,6 +73,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(routes)/payment/paymentMethods" />
           <Stack.Screen name="(routes)/payment/wallet" />
           <Stack.Screen name="(routes)/info/index" />
+          <Stack.Screen name="(routes)/parked/index" />
         </Stack>
       )}
     </>

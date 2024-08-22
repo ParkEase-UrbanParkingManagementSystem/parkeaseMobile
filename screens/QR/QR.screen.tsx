@@ -46,7 +46,7 @@ const QRScreen: React.FC<QRScreenProps> = ({ userID, vehicleID }) => {
                     // style={styles.qrCode}
                 />
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.parkedButton} onPress={() => router.back()}>
+                    <TouchableOpacity style={styles.parkedButton} onPress={() => router.push("/(routes)/parked")}>
                         <Text style={styles.buttonText}>Parked</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.billButton} onPress={() => router.push("/(routes)/payment/bill")}>
