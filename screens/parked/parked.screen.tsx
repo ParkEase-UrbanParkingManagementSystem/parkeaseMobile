@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import QRCode from 'react-native-qrcode-svg';
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { router } from "expo-router";
 
 interface ParkingDetails {
   vehicle_name: string;
@@ -173,6 +174,8 @@ export default function ParkedScreen() {
             <TouchableOpacity style={styles.modalCloseButton} onPress={toggleDetailsModal}>
               <Text style={styles.modalCloseButtonText}>Close</Text>
             </TouchableOpacity>
+
+            
           </View>
         </Modal>
 
@@ -187,9 +190,17 @@ export default function ParkedScreen() {
               />
             </View>
             <Text style={styles.modalTitle2}>Ask your warden to scan this QR to exit your vehicle</Text>
+
+            <TouchableOpacity style={styles.modalCloseButton} onPress={() => { router.push("/(routes)/payment/wallet"); toggleQRModal(); }}>
+              <Text style={styles.modalCloseButtonText}>Go to Payments</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.modalCloseButton} onPress={toggleQRModal}>
               <Text style={styles.modalCloseButtonText}>Close</Text>
             </TouchableOpacity>
+
+            
+
           </View>
         </Modal>
       </SafeAreaView>
@@ -357,8 +368,9 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     backgroundColor: colors.primary,
-    paddingVertical: hp('1%'),
+    paddingVertical: hp('1.5%'),
     borderRadius: wp('3%'),
+    marginBottom: hp('2%'),
   },
   modalCloseButtonText: {
     fontSize: wp('4.5%'),
