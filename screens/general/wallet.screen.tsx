@@ -4,24 +4,54 @@ import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
-
-const paymentMethods = [
-    { id: '1', name: 'PayPark Wallet', balance: 'LKR 10.00', image: require('@/assets/images/wallet.png') },
-    { id: '2', name: 'Cash', balance: '', image: require('@/assets/images/cash.png') },
-    { id: '3', name: 'Park Points', balance: 'LKR 1450.00', image: require('@/assets/images/ParkEase_logo.png') },
-];
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from "expo-router";
 
 export default function PaymentScreen() {
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isConfirmationVisible, setIsConfirmationVisible] = useState(false); // New state for confirmation dialog
-    const amountToPay = 1250.00;
+    const [details, setDetails] = useState<any>(null); // Changed to `any` for simplicity
+    const [error, setError] = useState<Error | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+    const amountToPay = Number(details?.toll_amount) || 0; // Ensure amountToPay is a number
 
-    const handleAddPaymentMethod = () => {
-        setIsModalVisible(true);
-    };
+    useEffect(() => {
+        const fetchDetails = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch('http://192.168.8.198:5000/parking/parked-detailsMob', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        token: token || "",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.message === "No parking details found") {
+                    setDetails(null);
+                } else {
+                    setDetails(data.data);
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                setError(err as Error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDetails();
+    }, [router]);
 
     const closeModal = () => {
         setIsModalVisible(false);
@@ -37,8 +67,49 @@ export default function PaymentScreen() {
         }
     };
 
-    const confirmPayment = () => {
-        // Handle the payment confirmation logic here
+    const confirmPayment = async () => {
+        if(selectedMethod === '1') {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch('http://192.168.8.198:5000/parking/pay-wallet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', 
+                        token: token || "",
+                    },
+                    body: JSON.stringify({ 
+                        amount: amountToPay,
+                        method: selectedMethod,
+                        instance_id: details?.instance_id,
+                    }),
+                });
+                // Handle response
+            } catch (error) {
+                console.error('Error paying by wallet:', error);
+            }
+        } else if(selectedMethod === '2') {
+            // Handle cash payment
+        } else if(selectedMethod === '3') {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch('http://192.168.8.198:5000/parking/pay-pp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        token: token || "",
+                    },
+                    body: JSON.stringify({ amount: amountToPay, method: selectedMethod,
+                        instance_id: details?.instance_id, }),
+                });
+                // Handle response
+            } catch (error) {
+                console.error('Error paying by park points:', error);
+            }
+        }
         setIsConfirmationVisible(false);
         Alert.alert("Payment Confirmed", "Your payment has been processed successfully.");
     };
@@ -53,9 +124,18 @@ export default function PaymentScreen() {
         Nunito_700Bold
     });
 
-    if (!fontsLoaded && !fontError) {
+    if (!fontsLoaded) {
+        if (fontError) {
+            console.error(fontError);
+        }
         return null;
     }
+
+    const paymentMethods = [
+        { id: '1', name: 'PayPark Wallet', balance: `LKR ${details?.wallet || 0}`, image: require('@/assets/images/wallet.png') },
+        { id: '2', name: 'Cash', balance: '', image: require('@/assets/images/cash.png') },
+        { id: '3', name: 'Park Points', balance: `LKR ${details?.parkpoints || 0}`, image: require('@/assets/images/ParkEase_logo.png') },
+    ];
 
     const getBalance = (methodId: string) => {
         const method = paymentMethods.find(m => m.id === methodId);
@@ -65,11 +145,22 @@ export default function PaymentScreen() {
     const balance = selectedMethod ? getBalance(selectedMethod) : 0;
     const isBalanceSufficient = balance >= amountToPay;
 
+    if (!details) {
+        return (
+            <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.messageContainer}>
+                        <Text style={styles.noDetailsText}>
+                            Please ask your warden to rescan your QR code before proceeding with payments.
+                        </Text>
+                    </View>
+                </SafeAreaView>
+            </LinearGradient>
+        );
+    }
+
     return (
-        <LinearGradient
-            colors={[colors.gradientStart, colors.gradientEnd]}
-            style={styles.container}
-        >
+        <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.container}>
             <SafeAreaView style={styles.innerContainer}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => {/* Navigate back */}}>
@@ -103,7 +194,7 @@ export default function PaymentScreen() {
                 </View>
                 {selectedMethod && (
                     <View style={styles.summaryContainer}>
-                        {selectedMethod === '2' ? ( // Cash
+                        {selectedMethod === '2' ? (
                             <Text style={styles.summaryText}>Cash payment selected. Confirm payment.</Text>
                         ) : (
                             <>
@@ -135,7 +226,10 @@ export default function PaymentScreen() {
                     <View style={styles.modalBackground}>
                         <View style={styles.modalContainer}>
                             <Text style={styles.modalTitle}>Confirm Payment</Text>
-                            <Text style={styles.modalMessage}>Are you sure you want to proceed with the payment using {selectedMethod == 1 ? "PayPark Wallet" : selectedMethod == 2 ? "Cash" : "Park Points"}?</Text>
+                            <Text style={styles.modalMessage}>
+                                Are you sure you want to proceed with the payment using  
+                                {selectedMethod === '1' ? "PayPark Wallet" : selectedMethod === '2' ? " Cash" : " Park Points"}?
+                            </Text>
                             <View style={styles.modalButtonsContainer}>
                                 <TouchableOpacity style={styles.modalButton} onPress={confirmPayment}>
                                     <Text style={styles.modalButtonText}>Yes</Text>
@@ -154,6 +248,31 @@ export default function PaymentScreen() {
 
 // styles
 export const styles = StyleSheet.create({
+    gradient: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    messageContainer: {
+        display: 'flex',
+        backgroundColor: '#ffffff',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    noDetailsText: {
+        fontSize: 16,
+        color: '#333333',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         alignItems: "center",

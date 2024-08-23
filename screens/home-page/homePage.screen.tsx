@@ -139,6 +139,9 @@ export default function HomePageScreen() {
                         </View>
                     )}
                 </View>
+                <TouchableOpacity  onPress={() => { router.push("/(routes)/payment/wallet"); }}>
+              <Text >Go to Payments</Text>
+            </TouchableOpacity>
                 <View>
                     <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
                         Recently visited
