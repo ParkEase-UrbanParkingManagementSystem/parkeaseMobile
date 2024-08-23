@@ -1,65 +1,41 @@
-import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, ScrollView} from "react-native";
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Modal, ScrollView } from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import colors from '../../constants/Colors'
-import {responsiveWidth} from "react-native-responsive-dimensions";
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import colors from '../../constants/Colors';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import IOSMap from "@/components/Map/IOSMap";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal"
-import React, { useState, useEffect, useContext } from 'react';
-import {Marker} from "react-native-maps";
+import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '../../utils/vehicleContext';
-import QRScreen from '@/screens/QR/QR.screen'
-
+import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
 
 export default function HomePageScreen() {
-    const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext);
-    // let [fontsLoaded, fontError] = useFonts({
-    //     Raleway_700Bold,
-    //     Nunito_400Regular,
-    //     Nunito_700Bold
-    // })
-    //
-    // if (!fontsLoaded && !fontError) {
-    //     return null;
-    // }
-    let plateNo = selectedVehicle?.vehicle_number;
-
+    const { selectedVehicle } = useContext(VehicleContext);
     const [userDetails, setUserDetails] = useState<any>(null);
-    const [showQR, setShowQR] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
-    // console.log("Meka thamai selected",selectedVehicle);
-    // console.log("Meka nama",selectedVehicle?.name);
-    
+    const plateNo = selectedVehicle?.vehicle_number;
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
-            // console.log("Token:", token);  // Debugging token
-
-            console.log("hellow")
 
             try {
                 const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
-                       "token": token || ""  // Ensuring token is included correctly
+                        "token": token || ""
                     }
                 });
 
-                // console.log("Response status:", response.status);  // Debugging response status
                 const parseRes = await response.json();
-                // console.log("Parsed response:", parseRes);  // Debugging parsed response
 
                 if (response.ok) {
                     setUserDetails(parseRes.data);
-                    console.log("User details set in state:", parseRes.data);  // Confirm state update
-
-                    
                 } else {
                     console.error("Error fetching details:", parseRes.message);
                 }
@@ -75,47 +51,56 @@ export default function HomePageScreen() {
         fetchUserDetails();
     }, []);
 
+    const handleShowQR = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
+
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
-            style={{flex:1, alignItems: "center", justifyContent: "center"}}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.home_page_top}>
-                        <View style={styles.searchBarContainer}>
-                            <ParkingLotSearchModal/>
-                        </View>
-                        <View style={styles.iconContainer}>
-                            <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
-                                <Image
-                                    source={require('@/assets/images/driver_profile.png')}
-                                    style={[styles.icon, {marginRight: 20}]}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.iconContainer}>
-                            <TouchableOpacity onPress={() => router.push("/")}>
-                                <Image
-                                    source={require('@/assets/images/notification.png')}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.searchBarContainer}>
+                        {/* Assuming ParkingLotSearchModal is a functional component */}
+                        <ParkingLotSearchModal />
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
+                            <Image
+                                source={require('@/assets/images/driver_profile.png')}
+                                style={[styles.icon, { marginRight: 20 }]}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity onPress={() => router.push("/")}>
+                            <Image
+                                source={require('@/assets/images/notification.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
-                        <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
+                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                             Hi, {userDetails?.fname}
                         </Text>
-                        <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10}}>
+                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10 }}>
                             Locate Parking Lots Near you
                         </Text>
                     </View>
                     <View style={styles.mapContainer}>
-                        <IOSMap/>
+                        <IOSMap />
                         {selectedVehicle && (
                             <TouchableOpacity
-                                onPress={() => setShowQR(!showQR)}
+                                onPress={handleShowQR}
                                 style={styles.currentVehicle}
                             >
                                 <View style={styles.QRContainer}>
@@ -132,155 +117,240 @@ export default function HomePageScreen() {
                             </TouchableOpacity>
                         )}
                     </View>
-                    {showQR && (
-                        <View style={styles.qrContainer}>
-                            <QRScreen userID={userDetails.driver_id} vehicleID={selectedVehicle?.vehicle_id} />
-
-                        </View>
-                    )}
                 </View>
-                <TouchableOpacity  onPress={() => { router.push("/(routes)/payment/wallet"); }}>
-              <Text >Go to Payments</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
+                    <Text>Go to Payments</Text>
+                </TouchableOpacity>
                 <View>
-                    <Text style={{color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10}}>
+                    <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                         Recently visited
                     </Text>
                 </View>
                 <View style={styles.home_page_bottom}>
                     <View style={styles.ScrollViewContainer}>
-                      <ScrollView horizontal>
-                        <TouchableOpacity
-                            style={styles.parkingLotContainer}
-                            onPress={() => router.push("/(routes)/parking-lot")}
-                        >
-                            <View style={styles.imageContainer}>
-                                <Image
-                                    style={styles.image}
-                                    source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}
-                                />
-                                <Text style={[styles.status, { color: "red" }]}>
-                                    Closed
-                                </Text>
-                            </View>
-                            <View style={styles.detailsContainer}>
-                                <Text
-                                    style={{fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1,}}
-                                >
-                                    Nugegoda Super Market
-                                </Text>
-                                <Text
-                                    style={{fontFamily: "Nunito_700Bold", fontSize: 15}}
-                                >
-                                    5.3 Km</Text>
-                                <View style={styles.capacity}>
+                        <ScrollView horizontal>
+                            <TouchableOpacity
+                                style={styles.parkingLotContainer}
+                                onPress={() => router.push("/(routes)/parking-lot")}
+                            >
+                                <View style={styles.imageContainer}>
                                     <Image
-                                        style={styles.vehicleIcon}
-                                        source={require("@/assets/images/suv_side.png")}
+                                        style={styles.image}
+                                        source={require("@/assets/ParkingLots/nugegodaSM_1.jpg")}
                                     />
-                                    <Text>: 500</Text>
+                                    <Text style={[styles.status, { color: "red" }]}>
+                                        Closed
+                                    </Text>
                                 </View>
-                                <TouchableOpacity
-                                    style={styles.navigateButton}
-                                    // onPress={() => router.push("/(routes)/")}
-                                >
-                                    <Text>Navigate</Text>
-
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableOpacity>
-                          <TouchableOpacity
-                              style={styles.parkingLotContainer}
-                              onPress={() => router.push("/(routes)/parking-lot")}
-                          >
-                              <View style={styles.imageContainer}>
-                                  <Image
-                                      style={styles.image}
-                                      source={require("@/assets/ParkingLots/GallFace.jpg")}
-                                  />
-                                  <Text style={styles.status}>
-                                      Open
-                                  </Text>
-                              </View>
-                              <View style={styles.detailsContainer}>
-                                  <Text
-                                      style={{fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1,}}
-                                  >
-                                      Galle Face
-                                  </Text>
-                                  <Text
-                                      style={{fontFamily: "Nunito_700Bold", fontSize: 15}}
-                                  >
-                                      10.3 Km</Text>
-                                  <View style={styles.capacity}>
-                                      <Image
-                                          style={styles.vehicleIcon}
-                                          source={require("@/assets/images/suv_side.png")}
-                                      />
-                                      <Text>: 1500</Text>
-                                  </View>
-                                  <TouchableOpacity
-                                      style={styles.navigateButton}
-                                      // onPress={() => router.push("/(routes)/")}
-                                  >
-                                      <Text>Navigate</Text>
-
-                                  </TouchableOpacity>
-                              </View>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                              style={styles.parkingLotContainer}
-                              onPress={() => router.push("/(routes)/parking-lot")}
-                          >
-                              <View style={styles.imageContainer}>
-                                  <Image
-                                      style={styles.image}
-                                      source={require("@/assets/ParkingLots/RaceCourse.jpg")}
-                                  />
-                                  <Text style={[styles.status, { color: "red" }]}>
-                                      Closed
-                                  </Text>
-                              </View>
-                              <View style={styles.detailsContainer}>
-                                  <Text
-                                      style={{fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1,}}
-                                  >
-                                      Race Course Colombo
-                                  </Text>
-                                  <Text
-                                      style={{fontFamily: "Nunito_700Bold", fontSize: 15}}
-                                  >
-                                      10.3 Km</Text>
-                                  <View style={styles.capacity}>
-                                      <Image
-                                          style={styles.vehicleIcon}
-                                          source={require("@/assets/images/suv_side.png")}
-                                      />
-                                      <Text>: 1500</Text>
-                                  </View>
-                                  <TouchableOpacity
-                                      style={styles.navigateButton}
-                                      // onPress={() => router.push("/(routes)/")}
-                                  >
-                                      <Text>Navigate</Text>
-
-                                  </TouchableOpacity>
-                              </View>
-                          </TouchableOpacity>
-                      </ScrollView>
+                                <View style={styles.detailsContainer}>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1, }}
+                                    >
+                                        Nugegoda Super Market
+                                    </Text>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}
+                                    >
+                                        5.3 Km
+                                    </Text>
+                                    <View style={styles.capacity}>
+                                        <Image
+                                            style={styles.vehicleIcon}
+                                            source={require("@/assets/images/suv_side.png")}
+                                        />
+                                        <Text>: 500</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.navigateButton}
+                                    >
+                                        <Text>Navigate</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.parkingLotContainer}
+                                onPress={() => router.push("/(routes)/parking-lot")}
+                            >
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        style={styles.image}
+                                        source={require("@/assets/ParkingLots/GallFace.jpg")}
+                                    />
+                                    <Text style={styles.status}>
+                                        Open
+                                    </Text>
+                                </View>
+                                <View style={styles.detailsContainer}>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1, }}
+                                    >
+                                        Galle Face
+                                    </Text>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}
+                                    >
+                                        10.3 Km
+                                    </Text>
+                                    <View style={styles.capacity}>
+                                        <Image
+                                            style={styles.vehicleIcon}
+                                            source={require("@/assets/images/suv_side.png")}
+                                        />
+                                        <Text>: 1500</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.navigateButton}
+                                    >
+                                        <Text>Navigate</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.parkingLotContainer}
+                                onPress={() => router.push("/(routes)/parking-lot")}
+                            >
+                                <View style={styles.imageContainer}>
+                                    <Image
+                                        style={styles.image}
+                                        source={require("@/assets/ParkingLots/RaceCourse.jpg")}
+                                    />
+                                    <Text style={[styles.status, { color: "red" }]}>
+                                        Closed
+                                    </Text>
+                                </View>
+                                <View style={styles.detailsContainer}>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1, }}
+                                    >
+                                        Race Course Colombo
+                                    </Text>
+                                    <Text
+                                        style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}
+                                    >
+                                        10.3 Km
+                                    </Text>
+                                    <View style={styles.capacity}>
+                                        <Image
+                                            style={styles.vehicleIcon}
+                                            source={require("@/assets/images/suv_side.png")}
+                                        />
+                                        <Text>: 1500</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.navigateButton}
+                                    >
+                                        <Text>Navigate</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </TouchableOpacity>
+                        </ScrollView>
                     </View>
                 </View>
             </SafeAreaView>
+
+            {/* Modal for QR code */}
+            <Modal
+    visible={isModalVisible}
+    animationType="fade"
+    transparent={true}
+    onRequestClose={handleCloseModal}
+>
+    <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
+            <View style={styles.vehicleInfoContainer}>
+                <Text style={styles.vehicleInfoText}>
+                    Vehicle: {selectedVehicle?.name}
+                </Text>
+                <Text style={styles.vehicleInfoText}>
+                    Plate No: {selectedVehicle?.vehicle_number}
+                </Text>
+            </View>
+            <View style={styles.qrCodeContainer}>
+                <QRCode
+                    value={`Vehicle: ${selectedVehicle?.vehicle_id}, User: ${userDetails?.driver_id}`}
+                    size={wp('60%')}
+                />
+            </View>
+            <TouchableOpacity
+                onPress={() => {
+                    router.push("/(routes)/parked");
+                    handleCloseModal();
+                }}
+                style={styles.parkedButton}
+            >
+                <Text style={styles.parkedButtonText}>Parked</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleCloseModal} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+</Modal>
+
         </LinearGradient>
     );
 }
 
-// styles
-export const styles = StyleSheet.create({
-
+const styles = StyleSheet.create({
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: wp('5%'),
+        borderRadius: wp('5%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: wp('80%'), // Adjust width as needed
+        maxHeight: hp('60%'), // Adjust height as needed
+    },
+    vehicleInfoContainer: {
+        marginBottom: hp('2%'), // Space between vehicle info and QR code
+        alignItems: 'center',
+    },
+    vehicleInfoText: {
+        fontFamily: 'Nunito_700Bold',
+        fontSize: wp('6%'),
+        color: colors.primary,
+        textAlign: 'center',
+    },
+    qrCodeContainer: {
+        width: wp('60%'),
+        height: wp('60%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    parkedButton: {
+        marginTop: 15,
+        padding: 10,
+        backgroundColor: colors.primary,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    parkedButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    closeButton: {
+        marginTop: 15,
+        padding: 10,
+        backgroundColor: colors.secondary,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    closeButtonText: {
+        color: 'white',
+        fontSize: 16,
+    },
     qrContainer: {
         position: 'absolute',
-        
         top: 0,
         left: 0,
         right: 0,
@@ -289,7 +359,6 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     firstContainer: {
         flex: 1,
         alignItems: "flex-start",
@@ -303,39 +372,24 @@ export const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         width: wp("95%"),
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.secondary_light,
         padding: 10,
         alignItems: "center",
         justifyContent: "flex-start",
         gap: 10,
-
     },
     searchBarContainer: {
         width: wp("60%"),
         marginRight: 10
     },
     home_page_mid: {
-        // flex: 1,
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.secondary_light,
         width: wp("100%"),
         height: hp("61%"),
         position: "relative",
     },
-    title: {
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.secondary_light,
-
-    },
-    iconContainer: {
-
-    },
+    title: {},
+    iconContainer: {},
     icon: {
         width: wp("9%"),
         height: hp("4%"),
@@ -345,9 +399,6 @@ export const styles = StyleSheet.create({
         height: hp("52%"),
         margin: 10,
         position: "relative",
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.white,
     },
     currentVehicle: {
         display: "flex",
@@ -365,28 +416,14 @@ export const styles = StyleSheet.create({
         opacity: 0.8,
         borderRadius: 10,
         position: "absolute",
-
     },
-    QRContainer : {
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.primary,
-        width: 40
-    },
-    plateNoContainer: {
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.primary,
-    },
+    QRContainer: {},
+    plateNoContainer: {},
     plateNo: {
         fontFamily: "Nunito_700Bold",
         fontSize: 20,
     },
     home_page_bottom: {
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.secondary_light,
-        // margin: 5,
         width: wp("100%"),
         marginLeft: "auto",
         marginRight: "auto",
@@ -426,9 +463,6 @@ export const styles = StyleSheet.create({
         padding: 2,
         flex: 1,
         flexShrink: 1,
-        // borderStyle: "solid",
-        // borderWidth: 0.5,
-        // borderColor: colors.primary,
         position: "relative",
     },
     capacity: {
@@ -455,9 +489,15 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "blue",
     },
-    navBar: {
-
+    
+   
+    modalTitle: {
+        fontSize: wp('6%'),
+        fontWeight: 'bold',
+        color: colors.primary,
+        textAlign: 'center',
+        marginBottom: hp('2%'),
     },
-
-
+    
+    
 });
