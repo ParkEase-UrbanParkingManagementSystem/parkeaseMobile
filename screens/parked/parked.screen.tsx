@@ -25,6 +25,7 @@ interface ParkingDetails {
   type_id: number;
   driver_id: string;
   vehicle_id: string;
+  parking_toll_amount: string;
 }
 
 export default function ParkedScreen() {
@@ -65,6 +66,8 @@ export default function ParkedScreen() {
         setLoading(false);
       }
     };
+
+    console.log(details);
 
     fetchDetails();
   }, []);
@@ -138,7 +141,7 @@ export default function ParkedScreen() {
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.parkingDetailsText}>Price per Hour:</Text>
-            <Text style={styles.parkingDuration}>{details?.pricePerHour || 'Rs 70/='}</Text>
+            <Text style={styles.parkingDuration}>{details?.parking_toll_amount || 'Rs 70/='}</Text>
           </View>
         </View>
 
@@ -165,7 +168,7 @@ export default function ParkedScreen() {
               <View style={styles.modalContent}>
                 <Text style={styles.modalText}>Lot Name: {details?.lot_name}</Text>
                 <Text style={styles.modalText}>Location: {details?.lot_city}</Text>
-                <Text style={styles.modalText}>Price per Hour: {details?.pricePerHour || 'N/A'}</Text>
+                <Text style={styles.modalText}>Price per Hour: {details?.parking_toll_amount || 'Rs 70/='}</Text>
               </View>
             )}
             <TouchableOpacity style={styles.switchButton} onPress={switchSection}>
