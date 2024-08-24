@@ -1,9 +1,9 @@
 // ActivitiesScreen.tsx
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import OngoingScreen from '@/app/(routes)/(tabs)/onGoing.screen';
+
 import HistoryScreen from '@/app/(routes)/(tabs)/history.screen';
-import PermitsScreen from '@/app/(routes)/(tabs)/permits.screen';
+
 import {SafeAreaView} from "react-native";
 import colors from "@/constants/Colors";
 import {LinearGradient} from "expo-linear-gradient";
@@ -39,9 +39,9 @@ const ActivitiesScreen = () => {
 
                     }}
                 >
-                    <Tab.Screen name="Ongoing" component={OngoingScreen} />
+                    
                     <Tab.Screen name="History" component={HistoryScreen} />
-                    <Tab.Screen name="Permits" component={PermitsScreen} />
+                    
                 </Tab.Navigator>
             </SafeAreaView>
         </LinearGradient>
