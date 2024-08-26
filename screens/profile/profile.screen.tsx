@@ -97,7 +97,7 @@ export default function ProfileScreen() {
                             style={styles.quickAccessIcon}
                             source={require("@/assets/images/paymentIcon.png")}
                         />
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Payment</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>PayPark Wallet</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}

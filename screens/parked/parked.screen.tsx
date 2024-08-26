@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import QRCode from 'react-native-qrcode-svg';
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { router } from "expo-router";
 
 interface ParkingDetails {
   vehicle_name: string;
@@ -24,6 +25,7 @@ interface ParkingDetails {
   type_id: number;
   driver_id: string;
   vehicle_id: string;
+  parking_toll_amount: string;
 }
 
 export default function ParkedScreen() {
@@ -65,6 +67,8 @@ export default function ParkedScreen() {
       }
     };
 
+    console.log(details);
+
     fetchDetails();
   }, []);
 
@@ -92,7 +96,7 @@ export default function ParkedScreen() {
     return (
       <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.noDetailsText}>No vehicle is currently parked.</Text>
+          <Text style={styles.noDetailsText}>Your vehicle is not currently parked. Please ask the warden to scan your QR code in order to start parking</Text>
         </SafeAreaView>
       </LinearGradient>
     );
@@ -137,7 +141,7 @@ export default function ParkedScreen() {
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.parkingDetailsText}>Price per Hour:</Text>
-            <Text style={styles.parkingDuration}>{details?.pricePerHour || 'Rs 70/='}</Text>
+            <Text style={styles.parkingDuration}>{details?.parking_toll_amount || 'Rs 70/='}</Text>
           </View>
         </View>
 
@@ -164,7 +168,7 @@ export default function ParkedScreen() {
               <View style={styles.modalContent}>
                 <Text style={styles.modalText}>Lot Name: {details?.lot_name}</Text>
                 <Text style={styles.modalText}>Location: {details?.lot_city}</Text>
-                <Text style={styles.modalText}>Price per Hour: {details?.pricePerHour || 'N/A'}</Text>
+                <Text style={styles.modalText}>Price per Hour: {details?.parking_toll_amount || 'Rs 70/='}</Text>
               </View>
             )}
             <TouchableOpacity style={styles.switchButton} onPress={switchSection}>
@@ -173,6 +177,8 @@ export default function ParkedScreen() {
             <TouchableOpacity style={styles.modalCloseButton} onPress={toggleDetailsModal}>
               <Text style={styles.modalCloseButtonText}>Close</Text>
             </TouchableOpacity>
+
+            
           </View>
         </Modal>
 
@@ -187,9 +193,17 @@ export default function ParkedScreen() {
               />
             </View>
             <Text style={styles.modalTitle2}>Ask your warden to scan this QR to exit your vehicle</Text>
+
+            <TouchableOpacity style={styles.modalCloseButton} onPress={() => { router.push("/(routes)/payment/wallet"); toggleQRModal(); }}>
+              <Text style={styles.modalCloseButtonText}>Go to Payments</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.modalCloseButton} onPress={toggleQRModal}>
               <Text style={styles.modalCloseButtonText}>Close</Text>
             </TouchableOpacity>
+
+            
+
           </View>
         </Modal>
       </SafeAreaView>
@@ -357,8 +371,9 @@ const styles = StyleSheet.create({
   },
   modalCloseButton: {
     backgroundColor: colors.primary,
-    paddingVertical: hp('1%'),
+    paddingVertical: hp('1.5%'),
     borderRadius: wp('3%'),
+    marginBottom: hp('2%'),
   },
   modalCloseButtonText: {
     fontSize: wp('4.5%'),

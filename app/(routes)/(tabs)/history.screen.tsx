@@ -1,115 +1,84 @@
 // HistoryScreen.tsx
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import colors from "@/constants/Colors";
-import {LinearGradient} from "expo-linear-gradient";
-import {router} from "expo-router";
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { LinearGradient } from "expo-linear-gradient";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
     useFonts,
     Nunito_600SemiBold,
     Nunito_700Bold,
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
+import { router, useFocusEffect } from "expo-router";
 
-// hard coded data for past parkings
-const parkingData = [
-    {
-        date: new Date('2024-07-09'),
-        location: 'CCC Car Park',
-        inTime: '14:23',
-        outTime: '15:50',
-        cost: '12.50',
-        vehicle: 'Nissan Patrol Y61'
-    },
-    {
-        date: new Date('2024-07-10'),
-        location: 'Liberty Plaza',
-        inTime: '12:00',
-        outTime: '14:00',
-        cost: '10.00',
-        vehicle: 'Toyota Corolla'
-    },
-    {
-        date: new Date('2024-07-11'),
-        location: 'Majestic City',
-        inTime: '09:00',
-        outTime: '10:30',
-        cost: '8.00',
-        vehicle: 'Honda Civic'
-    },
-    {
-        date: new Date('2024-07-12'),
-        location: 'Crescat Boulevard',
-        inTime: '16:00',
-        outTime: '18:00',
-        cost: '15.00',
-        vehicle: 'BMW X5'
-    },
-    {
-        date: new Date('2024-07-13'),
-        location: 'ODEL',
-        inTime: '11:00',
-        outTime: '13:30',
-        cost: '11.00',
-        vehicle: 'Audi A4'
-    },
-    {
-        date: new Date('2024-07-14'),
-        location: 'Park Street Mews',
-        inTime: '10:00',
-        outTime: '12:00',
-        cost: '9.50',
-        vehicle: 'Mercedes-Benz C-Class'
-    },
-    {
-        date: new Date('2024-07-14'),
-        location: 'Park Street Mews',
-        inTime: '10:00',
-        outTime: '12:00',
-        cost: '9.50',
-        vehicle: 'Mercedes-Benz C-Class'
-    },
-    {
-        date: new Date('2024-07-14'),
-        location: 'Park Street Mews',
-        inTime: '10:00',
-        outTime: '12:00',
-        cost: '9.50',
-        vehicle: 'Mercedes-Benz C-Class'
-    },
-    {
-        date: new Date('2024-07-14'),
-        location: 'Park Street Mews',
-        inTime: '10:00',
-        outTime: '12:00',
-        cost: '9.50',
-        vehicle: 'Mercedes-Benz C-Class'
-    }
-];
-
-// methods for data processing
+// Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
 const getMonthAbbr = (date: Date) => date.toLocaleString('default', { month: 'short' });
+
 const getElapsedTime = (inTime: string, outTime: string) => {
-    const [inHours, inMinutes] = inTime.split(':').map(Number);
-    const [outHours, outMinutes] = outTime.split(':').map(Number);
+    let inDate = new Date(inTime);
+    let outDate = new Date(outTime);
 
-    let elapsedHours = outHours - inHours;
-    let elapsedMinutes = outMinutes - inMinutes;
-
-    if (elapsedMinutes < 0) {
-        elapsedMinutes += 60;
-        elapsedHours -= 1;
+    // Ensure that the elapsed time is non-negative
+    if (inDate > outDate) {
+        [inDate, outDate] = [outDate, inDate];
     }
 
-    return `${elapsedHours} hrs ${elapsedMinutes} mins`;
+    const elapsedMs = outDate.getTime() - inDate.getTime();
+    const elapsedMinutes = Math.floor(elapsedMs / 60000);
+    const elapsedHours = Math.floor(elapsedMinutes / 60);
+    const remainingMinutes = elapsedMinutes % 60;
+
+    // Handle cases where the elapsed time crosses midnight
+    if (elapsedHours < 0) {
+        return `${24 + elapsedHours} hrs ${remainingMinutes} mins`;
+    }
+
+    return `${elapsedHours} hrs ${remainingMinutes} mins`;
 };
 
-
+interface Instance {
+  instance_id: string;
+  in_time: string;
+  out_time: string;
+  lot_name: string;
+  city: string;
+  cost: number;
+  vehicle_name: string;
+}
 
 const HistoryScreen = () => {
+    const [instances, setInstances] = useState<Instance[]>([]);
+
+    useEffect(() => {
+        const fetchInstances = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                const response = await fetch(`http://192.168.8.198:5000/parking/get-recent-parking-instances`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token || ""
+                    }
+                });
+                const parseRes = await response.json();
+
+                if (response.ok) {
+                    setInstances(parseRes.data);
+                    console.log("Instances:", instances);
+                } else {
+                    console.error("Error: ", parseRes.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchInstances();
+    }, []);
+
     let [fontsLoaded, fontError] = useFonts({
         Nunito_600SemiBold,
         Nunito_700Bold,
@@ -119,40 +88,41 @@ const HistoryScreen = () => {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+
     return (
         <LinearGradient
             colors={[colors.secondary_light, colors.secondary_light]}
-            style={{ flex: 1}}
+            style={{ flex: 1 }}
         >
-            <ScrollView style={styles.activityScrollView} contentContainerStyle={{alignItems: "center",}}>
-                {parkingData.map((item, index) => (
+            <ScrollView style={styles.activityScrollView} contentContainerStyle={{ alignItems: "center" }}>
+                {instances.map((item, index) => (
                     <TouchableOpacity
+
                         key={index}
                         style={styles.parking}
-                        // onPress={() => router.push("/(routes)/past-parking")}
+                        onPress={() => router.push({ pathname: "/(routes)/instance", params: { id: item.instance_id } })}
+
                     >
                         <View style={styles.day}>
-                            <Text style={styles.date}>{getDay(item.date)}</Text>
-                            <Text style={styles.month}>{getMonthAbbr(item.date)}</Text>
+                            <Text style={styles.lotName}>{item.lot_name}</Text>
+                            <Text style={styles.date}>{getDay(new Date(item.in_time))}</Text>
+                            <Text style={styles.month}>{getMonthAbbr(new Date(item.in_time))}</Text>
                         </View>
                         <View style={styles.details}>
-                            {/*location*/}
                             <View style={styles.row}>
                                 <Image
                                     style={styles.icon}
                                     source={require("@/assets/images/ParkingLocation.png")}
                                 />
-                                <Text style={styles.detail}>{item.location}</Text>
+                                <Text style={styles.detail}>{item.city}</Text>
                             </View>
-                            {/*time duration*/}
                             <View style={styles.row}>
                                 <Image
                                     style={styles.icon}
                                     source={require("@/assets/images/duration.png")}
                                 />
-                                <Text style={styles.detail}>{`${item.inTime} - ${item.outTime} = ${getElapsedTime(item.inTime, item.outTime)}`}</Text>
+                                <Text style={styles.detail}>{`${getElapsedTime(item.in_time, item.out_time)}`}</Text>
                             </View>
-                            {/*cost*/}
                             <View style={styles.row}>
                                 <Image
                                     style={styles.icon}
@@ -160,19 +130,17 @@ const HistoryScreen = () => {
                                 />
                                 <Text style={styles.detail}>{item.cost} LKR</Text>
                             </View>
-                            {/*vehicle*/}
                             <View style={styles.row}>
                                 <Image
                                     style={styles.icon}
                                     source={require("@/assets/images/vehicle.png")}
                                 />
-                                <Text style={styles.detail}>{item.vehicle}</Text>
+                                <Text style={styles.detail}>{item.vehicle_name}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-
         </LinearGradient>
     );
 };
@@ -180,68 +148,74 @@ const HistoryScreen = () => {
 const styles = StyleSheet.create({
     activityScrollView: {
         flex: 1,
-        padding: 5,
+        padding: 10,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
     },
     parking: {
-        // borderStyle: "solid",
-        // borderWidth: 1,
         display: 'flex',
         flexDirection: 'row',
-        gap: 10,
+        gap: 15,
         backgroundColor: colors.secondary_light2,
-        borderRadius: 10,
-        paddingHorizontal: 10,
-        marginVertical: 5,
+        borderRadius: 15,
+        padding: 15,
+        marginVertical: 10,
         width: wp("90%"),
-
-        shadowColor: "#1a2131",
-        shadowOffset: {
-            width: 0,
-            height: 7,
-        },
-        shadowOpacity:  0.21,
-        shadowRadius: 7.68,
-        elevation: 10
-
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 7,
     },
     day: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: "27%",
-        // borderStyle: "solid",
-        // borderWidth: 1,
+        width: "30%",
+        paddingRight: 10,
+        borderRightColor: colors.secondary_light2,
+        borderRightWidth: 1,
+    },
+    lotName: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 18,
+        textAlign: 'center',
+        color: colors.primary,
     },
     date: {
-        fontFamily: "Nunito_700Bold", fontSize: 45
+        fontFamily: "Nunito_700Bold",
+        fontSize: 28,
+        color: colors.primary,
     },
     month: {
-        fontFamily: "Nunito_700Bold", fontSize: 45
+        fontFamily: "Nunito_600SemiBold",
+        fontSize: 18,
+        color: colors.primary,
     },
     details: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: 5,
-        gap: 10,
+        paddingLeft: 15,
+        gap: 12,
     },
     icon: {
         width: 25,
         height: 25,
     },
     detail: {
-        fontFamily: "Nunito_600SemiBold", fontSize: 15
+        fontFamily: "Nunito_600SemiBold",
+        fontSize: 16,
+        color: colors.text,
     },
     row: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        gap: 10,
+        gap: 12,
     },
 });
 
