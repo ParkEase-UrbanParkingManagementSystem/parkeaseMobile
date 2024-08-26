@@ -161,7 +161,7 @@ export default function HomePageScreen() {
                 </View>
                 <View style={styles.home_page_bottom}>
     <View style={styles.ScrollViewContainer}>
-        <ScrollView horizontal>
+        <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
             {recentVisits.map((visit, index) => (
                 <TouchableOpacity
                 key={index}

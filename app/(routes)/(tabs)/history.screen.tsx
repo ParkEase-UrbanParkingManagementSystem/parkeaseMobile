@@ -11,6 +11,7 @@ import {
     Nunito_700Bold,
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
+import { router, useFocusEffect } from "expo-router";
 
 // Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
@@ -38,8 +39,18 @@ const getElapsedTime = (inTime: string, outTime: string) => {
     return `${elapsedHours} hrs ${remainingMinutes} mins`;
 };
 
+interface Instance {
+  instance_id: string;
+  in_time: string;
+  out_time: string;
+  lot_name: string;
+  city: string;
+  cost: number;
+  vehicle_name: string;
+}
+
 const HistoryScreen = () => {
-    const [instances, setInstances] = useState([]);
+    const [instances, setInstances] = useState<Instance[]>([]);
 
     useEffect(() => {
         const fetchInstances = async () => {
@@ -56,6 +67,7 @@ const HistoryScreen = () => {
 
                 if (response.ok) {
                     setInstances(parseRes.data);
+                    console.log("Instances:", instances);
                 } else {
                     console.error("Error: ", parseRes.message);
                 }
@@ -85,8 +97,11 @@ const HistoryScreen = () => {
             <ScrollView style={styles.activityScrollView} contentContainerStyle={{ alignItems: "center" }}>
                 {instances.map((item, index) => (
                     <TouchableOpacity
+
                         key={index}
                         style={styles.parking}
+                        onPress={() => router.push({ pathname: "/(routes)/instance", params: { id: item.instance_id } })}
+
                     >
                         <View style={styles.day}>
                             <Text style={styles.lotName}>{item.lot_name}</Text>

@@ -96,7 +96,7 @@ export default function ParkedScreen() {
     return (
       <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
         <SafeAreaView style={styles.container}>
-          <Text style={styles.noDetailsText}>No vehicle is currently parked.</Text>
+          <Text style={styles.noDetailsText}>Your vehicle is not currently parked. Please ask the warden to scan your QR code in order to start parking</Text>
         </SafeAreaView>
       </LinearGradient>
     );
