@@ -8,6 +8,8 @@ import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import IOSMap from "@/components/Map/IOSMap";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Marker} from "react-native-maps";
+
 import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '../../utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
@@ -19,6 +21,11 @@ export default function HomePageScreen() {
     const [recentVisits, setRecentVisits] = useState<any[]>([]);    
 
     const plateNo = selectedVehicle?.vehicle_number;
+
+
+
+
+
 
     useEffect(() => {
         const fetchRecentVisits = async () => {
@@ -53,18 +60,20 @@ export default function HomePageScreen() {
     
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
-    
+
             try {
-                const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
+                const response = await fetch(`http://10.22.127.128:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                         "token": token || ""
                     }
                 });
+
     
                 const parseRes = await response.json();
     
+
                 if (response.ok) {
                     setUserDetails(parseRes.data);
                 } else {
@@ -99,6 +108,7 @@ export default function HomePageScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.home_page_top}>
+
                     <View style={styles.searchBarContainer}>
                         {/* Assuming ParkingLotSearchModal is a functional component */}
                         <ParkingLotSearchModal />
@@ -119,6 +129,7 @@ export default function HomePageScreen() {
                             />
                         </TouchableOpacity>
                     </View>
+
                 </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
@@ -130,6 +141,7 @@ export default function HomePageScreen() {
                         </Text>
                     </View>
                     <View style={styles.mapContainer}>
+
                         <IOSMap />
                         {selectedVehicle && (
                             <TouchableOpacity
@@ -150,6 +162,7 @@ export default function HomePageScreen() {
                             </TouchableOpacity>
                         )}
                     </View>
+
                 </View>
                 <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
                     <Text>Go to Payments</Text>
@@ -210,11 +223,13 @@ export default function HomePageScreen() {
                             <Text>Navigate</Text>
                         </TouchableOpacity> */}
                     </View>
+
                 </TouchableOpacity>
             ))}
         </ScrollView>
     </View>
 </View>
+
 
             </SafeAreaView>
 
@@ -258,8 +273,9 @@ export default function HomePageScreen() {
 </Modal>
 
         </LinearGradient>
-    );
+    )
 }
+
 
 const styles = StyleSheet.create({
     modalBackground: {
@@ -329,6 +345,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
     firstContainer: {
         flex: 1,
         alignItems: "flex-start",
