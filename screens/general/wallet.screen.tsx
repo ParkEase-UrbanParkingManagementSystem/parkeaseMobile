@@ -24,7 +24,7 @@ export default function PaymentScreen() {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await fetch('http://192.168.8.198:5000/parking/parked-detailsMob', {
+                const response = await fetch('http://192.168.154.147:5000/parking/parked-detailsMob', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export default function PaymentScreen() {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await fetch('http://192.168.8.198:5000/parking/pay-wallet', {
+                const response = await fetch('http://192.168.154.147:5000/parking/pay-wallet', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json', 
@@ -96,7 +96,7 @@ export default function PaymentScreen() {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await fetch('http://192.168.8.198:5000/parking/pay-pp', {
+                const response = await fetch('http://192.168.154.147:5000/parking/pay-pp', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

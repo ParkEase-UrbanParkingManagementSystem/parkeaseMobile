@@ -56,7 +56,7 @@ const HistoryScreen = () => {
         const fetchInstances = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                const response = await fetch(`http://192.168.8.198:5000/parking/get-recent-parking-instances`, {
+                const response = await fetch(`http://192.168.154.147:5000/parking/get-recent-parking-instances`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

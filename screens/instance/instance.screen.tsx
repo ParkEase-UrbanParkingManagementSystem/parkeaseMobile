@@ -23,7 +23,7 @@ const InstanceScreen = () => {
     const fetchInstances = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await fetch(`http://192.168.8.198:5000/parking/get-instance-details/${id}`, {
+        const response = await fetch(`http://192.168.154.147:5000/parking/get-instance-details/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const InstanceScreen = () => {
   const postWardenReviews = async (review: string, rating: number) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.8.198:5000/reviews/warden', {
+      const response = await fetch('http://192.168.154.147:5000/reviews/warden', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const InstanceScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       console.log(details?.instaceDetails?.driver_id)
-      const response = await fetch('http://192.168.8.198:5000/reviews/parking', {
+      const response = await fetch('http://192.168.154.147:5000/reviews/parking', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -42,7 +42,7 @@ export default function ParkedScreen() {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await fetch('http://192.168.8.198:5000/parking/parking-details', {
+        const response = await fetch('http://192.168.154.147:5000/parking/parking-details', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

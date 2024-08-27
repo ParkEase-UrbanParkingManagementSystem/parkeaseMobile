@@ -50,7 +50,7 @@ export default function ChooseVehicleScreen() {
       console.log('Token:', token); // Debugging token
 
       try {
-        const response = await fetch(`http://192.168.8.198:5000/vehicle`, {
+        const response = await fetch(`http://192.168.154.147:5000/vehicle`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
