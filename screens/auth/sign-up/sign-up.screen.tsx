@@ -118,7 +118,7 @@ export default function SignUpScreen() {
                 district,
             };
 
-            const response = await fetch(`http://10.22.127.128:5000/auth/registerDriver`, {
+            const response = await fetch(`http://192.168.8.198:5000/auth/registerDriver`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

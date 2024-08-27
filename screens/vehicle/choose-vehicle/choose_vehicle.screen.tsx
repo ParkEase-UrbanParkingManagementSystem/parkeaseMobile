@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { VehicleContext } from '@/utils/vehicleContext'; // Import VehicleContext
+import { VehicleContext } from '../../../utils/vehicleContext'; // Import VehicleContext
 
 export default function ChooseVehicleScreen() {
   const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext); // Use VehicleContext
