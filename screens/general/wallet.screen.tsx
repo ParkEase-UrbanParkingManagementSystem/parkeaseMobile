@@ -1,177 +1,439 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Modal } from 'react-native';
-import { useFonts, Raleway_700Bold } from '@expo-google-fonts/raleway';
-import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
-import { LinearGradient } from 'expo-linear-gradient';
-import PaymentOptions from '@/components/payment/PaymentOptions';
-import PaymentMethodForm from '@/components/payment/PaymentMethodForm';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Modal, Alert } from "react-native";
+import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
+import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
+import { LinearGradient } from "expo-linear-gradient";
 import colors from '../../constants/Colors';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import React, { useState, useEffect } from "react";
+import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from "expo-router";
 
-const WalletScreen: React.FC = () => {
+export default function PaymentScreen() {
+    const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [details, setDetails] = useState<any>(null); // Changed to `any` for simplicity
+    const [error, setError] = useState<Error | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
+    const amountToPay = Number(details?.toll_amount) || 0; // Ensure amountToPay is a number
+
+    useEffect(() => {
+        const fetchDetails = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+                console.log(token)
+
+                const response = await fetch('http://192.168.8.198:5000/parking/parked-detailsMob', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        token: token || "",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.message === "No parking details found") {
+                    setDetails(null);
+                } else {
+                    setDetails(data.data);
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                setError(err as Error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDetails();
+    }, [router]);
+
+    const closeModal = () => {
+        setIsModalVisible(false);
+    };
+
+    const selectMethod = (id: string) => {
+        setSelectedMethod(id);
+    };
+
+    const handleConfirmPayment = () => {
+        if (selectedMethod) {
+            setIsConfirmationVisible(true);
+        }
+    };
+
+    const confirmPayment = async () => {
+        if(selectedMethod === '1') {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch('http://192.168.8.198:5000/parking/pay-wallet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', 
+                        token: token || "",
+                    },
+                    body: JSON.stringify({ 
+                        amount: amountToPay,
+                        method: selectedMethod,
+                        instance_id: details?.instance_id,
+                    }),
+                });
+                // Handle response
+            } catch (error) {
+                console.error('Error paying by wallet:', error);
+            }
+        } else if(selectedMethod === '2') {
+            // Handle cash payment
+        } else if(selectedMethod === '3') {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch('http://192.168.8.198:5000/parking/pay-pp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        token: token || "",
+                    },
+                    body: JSON.stringify({ amount: amountToPay, method: selectedMethod,
+                        instance_id: details?.instance_id, }),
+                });
+                // Handle response
+            } catch (error) {
+                console.error('Error paying by park points:', error);
+            }
+        }
+        setIsConfirmationVisible(false);
+        Alert.alert("Payment Confirmed", "Your payment has been processed successfully.");
+    };
+
+    const cancelConfirmation = () => {
+        setIsConfirmationVisible(false);
+    };
+
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
         Nunito_700Bold
     });
 
-    const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-
-    const selectMethod = (id: string) => {
-        setSelectedMethod(id);
-    };
-
-    const handleAddPaymentMethod = () => {
-        setIsModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setIsModalVisible(false);
-    };
-
-    if (!fontsLoaded && !fontError) {
+    if (!fontsLoaded) {
+        if (fontError) {
+            console.error(fontError);
+        }
         return null;
     }
 
+    const paymentMethods = [
+        { id: '1', name: 'PayPark Wallet', balance: `LKR ${details?.wallet || 0}`, image: require('@/assets/images/wallet.png') },
+        { id: '2', name: 'Cash', balance: '', image: require('@/assets/images/cash.png') },
+        { id: '3', name: 'Park Points', balance: `LKR ${details?.parkpoints || 0}`, image: require('@/assets/images/ParkEase_logo.png') },
+    ];
+
+    const getBalance = (methodId: string) => {
+        const method = paymentMethods.find(m => m.id === methodId);
+        return method?.balance ? parseFloat(method.balance.replace('LKR ', '').replace(',', '')) : 0;
+    };
+
+    const balance = selectedMethod ? getBalance(selectedMethod) : 0;
+    const isBalanceSufficient = balance >= amountToPay;
+
+    if (!details) {
+        return (
+            <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.messageContainer}>
+                        <Text style={styles.noDetailsText}>
+                            Please ask your warden to rescan your QR code before proceeding with payments.
+                        </Text>
+                    </View>
+                </SafeAreaView>
+            </LinearGradient>
+        );
+    }
+
     return (
-        <LinearGradient colors={[colors.white, colors.white]} style={{ flex: 1 }}>
-            <SafeAreaView style={styles.firstContainer}>
-                <View style={styles.title}>
-                    <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 25 }}>Wallet</Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={[styles.mode, { backgroundColor: colors.primary_light }]}>
-                        <Image source={require('@/assets/images/personal.png')} style={{ width: 15, height: 15 }} />
-                        <Text>Personal</Text>
+        <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.container}>
+            <SafeAreaView style={styles.innerContainer}>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => {/* Navigate back */}}>
+                        <Image source={require('@/assets/images/next.png')} style={styles.backIcon} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.mode, { backgroundColor: colors.secondary_light2 }]}>
-                        <Image source={require('@/assets/images/business_bag.png')} style={{ width: 15, height: 15 }} />
-                        <Text>Business</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Checkout</Text>
                 </View>
-                <View style={styles.sub_title}>
-                    <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 20 }}>Park Points</Text>
-                </View>
-                <View style={styles.option}>
-                    <View style={styles.left}>
-                        <Image source={require('@/assets/images/ParkEase_logo.png')} style={{ width: 40, height: 40 }} />
-                    </View>
-                    <View style={styles.mid}>
-                        <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 15 }}>Park Points</Text>
-                        <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 12 }}>LKR 145.00</Text>
-                    </View>
-                </View>
-                <View style={styles.sub_title}>
-                    <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 20 }}>Payment Methods</Text>
+                <View style={styles.amountContainer}>
+                    <Text style={styles.amountText}>Amount to Pay</Text>
+                    <Text style={styles.amountValue}>LKR {amountToPay.toFixed(2)}</Text>
                 </View>
                 <View style={styles.paymentMethodsContainer}>
-                    <PaymentOptions />
+                    {paymentMethods.map(method => (
+                        <TouchableOpacity
+                            key={method.id}
+                            style={[
+                                styles.paymentMethod,
+                                selectedMethod === method.id && styles.selectedMethod
+                            ]}
+                            onPress={() => selectMethod(method.id)}
+                        >
+                            <Image source={method.image} style={styles.paymentImage} />
+                            <View style={styles.paymentDetails}>
+                                <Text style={styles.paymentName}>{method.name}</Text>
+                                {method.balance ? (
+                                    <Text style={styles.paymentBalance}>{method.balance}</Text>
+                                ) : null}
+                            </View>
+                        </TouchableOpacity>
+                    ))}
                 </View>
-                <TouchableOpacity style={styles.option} onPress={handleAddPaymentMethod}>
-                    <View style={styles.left}>
-                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
+                {selectedMethod && (
+                    <View style={styles.summaryContainer}>
+                        {selectedMethod === '2' ? (
+                            <Text style={styles.summaryText}>Cash payment selected. Confirm payment.</Text>
+                        ) : (
+                            <>
+                                <Text style={styles.summaryText}>Current Balance: LKR {balance.toFixed(2)}</Text>
+                                <Text style={styles.summaryText}>Amount to Pay: LKR {amountToPay.toFixed(2)}</Text>
+                                <Text style={styles.summaryText}>Balance After Payment: LKR {(balance - amountToPay).toFixed(2)}</Text>
+                                {!isBalanceSufficient && (
+                                    <Text style={styles.insufficientBalanceText}>Insufficient balance for this method.</Text>
+                                )}
+                            </>
+                        )}
                     </View>
-                    <View style={styles.mid}>
-                        <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 15 }}>Add payment method</Text>
-                    </View>
+                )}
+                <TouchableOpacity
+                    style={[
+                        styles.confirmButton,
+                        (selectedMethod === '2' || isBalanceSufficient) ? styles.confirmButtonVisible : styles.confirmButtonHidden
+                    ]}
+                    onPress={handleConfirmPayment}
+                >
+                    <Text style={styles.confirmButtonText}>Confirm Payment</Text>
                 </TouchableOpacity>
+
                 <Modal visible={isModalVisible} animationType="slide" onRequestClose={closeModal}>
                     <PaymentMethodForm onClose={closeModal} />
                 </Modal>
-                <View style={styles.sub_title}>
-                    <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 20 }}>Vouchers</Text>
-                </View>
-                <TouchableOpacity style={styles.option}>
-                    <View style={styles.left}>
-                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
+
+                <Modal visible={isConfirmationVisible} transparent={true} animationType="fade" onRequestClose={cancelConfirmation}>
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalTitle}>Confirm Payment</Text>
+                            <Text style={styles.modalMessage}>
+                                Are you sure you want to proceed with the payment using  
+                                {selectedMethod === '1' ? "PayPark Wallet" : selectedMethod === '2' ? " Cash" : " Park Points"}?
+                            </Text>
+                            <View style={styles.modalButtonsContainer}>
+                                <TouchableOpacity style={styles.modalButton} onPress={confirmPayment}>
+                                    <Text style={styles.modalButtonText}>Yes</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.modalButton} onPress={cancelConfirmation}>
+                                    <Text style={styles.modalButtonText}>No</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
-                    <View style={styles.mid}>
-                        <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Add voucher code</Text>
-                    </View>
-                </TouchableOpacity>
-                <View style={styles.sub_title}>
-                    <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 20 }}>Promotions</Text>
-                </View>
-                <TouchableOpacity style={styles.option}>
-                    <View style={styles.left}>
-                        <Image source={require('@/assets/images/promotion.png')} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.mid}>
-                        <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Promotions</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.option}>
-                    <View style={styles.left}>
-                        <Image source={require('@/assets/images/add.png')} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.mid}>
-                        <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15 }}>Add promo code</Text>
-                    </View>
-                </TouchableOpacity>
+                </Modal>
             </SafeAreaView>
         </LinearGradient>
     );
-};
+}
 
 // styles
-const styles = StyleSheet.create({
-    firstContainer: {
+export const styles = StyleSheet.create({
+    gradient: {
         flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
+    },
+    messageContainer: {
+        display: 'flex',
+        backgroundColor: '#ffffff',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    noDetailsText: {
+        fontSize: 16,
+        color: '#333333',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    innerContainer: {
+        flex: 1,
+        width: '90%',
         justifyContent: 'flex-start',
     },
-    title: {
-        width: wp('90%'),
-        alignItems: 'flex-start',
-        justifyContent: 'center',
+    header: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: hp('4%'),
     },
-    buttonContainer: {
+    backIcon: {
+        width: 30,
+        height: 30,
+        tintColor: colors.primary,
+    },
+    headerTitle: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 28,
+        color: colors.primary,
+        marginLeft: wp('4%'),
+    },
+    amountContainer: {
+        width: '100%',
+        alignItems: 'center',
+        marginVertical: hp('3%'),
+    },
+    amountText: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 20,
+        color: colors.primary,
+    },
+    amountValue: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 36,
+        color: colors.primary,
+    },
+    paymentMethodsContainer: {
+        width: '100%',
+        marginVertical: hp('3%'),
+        gap: hp('2%'),
+    },
+    paymentMethod: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: hp('1.5%'),
+        borderBottomWidth: 2,
+        borderBottomColor: colors.primary,
+        paddingHorizontal: wp('4%'),
+    },
+    selectedMethod: {
+        backgroundColor: colors.secondary_light2,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: colors.primary,
+    },
+    paymentImage: {
+        width: 50,
+        height: 50,
+        marginRight: wp('4%'),
+    },
+    paymentDetails: {
+        flex: 1,
+    },
+    paymentName: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 18,
+        color: colors.primary,
+    },
+    paymentBalance: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 16,
+        color: colors.primary,
+    },
+    summaryContainer: {
+        width: '100%',
+        padding: hp('2%'),
+        backgroundColor: colors.secondary_light2,
+        borderRadius: 12,
+        marginVertical: hp('3%'),
+    },
+    summaryText: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 16,
+        color: colors.primary,
+        marginBottom: hp('1%'),
+    },
+    insufficientBalanceText: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 16,
+        color: colors.error,
+        marginTop: hp('1%'),
+    },
+    confirmButton: {
+        width: '100%',
+        paddingVertical: hp('2.5%'),
+        backgroundColor: colors.primary,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: hp('4%'),
+    },
+    confirmButtonVisible: {
         display: 'flex',
-        width: wp('90%'),
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: 10,
-        marginTop: 5,
     },
-    mode: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: 10,
-        borderRadius: 15,
-        gap: 5,
+    confirmButtonHidden: {
+        display: 'none',
     },
-    sub_title: {
-        width: wp('90%'),
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        marginTop: 20,
+    confirmButtonText: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 20,
+        color: colors.white,
     },
-    option: {
-        flexDirection: 'row',
-        width: wp('90%'),
-        padding: 5,
-        gap: 10,
-        marginTop: 10,
-    },
-    left: {
+    modalBackground: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    mid: {
-        width: wp('40%'),
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
-    right: {
-        flexDirection: 'row',
-        justifyContent: 'center',
+    modalContainer: {
+        width: '80%',
+        padding: hp('4%'),
+        backgroundColor: colors.white,
+        borderRadius: 12,
         alignItems: 'center',
-        gap: 10,
-        position: 'relative',
     },
-    paymentMethodsContainer: {},
+    modalTitle: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 20,
+        color: colors.primary,
+        marginBottom: hp('2%'),
+    },
+    modalMessage: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 16,
+        color: colors.primary,
+        marginBottom: hp('3%'),
+        textAlign: 'center',
+    },
+    modalButtonsContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-around',
+    },
+    modalButton: {
+        width: '45%',
+        paddingVertical: hp('1.5%'),
+        backgroundColor: colors.primary,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalButtonText: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 16,
+        color: colors.white,
+    },
 });
-
-export default WalletScreen;

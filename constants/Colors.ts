@@ -18,6 +18,8 @@ export default {
     black: '#000000',
     caution_yellow: '#f7ee20',
     caution_orange: '#f69220',
+    gradientStart: '#FEFFCC',
+    gradientEnd: '#FFFFFF',
 
     tint: tintColorLight,
     tabIconSelected: tintColorLight,
