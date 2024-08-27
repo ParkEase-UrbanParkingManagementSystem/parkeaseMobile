@@ -87,7 +87,7 @@ export default function LoginScreen(message?: any) {
             console.log("Sending request with body:", body);
 
             // const response = await fetch(`http://localhost:5001/auth/login`, {
-                const response = await fetch(`http://192.168.154.147:5000/auth/login`, {
+                const response = await fetch(`http://192.168.8.198:5000/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),

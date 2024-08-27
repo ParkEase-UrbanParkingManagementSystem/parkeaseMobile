@@ -49,7 +49,7 @@ export default function AddVehicleScreen() {
         };
 
         try {
-            const response = await fetch('http://192.168.154.147:5000/vehicle', {
+            const response = await fetch('http://192.168.8.198:5000/vehicle', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

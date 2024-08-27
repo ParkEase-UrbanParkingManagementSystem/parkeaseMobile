@@ -40,7 +40,7 @@ export default function ParkingLotScreen() {
       const token = await AsyncStorage.getItem('token');
 
       try {
-        const response = await fetch(`http://192.168.154.147:5000/parkinglots/${id}`, {
+        const response = await fetch(`http://192.168.8.198:5000/parkinglots/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ export default function ProfileScreen() {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
             try {
-                const response = await fetch(`http://192.168.154.147:5000/driver/details`, {
+                const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
