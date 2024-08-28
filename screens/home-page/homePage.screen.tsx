@@ -39,6 +39,7 @@ export default function HomePageScreen() {
     
                 if (response.ok) {
                     setRecentVisits(parseRes.data);
+                    
                 } else {
                     console.error("Error fetching recent visits:", parseRes.message);
                 }
@@ -161,58 +162,54 @@ export default function HomePageScreen() {
                 </View>
                 <View style={styles.home_page_bottom}>
     <View style={styles.ScrollViewContainer}>
-        <ScrollView horizontal = {true} showsHorizontalScrollIndicator={false}>
-            {recentVisits.map((visit, index) => (
-                <TouchableOpacity
-                key={index}
-                style={styles.parkingLotContainer}
-                onPress={() => router.push({
-                    pathname: "/(routes)/parking-lot",
-                    params: {
-                        id: visit.lot_id,
-                    },
-                })}
-            >
-                    <View style={styles.imageContainer}>
-                        <Image
-                            style={styles.image}
-                            source={{ uri: visit.images[0] }} // Assuming `images` is an array
-                        />
-                        {/* <Text style={[styles.status, { color: visit.status === 'active' ? 'green' : 'red' }]}>
-                            {visit.status === 'active' ? 'Open' : 'Closed'}
-                        </Text> */}
-                    </View>
-                    <View style={styles.detailsContainer}>
-                        <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1 }}>
-                            {visit.lot_name}
-                        </Text>
-                        <View style={styles.capacity}>
-                            <Image
-                                style={styles.vehicleIcon}
-                                source={require("@/assets/images/suv_side.png")}
-                            />
-                            <Text>: {visit.car_capacity}</Text>
-                        </View>
-                        <View style={styles.capacity}>
-                            <Image
-                                style={styles.vehicleIcon}
-                                source={require("@/assets/images/bike_side.png")}
-                            />
-                            <Text>: {visit.bike_capacity}</Text>
-                        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    {recentVisits.map((visit, index) => (
+        <TouchableOpacity
+            key={index}
+            style={styles.parkingLotContainer}
+            onPress={() => router.push({
+                pathname: "/(routes)/parking-lot",
+                params: { id: visit.lot_id },
+            })}
+        >
+            <View style={styles.imageContainer}>
+                {visit.images && visit.images.length > 0 ? (
+                    <Image
+                        style={styles.image}
+                        source={{ uri: `http://192.168.8.198:5000/${visit.images[0].replace(/\\/g, "/")}` }} // Corrected image path formatting
+                    />
+                ) : (
+                    <Text>No Image Available</Text>
+                )}
+            </View>
+            <View style={styles.detailsContainer}>
+                <Text style={{ fontFamily: "Nunito_700Bold", fontSize: 15, flexShrink: 1 }}>
+                    {visit.lot_name}
+                </Text>
+                <View style={styles.capacity}>
+                    <Image
+                        style={styles.vehicleIcon}
+                        source={require("@/assets/images/suv_side.png")}
+                    />
+                    <Text>: {visit.car_capacity}</Text>
+                </View>
+                <View style={styles.capacity}>
+                    <Image
+                        style={styles.vehicleIcon}
+                        source={require("@/assets/images/bike_side.png")}
+                    />
+                    <Text>: {visit.bike_capacity}</Text>
+                </View>
+                <View style={[styles.statusContainer, { backgroundColor: visit.status === 'active' ? colors.success : 'red' }]}>
+                    <Text style={styles.status}>
+                        {visit.status === 'active' ? 'Open' : 'Closed'}
+                    </Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+    ))}
+</ScrollView>
 
-                        <View style={[styles.statusContainer, { backgroundColor: visit.status === 'active' ? colors.success : 'red' }]}>
-                            <Text style={styles.status}>
-                                {visit.status === 'active' ? 'Open' : 'Closed'}
-                            </Text>
-                        </View>
-                        {/* <TouchableOpacity style={styles.navigateButton}>
-                            <Text>Navigate</Text>
-                        </TouchableOpacity> */}
-                    </View>
-                </TouchableOpacity>
-            ))}
-        </ScrollView>
     </View>
 </View>
 
