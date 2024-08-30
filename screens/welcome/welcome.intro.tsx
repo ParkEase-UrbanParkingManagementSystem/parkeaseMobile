@@ -1,4 +1,4 @@
-import {View, Text, Image, StyleSheet} from "react-native";
+import {View, Text, Image, StyleSheet, TouchableOpacity} from "react-native";
 import {
     Nunito_400Regular,
     Nunito_600SemiBold,
@@ -36,6 +36,12 @@ export default function WelcomeIntroScreen() {
             start={{ x: 0, y: 0 }}
             end={{x: 1 , y: 1 }}
         >
+            <TouchableOpacity
+                onPress={() => router.push("/(routes)/login")}
+                className="w-full flex justify-end items-end p-5"
+            >
+                <Text className="text-black text-md font-JakartaBold">Skip</Text>
+            </TouchableOpacity>
             <View style={{ marginTop: 80 }}>
                 <Image
                     source={item.image}
