@@ -36,13 +36,13 @@ export default function WelcomeIntroScreen() {
             start={{ x: 0, y: 0 }}
             end={{x: 1 , y: 1 }}
         >
-            <TouchableOpacity
-                onPress={() => router.push("/(routes)/login")}
-                className="w-full flex justify-end items-end p-5"
-            >
-                <Text className="text-black text-md font-JakartaBold">Skip</Text>
-            </TouchableOpacity>
-            <View style={{ marginTop: 80 }}>
+            <View style={{ marginTop: 60 }}>
+                <TouchableOpacity
+                    onPress={() => router.push("/(routes)/login")}
+                    style={styles.skipButton}
+                >
+                    <Text className="text-black text-md font-JakartaBold">Skip</Text>
+                </TouchableOpacity>
                 <Image
                     source={item.image}
                     style={{ alignSelf: "center", marginBottom: 0, width: responsiveWidth(88), height: responsiveHeight(46)}}
@@ -179,5 +179,13 @@ export const styles = StyleSheet.create({
     buttonText: {
         color: "black",
         textAlign: "center",
-    }
+    },
+    skipButton: {
+        alignSelf: "flex-end",
+        marginBottom: 20,
+        marginRight: 20
+        // borderStyle: "solid",
+        // borderWidth: 1,
+        // borderColor: "black",
+    },
 })
