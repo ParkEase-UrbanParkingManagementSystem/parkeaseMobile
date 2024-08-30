@@ -30,14 +30,9 @@ import {
 } from "@expo-google-fonts/nunito";
 import { useState } from "react";
 import { router } from "expo-router";
-import axios from "axios";
-import { SERVER_URI } from "@/utils/uri";
-import { Toast } from "react-native-toast-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import colors from "../../../constants/Colors"
-import {white} from "colorette";
-import {color} from "ansi-fragments";
+import {EXPO_PUBLIC_API_KEY} from '@env'
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -86,8 +81,7 @@ export default function LoginScreen(message?: any) {
             const body = { email, password };
             console.log("Sending request with body:", body);
 
-            // const response = await fetch(`http://localhost:5001/auth/login`, {
-                const response = await fetch(`http://192.168.8.198:5000/auth/login`, {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),

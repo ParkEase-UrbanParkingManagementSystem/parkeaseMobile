@@ -9,15 +9,15 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import IOSMap from "@/components/Map/IOSMap";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
-import { VehicleContext } from '../../utils/vehicleContext';
+import { VehicleContext } from '@/utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function HomePageScreen() {
     const { selectedVehicle } = useContext(VehicleContext);
     const [userDetails, setUserDetails] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [recentVisits, setRecentVisits] = useState<any[]>([]);    
-
+    const [recentVisits, setRecentVisits] = useState<any[]>([]);
     const plateNo = selectedVehicle?.vehicle_number;
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export default function HomePageScreen() {
             const token = await AsyncStorage.getItem("token");
     
             try {
-                const response = await fetch(`http://192.168.8.198:5000/parking/get-recent-parking-lots-home`, {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-recent-parking-lots-home`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function HomePageScreen() {
             const token = await AsyncStorage.getItem("token");
     
             try {
-                const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -176,7 +176,7 @@ export default function HomePageScreen() {
                 {visit.images && visit.images.length > 0 ? (
                     <Image
                         style={styles.image}
-                        source={{ uri: `http://192.168.8.198:5000/${visit.images[0].replace(/\\/g, "/")}` }} // Corrected image path formatting
+                        source={{ uri: `${EXPO_PUBLIC_API_KEY}/${visit.images[0].replace(/\\/g, "/")}` }} // Corrected image path formatting
                     />
                 ) : (
                     <Text>No Image Available</Text>
@@ -234,7 +234,7 @@ export default function HomePageScreen() {
             </View>
             <View style={styles.qrCodeContainer}>
                 <QRCode
-                    value={`Vehicle: ${selectedVehicle?.vehicle_id}, User: ${userDetails?.driver_id}`}
+                    value={`Vehicle: ${selectedVehicle?.vehicle_number}, User: ${userDetails?.driver_id}`}
                     size={wp('60%')}
                 />
             </View>

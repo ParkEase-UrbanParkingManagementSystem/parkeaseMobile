@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function PaymentScreen() {
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
@@ -25,7 +26,7 @@ export default function PaymentScreen() {
                 if (!token) throw new Error('No token found');
                 console.log(token)
 
-                const response = await fetch('http://192.168.8.198:5000/parking/parked-detailsMob', {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/parked-detailsMob`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ export default function PaymentScreen() {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await fetch('http://192.168.8.198:5000/parking/pay-wallet', {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/pay-wallet`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json', 
@@ -97,7 +98,7 @@ export default function PaymentScreen() {
                 const token = await AsyncStorage.getItem('token');
                 if (!token) throw new Error('No token found');
 
-                const response = await fetch('http://192.168.8.198:5000/parking/pay-pp', {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/pay-pp`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

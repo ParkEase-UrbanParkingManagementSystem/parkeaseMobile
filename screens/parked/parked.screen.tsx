@@ -7,6 +7,7 @@ import QRCode from 'react-native-qrcode-svg';
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { router } from "expo-router";
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 interface ParkingDetails {
   vehicle_name: string;
@@ -42,7 +43,7 @@ export default function ParkedScreen() {
         const token = await AsyncStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        const response = await fetch('http://192.168.8.198:5000/parking/parking-details', {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/parking-details`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

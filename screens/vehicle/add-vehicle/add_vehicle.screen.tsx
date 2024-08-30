@@ -20,6 +20,8 @@ import VehicleNameInput from "@/components/input/VehicleNameInput";
 import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
 import VehicleNumberInput from "@/components/input/VehicleNumberInput"; // Assuming this is a new component
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// @ts-ignore
+import {EXPO_PUBLIC_API_KEY} from '@env'
 
 export default function AddVehicleScreen() {
     const [buttonSpinner, setButtonSpinner] = useState(false);
@@ -49,7 +51,7 @@ export default function AddVehicleScreen() {
         };
 
         try {
-            const response = await fetch('http://192.168.8.198:5000/vehicle', {
+            const response = await fetch(`${EXPO_PUBLIC_API_KEY}/vehicle`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

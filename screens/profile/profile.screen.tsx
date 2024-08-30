@@ -7,6 +7,7 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function ProfileScreen() {
     const [fontsLoaded] = useFonts({
@@ -27,7 +28,7 @@ export default function ProfileScreen() {
         const fetchUserDetails = async () => {
             const token = await AsyncStorage.getItem("token");
             try {
-                const response = await fetch(`http://192.168.8.198:5000/driver/details`, {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/driver/details`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

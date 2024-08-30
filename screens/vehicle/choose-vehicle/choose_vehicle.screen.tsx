@@ -7,7 +7,8 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { VehicleContext } from '../../../utils/vehicleContext'; // Import VehicleContext
+import { VehicleContext } from '../../../utils/vehicleContext';
+import {EXPO_PUBLIC_API_KEY} from "@env"; // Import VehicleContext
 
 export default function ChooseVehicleScreen() {
   const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext); // Use VehicleContext
@@ -50,7 +51,7 @@ export default function ChooseVehicleScreen() {
       console.log('Token:', token); // Debugging token
 
       try {
-        const response = await fetch(`http://192.168.8.198:5000/vehicle`, {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/parked-detailsMob/vehicle`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

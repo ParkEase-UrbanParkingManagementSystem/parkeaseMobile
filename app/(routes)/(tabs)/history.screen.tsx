@@ -12,6 +12,7 @@ import {
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
 import { router, useFocusEffect } from "expo-router";
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 // Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
@@ -56,7 +57,7 @@ const HistoryScreen = () => {
         const fetchInstances = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                const response = await fetch(`http://192.168.8.198:5000/parking/get-recent-parking-instances`, {
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-recent-parking-instances`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

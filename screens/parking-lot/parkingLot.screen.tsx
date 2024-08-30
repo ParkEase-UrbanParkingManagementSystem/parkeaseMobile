@@ -10,6 +10,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import StarRating from '@/components/rating/StarRating';
 import AutoScroller from '@/components/ScrollView/AutoScroller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 interface Review {
   name: string;
@@ -40,7 +41,7 @@ export default function ParkingLotScreen() {
       const token = await AsyncStorage.getItem('token');
 
       try {
-        const response = await fetch(`http://192.168.8.198:5000/parkinglots/${id}`, {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parkinglots/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

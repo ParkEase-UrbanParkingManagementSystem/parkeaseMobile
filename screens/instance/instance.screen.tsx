@@ -7,6 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 import colors from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
+import {EXPO_PUBLIC_API_KEY} from "@env";
 
 
 const InstanceScreen = () => {
@@ -23,7 +24,7 @@ const InstanceScreen = () => {
     const fetchInstances = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await fetch(`http://192.168.8.198:5000/parking/get-instance-details/${id}`, {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-instance-details/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ const InstanceScreen = () => {
   const postWardenReviews = async (review: string, rating: number) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch('http://192.168.8.198:5000/reviews/warden', {
+      const response = await fetch(`${EXPO_PUBLIC_API_KEY}/reviews/warden`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ const InstanceScreen = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       console.log(details?.instaceDetails?.driver_id)
-      const response = await fetch('http://192.168.8.198:5000/reviews/parking', {
+      const response = await fetch(`${EXPO_PUBLIC_API_KEY}/reviews/parking`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
