@@ -33,6 +33,8 @@ import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../../../constants/Colors"
 import {EXPO_PUBLIC_API_KEY} from '@env'
+import InputField from "@/components/InputField";
+import { icons } from "@/constants";
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -43,38 +45,6 @@ export default function LoginScreen(message?: any) {
     const [error, setError] = useState({
         password: "",
     });
-
-    const handlePasswordValidation = (value: string) => {
-        const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
-        const passwordOneNumber = /(?=.*[0-9])/;
-        const passwordSixValue = /(?=.{6,})/;
-
-        if (!passwordSpecialCharacter.test(value)) {
-            setError({
-                ...error,
-                password: "Write at least one special character",
-            });
-            setPassword('');
-        } else if (!passwordOneNumber.test(value)) {
-            setError({
-                ...error,
-                password: "Write at least one number",
-            });
-            setPassword('');
-        } else if (!passwordSixValue.test(value)) {
-            setError({
-                ...error,
-                password: "Write at least 6 characters",
-            });
-            setPassword('');
-        } else {
-            setError({
-                ...error,
-                password: "",
-            });
-            setPassword(value);
-        }
-    };
 
     const handleSignIn = async (email: string, password: string) => {
         try {
@@ -149,71 +119,30 @@ export default function LoginScreen(message?: any) {
                     </Text>
                     <View style={styles.inputContainer}>
                         <View>
-                            <TextInput
-                                style={styles.input}
-                                autoCapitalize="none"
-                                keyboardType="email-address"
-                                value={email}
-                                placeholder="Email Address"
+                            <InputField
+                                label="Email"
+                                placeholder="Enter email"
                                 placeholderTextColor = "#D1D2D5"
-                                onChangeText={(value) =>
-                                    setEmail(value)
-                                }
+                                icon={icons.email}
+                                textContentType="emailAddress"
+                                value={email}
+                                autoCapitalize="none" // Disable automatic capitalization
+                                onChangeText={(value) => setEmail(value)}
                             />
-                            <Fontisto
-                                style={{ position: "absolute", left: 26, top: 17.8 }}
-                                name="email"
-                                size={20}
-                                color={"#A1A1A1"}
-                            />
-                            {required && (
-                                <View style={styles.errorContainer}>
-                                    <Entypo name="cross" size={18} color={"red"} />
-                                </View>
-                            )}
                             <View style={{ marginTop: 15 }}>
-                                <TextInput
-                                    style={styles.input}
-                                    autoCapitalize="none"
-                                    keyboardType="default"
-                                    secureTextEntry={!isPasswordVisible}
-                                    value={password}
-                                    placeholder="********"
+                                <InputField
+                                    label="Password"
+                                    placeholder="Enter password"
                                     placeholderTextColor = "#D1D2D5"
-                                    // onChangeText={handlePasswordValidation}
+                                    icon={icons.lock}
+                                    secureTextEntry={true}
+                                    textContentType="password"
+                                    value={password}
                                     onChangeText={(value) =>
                                         setPassword(value)
                                     }
                                 />
-                                <TouchableOpacity
-                                    style={styles.visibleIcon}
-                                    onPress={() => setPasswordVisible(!isPasswordVisible)}
-                                >
-                                    {isPasswordVisible ? (
-                                        <Ionicons
-                                            name="eye-off-outline"
-                                            size={23}
-                                            color={"#747474"}
-                                        />
-                                    ) : (
-                                        <Ionicons name="eye-outline" size={23} color={"#747474"} />
-                                    )}
-                                </TouchableOpacity>
-                                <SimpleLineIcons
-                                    style={styles.icon2}
-                                    name="lock"
-                                    size={20}
-                                    color={"#A1A1A1"}
-                                />
                             </View>
-                            {error.password && (
-                                <View style={[styles.errorContainer, { top: 145 }]}>
-                                    <Entypo name="cross" size={18} color={"red"} />
-                                    <Text style={{ color: "red", fontSize: 11, marginTop: -1 }}>
-                                        {error.password}
-                                    </Text>
-                                </View>
-                            )}
                             <TouchableOpacity
                                 onPress={() => router.push("/(routes)/forgot-password")}
                             >
