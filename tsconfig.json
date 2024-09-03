@@ -1,7 +1,8 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "types": ["react", "react-native"],
+//    "types": ["react", "react-native"],
+    "types": ["node"],
     "strict": true,
     "paths": {
       "@/*": [

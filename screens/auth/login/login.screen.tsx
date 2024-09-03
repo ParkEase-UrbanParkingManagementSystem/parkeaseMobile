@@ -32,7 +32,6 @@ import { useState } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../../../constants/Colors"
-import {EXPO_PUBLIC_API_KEY} from '@env'
 import InputField from "@/components/InputField";
 import { icons } from "@/constants";
 
@@ -45,6 +44,7 @@ export default function LoginScreen(message?: any) {
     const [error, setError] = useState({
         password: "",
     });
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
     const handleSignIn = async (email: string, password: string) => {
         try {

@@ -7,7 +7,6 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function ProfileScreen() {
     const [fontsLoaded] = useFonts({
@@ -15,6 +14,8 @@ export default function ProfileScreen() {
         Nunito_400Regular,
         Nunito_700Bold
     });
+
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
     const [userDetails, setUserDetails] = useState<any>(null);
 

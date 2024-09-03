@@ -12,7 +12,6 @@ import {
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
 import { router, useFocusEffect } from "expo-router";
-import {EXPO_PUBLIC_API_KEY} from "@env";
 
 // Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
@@ -52,6 +51,7 @@ interface Instance {
 
 const HistoryScreen = () => {
     const [instances, setInstances] = useState<Instance[]>([]);
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
     useEffect(() => {
         const fetchInstances = async () => {

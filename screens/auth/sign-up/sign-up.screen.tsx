@@ -34,7 +34,6 @@ import { router } from "expo-router";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
 
 import colors from "../../../constants/Colors";
-import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function SignUpScreen() {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -55,6 +54,8 @@ export default function SignUpScreen() {
     const [city, setCity] = useState('');
     const [district, setDistrict] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
 
     let [fontsLoaded, fontError] = useFonts({

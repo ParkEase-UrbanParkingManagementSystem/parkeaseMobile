@@ -11,7 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '@/utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
-import {EXPO_PUBLIC_API_KEY} from "@env";
 
 export default function HomePageScreen() {
     const { selectedVehicle } = useContext(VehicleContext);
@@ -19,6 +18,7 @@ export default function HomePageScreen() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [recentVisits, setRecentVisits] = useState<any[]>([]);
     const plateNo = selectedVehicle?.vehicle_number;
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
     useEffect(() => {
         const fetchRecentVisits = async () => {

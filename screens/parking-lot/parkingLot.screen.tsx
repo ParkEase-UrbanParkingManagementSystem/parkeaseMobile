@@ -10,7 +10,6 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import StarRating from '@/components/rating/StarRating';
 import AutoScroller from '@/components/ScrollView/AutoScroller';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {EXPO_PUBLIC_API_KEY} from "@env";
 
 interface Review {
   name: string;
@@ -35,6 +34,8 @@ export default function ParkingLotScreen() {
   const [slotPrices, setSlotPrices] = useState<SlotPrice[]>([]);
 
   const { id } = useLocalSearchParams();
+
+  const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
   useEffect(() => {
     const fetchParkingLotDetails = async () => {
