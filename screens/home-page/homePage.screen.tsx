@@ -19,6 +19,7 @@ export default function HomePageScreen() {
     const [userDetails, setUserDetails] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [recentVisits, setRecentVisits] = useState<any[]>([]);
+    const [driverStatus, setDriverStatus] = useState<any>(null);
     
     const plateNo = selectedVehicle?.vehicle_number;
 
@@ -81,9 +82,43 @@ export default function HomePageScreen() {
                 }
             }
         };
+
+        const fetchDriverStatus = async () => {
+            const token = await AsyncStorage.getItem("token");
+
+            try {
+                
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-parking-status`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token || ""
+                    }
+                });
+
+                const parseRes = await response.json();
+                console.log(parseRes);
+
+                if (response.ok) {
+                    console.log("Meka thamai machan",parseRes);
+                    setDriverStatus(parseRes.data);
+                } else {
+                    console.error("Error fetching driver status:", parseRes.message);
+                }
+
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log("Fetch error:", error.message);
+                } else {
+                    console.log("An unexpected error occurred");
+                }
+            }
+        }
+
     
         fetchRecentVisits();  // Call the fetchRecentVisits function
         fetchUserDetails();   // Call the fetchUserDetails function
+        fetchDriverStatus();  // Call the fetchDriverStatus function
     }, []);
     
 
@@ -93,6 +128,14 @@ export default function HomePageScreen() {
 
     const handleCloseModal = () => {
         setIsModalVisible(false);
+    };
+
+    const handleNavigation = () => {
+        if (driverStatus === "parked") {
+            router.push("/(routes)/parked");
+        } else if (driverStatus === "payment") {
+            router.push("/(routes)/payment/wallet");
+        }
     };
 
     return (
@@ -134,24 +177,55 @@ export default function HomePageScreen() {
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap />
-                        {selectedVehicle && (
-                            <TouchableOpacity
-                                onPress={handleShowQR}
-                                style={styles.currentVehicle}
-                            >
-                                <View style={styles.QRContainer}>
-                                    <Image
-                                        source={require('@/assets/images/QR_icon.png')}
-                                        style={[styles.icon, { marginRight: 20 }]}
-                                    />
-                                </View>
-                                <View style={styles.plateNoContainer}>
-                                    <Text style={styles.plateNo}>
-                                        {plateNo}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity
+                                    onPress={
+                                        driverStatus === "available" && !selectedVehicle
+                                            ? () => router.push('/(routes)/choose-vehicle')
+                                            : driverStatus === "available" && selectedVehicle
+                                            ? handleShowQR
+                                            : handleNavigation
+                                    }
+                                    style={styles.currentVehicle}
+                                >
+                                    {driverStatus === "available" && selectedVehicle ? (
+                                        <View style={styles.QRContainer}>
+                                            <Image
+                                                source={require('@/assets/images/QR_icon.png')}
+                                                style={[styles.icon, { marginBottom: 10 }]}
+                                            />
+                                            <View style={styles.plateNoContainer}>
+                                                <Text style={styles.plateNo}>{plateNo}</Text>
+                                            </View>
+                                        </View>
+                                    ) : driverStatus === "available" && !selectedVehicle ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/vehicle.png')}
+                                                style={styles.smallIcon}
+                                            />
+                                            <Text style={styles.messageText}>Please select a vehicle</Text>
+                                        </View>
+                                    ) : driverStatus === "parked" ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/home.png')}
+                                                style={styles.smallIcon}
+                                            />
+                                            <Text style={styles.messageText}>Go to the parking screen.</Text>
+                                        </View>
+                                    ) : driverStatus === "payment" ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/cash.png')}
+                                                style={styles.smallIcon}
+                                            />
+                                            <Text style={styles.messageText}>Go to the payment screen</Text>
+                                        </View>
+                                    ) : null}
+                                </TouchableOpacity>
+
+
+
                     </View>
                 </View>
                 <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
@@ -386,12 +460,42 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: "absolute",
     },
-    QRContainer: {},
-    plateNoContainer: {},
+     messageContainer: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    smallIcon: {
+        width: 100,
+        height: 80,
+    },
+    messageText: {
+        display: "flex",
+        flexDirection: "row",
+        fontSize: 18,
+        fontWeight: "600",
+        color: '#333',
+        textAlign: 'center',
+    },
+    QRContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 12,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 12,
+        flexDirection: 'row',
+    },
+    plateNoContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     plateNo: {
         fontFamily: "Nunito_700Bold",
         fontSize: 20,
     },
+
+    
+    
     home_page_bottom: {
         width: wp("100%"),
         marginLeft: "auto",
