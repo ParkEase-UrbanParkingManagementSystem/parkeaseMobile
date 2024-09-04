@@ -53,7 +53,7 @@ export default function ChooseVehicleScreen() {
       console.log('Token:', token); // Debugging token
 
       try {
-        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/parked-detailsMob/vehicle`, {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/vehicle`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
