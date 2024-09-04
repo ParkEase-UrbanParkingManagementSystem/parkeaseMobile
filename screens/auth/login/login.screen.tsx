@@ -32,7 +32,10 @@ import { useState } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../../../constants/Colors"
-import {EXPO_PUBLIC_API_KEY} from '@env'
+import React from 'react';
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+
+
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -48,6 +51,7 @@ export default function LoginScreen(message?: any) {
         const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
         const passwordOneNumber = /(?=.*[0-9])/;
         const passwordSixValue = /(?=.{6,})/;
+        
 
         if (!passwordSpecialCharacter.test(value)) {
             setError({

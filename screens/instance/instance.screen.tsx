@@ -7,7 +7,8 @@ import { useLocalSearchParams } from "expo-router";
 import colors from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
-import {EXPO_PUBLIC_API_KEY} from "@env";
+import {EXPO_PUBLIC_API_KEY} from '../../config'
+
 
 
 const InstanceScreen = () => {
@@ -17,6 +18,7 @@ const InstanceScreen = () => {
   const [selectedReviewType, setSelectedReviewType] = useState<'warden' | 'lot'>('warden');
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
+ 
 
     
 

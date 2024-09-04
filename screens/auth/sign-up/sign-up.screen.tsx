@@ -32,11 +32,16 @@ import {
 import { useState } from "react";
 import { router } from "expo-router";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
 
 import colors from "../../../constants/Colors";
-import {EXPO_PUBLIC_API_KEY} from "@env";
+
+import React from 'react';
+
 
 export default function SignUpScreen() {
+    
+   
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
     const [required, setRequired] = useState(false);
