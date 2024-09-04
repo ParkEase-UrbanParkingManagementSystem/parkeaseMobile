@@ -4,10 +4,9 @@
 //    "types": ["react", "react-native"],
     "types": ["node"],
     "strict": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["src/*"]
     }
   },
   "include": [

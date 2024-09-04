@@ -8,6 +8,7 @@ import {
     TextInput,
     TouchableOpacity,
     ActivityIndicator, SafeAreaView,
+    Alert
 } from "react-native";
 import {
     Entypo,
@@ -28,62 +29,51 @@ import {
     Nunito_700Bold,
     Nunito_600SemiBold,
 } from "@expo-google-fonts/nunito";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../../../constants/Colors"
 import InputField from "@/components/InputField";
 import { icons } from "@/constants";
+import OAuth from "@/components/OAuth";
+import { useSignIn } from "@clerk/clerk-expo";
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [required, setRequired] = useState("");
-    const [error, setError] = useState({
+    // const [required, setRequired] = useState("");
+    // const [error, setError] = useState({
+    //     password: "",
+    // });
+    const { signIn, setActive, isLoaded } = useSignIn();
+    const [form, setForm] = useState({
+        email: "",
         password: "",
     });
     const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
-    const handleSignIn = async (email: string, password: string) => {
-        try {
-            const body = { email, password };
-            console.log("Sending request with body:", body);
+    const handleSignIn = useCallback(async () => {
+        if (!isLoaded) return;
 
-                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body),
+        try {
+            const signInAttempt = await signIn.create({
+                identifier: form.email,
+                password: form.password,
             });
 
-            const parseRes = await response.json();
-            console.log("Response:", parseRes); // Debugging response
-
-            if (parseRes.token) {
-                console.log("Received token:", parseRes.token); // Debugging received token
-                await AsyncStorage.setItem("token", parseRes.token);
-
-                const role_id = parseRes.role_id;
-                console.log("Role ID:", role_id); // Debugging role ID
-
-                if (role_id === 1) {
-                    router.push("/home-page");
-                }
-                    // else if (role_id === 1) {
-                    //     navigation.navigate("Driver"); // Navigate to Driver for role 1
-                // }
-                else {
-                    alert("Login successful, but unknown role");
-                }
+            if (signInAttempt.status === "complete") {
+                await setActive({ session: signInAttempt.createdSessionId });
+                router.push("/(routes)/home-page")
             } else {
-                alert("Login failed, please check your credentials.");
+                // See https://clerk.com/docs/custom-flows/error-handling for more info on error handling
+                console.log(JSON.stringify(signInAttempt, null, 2));
+                Alert.alert("Error", "Log in failed. Please try again.");
             }
-        } catch (err) {
-            // console.error("Error during login:", err.message);
-            // alert("Error during login:", err.message);
+        } catch (err: any) {
+            console.log(JSON.stringify(err, null, 2));
+            Alert.alert("Error", err.errors[0].longMessage);
         }
-    };
+    }, [isLoaded, form]);
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_600SemiBold,
@@ -125,24 +115,37 @@ export default function LoginScreen(message?: any) {
                                 placeholderTextColor = "#D1D2D5"
                                 icon={icons.email}
                                 textContentType="emailAddress"
-                                value={email}
+                                value={form.email}
                                 autoCapitalize="none" // Disable automatic capitalization
-                                onChangeText={(value) => setEmail(value)}
+                                onChangeText={(value) => setForm({ ...form, email: value })}
                             />
-                            <View style={{ marginTop: 15 }}>
+                            <View>
                                 <InputField
                                     label="Password"
                                     placeholder="Enter password"
                                     placeholderTextColor = "#D1D2D5"
                                     icon={icons.lock}
-                                    secureTextEntry={true}
+                                    secureTextEntry={!isPasswordVisible}
                                     textContentType="password"
-                                    value={password}
-                                    onChangeText={(value) =>
-                                        setPassword(value)
-                                    }
+                                    value={form.password}
+                                    onChangeText={(value) => setForm({ ...form, password: value })}
                                 />
+                                <TouchableOpacity
+                                    style={styles.visibleIcon}
+                                    onPress={() => setPasswordVisible(!isPasswordVisible)}
+                                >
+                                    {isPasswordVisible ? (
+                                        <Ionicons
+                                            name="eye-off-outline"
+                                            size={23}
+                                            color={"#747474"}
+                                        />
+                                    ) : (
+                                        <Ionicons name="eye-outline" size={23} color={"#747474"} />
+                                    )}
+                                </TouchableOpacity>
                             </View>
+
                             <TouchableOpacity
                                 onPress={() => router.push("/(routes)/forgot-password")}
                             >
@@ -164,7 +167,7 @@ export default function LoginScreen(message?: any) {
                                     backgroundColor: colors.primary,
                                     marginTop: 15,
                                 }}
-                                onPress={() => handleSignIn(email, password)}
+                                onPress={handleSignIn}
                             >
                                 {buttonSpinner ? (
                                     <ActivityIndicator size="small" color={"white"} />
@@ -182,25 +185,7 @@ export default function LoginScreen(message?: any) {
                                 )}
                             </TouchableOpacity>
 
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    marginTop: 20,
-                                    gap: 15,
-                                }}
-                            >
-                                <TouchableOpacity>
-                                    <FontAwesome name="google" size={30} />
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <FontAwesome name="apple" size={30} />
-                                </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <FontAwesome name="github" size={30} />
-                                </TouchableOpacity>
-                            </View>
+                            <OAuth/>
 
                             <View style={styles.signupRedirect}>
                                 <Text style={{ fontSize: 18, fontFamily: "Raleway_600SemiBold" }}>
@@ -264,7 +249,7 @@ const styles = StyleSheet.create({
     visibleIcon: {
         position: "absolute",
         right: 30,
-        top: 15,
+        top: 55,
     },
     icon2: {
         position: "absolute",
