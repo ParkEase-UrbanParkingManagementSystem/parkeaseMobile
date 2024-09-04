@@ -236,7 +236,7 @@ export default function HomePageScreen() {
             </View>
             <View style={styles.qrCodeContainer}>
                 <QRCode
-                    value={`Vehicle: ${selectedVehicle?.vehicle_number}, User: ${userDetails?.driver_id}`}
+                    value={`Vehicle: ${selectedVehicle?.vehicle_id}, User: ${userDetails?.driver_id}`}
                     size={wp('60%')}
                 />
             </View>
