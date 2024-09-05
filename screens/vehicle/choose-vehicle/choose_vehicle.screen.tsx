@@ -37,7 +37,9 @@ export default function ChooseVehicleScreen() {
         case 2:
           return require('@/assets/images/bike_side.png');
         case 3:
-          return require('@/assets/images/tuktuk_side.png'); 
+          return require('@/assets/images/tuktuk_side.png');
+        case 4:
+          return require('@/assets/images/bus_side.png');
       }
     };
 
@@ -52,7 +54,7 @@ export default function ChooseVehicleScreen() {
       console.log('Token:', token); // Debugging token
 
       try {
-        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/parked-detailsMob/vehicle`, {
+        const response = await fetch(`${EXPO_PUBLIC_API_KEY}/vehicle`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -84,7 +86,7 @@ export default function ChooseVehicleScreen() {
 
   const handleSelectVehicle = (vehicle: Vehicle) => {
     setSelectedVehicle(vehicle);
-    router.push('/(routes)/home-page');
+    // router.push('/(routes)/home-page');
   };
 
   if (!fontsLoaded) {
@@ -113,7 +115,9 @@ export default function ChooseVehicleScreen() {
                     : selectedVehicle.type_id === 2 
                     ? require('@/assets/images/bike_side.png') 
                     : selectedVehicle.type_id === 3 
-                    ? require('@/assets/images/tuktuk_side.png') 
+                    ? require('@/assets/images/tuktuk_side.png')
+                    : selectedVehicle.type_id === 4
+                    ? require('@/assets/images/bus_side.png')
                     : require('@/assets/images/car_side.png') // default image if type_id doesn't match
                 } 
               />
