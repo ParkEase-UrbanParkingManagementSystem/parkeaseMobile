@@ -37,6 +37,7 @@ import InputField from "@/components/InputField";
 import { icons } from "@/constants";
 import OAuth from "@/components/OAuth";
 import { useSignIn } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
@@ -51,29 +52,45 @@ export default function LoginScreen(message?: any) {
         password: "",
     });
     const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
-
-    const handleSignIn = useCallback(async () => {
-        if (!isLoaded) return;
-
+    const router = useRouter(); // Ensure this is initialized
+    const handleSignIn = async (email: string, password: string) => {
         try {
-            const signInAttempt = await signIn.create({
-                identifier: form.email,
-                password: form.password,
+            const body = { email, password };
+            console.log("Sending request with body:", body);
+
+            const response = await fetch(`${EXPO_PUBLIC_API_KEY}/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
             });
 
-            if (signInAttempt.status === "complete") {
-                await setActive({ session: signInAttempt.createdSessionId });
-                router.push("/(routes)/home-page")
+            const parseRes = await response.json();
+            console.log("Response:", parseRes); // Debugging response
+
+            if (parseRes.token) {
+                console.log("Received token:", parseRes.token); // Debugging received token
+                await AsyncStorage.setItem("token", parseRes.token);
+
+                const role_id = parseRes.role_id;
+                console.log("Role ID:", role_id); // Debugging role ID
+
+                if (role_id === 1) {
+                    router.push("/(routes)/choose-vehicle")
+                }
+                    // else if (role_id === 1) {
+                    //     navigation.navigate("Driver"); // Navigate to Driver for role 1
+                // }
+                else {
+                    alert("Login successful, but unknown role");
+                }
             } else {
-                // See https://clerk.com/docs/custom-flows/error-handling for more info on error handling
-                console.log(JSON.stringify(signInAttempt, null, 2));
-                Alert.alert("Error", "Log in failed. Please try again.");
+                alert("Login failed, please check your credentials.");
             }
-        } catch (err: any) {
-            console.log(JSON.stringify(err, null, 2));
-            Alert.alert("Error", err.errors[0].longMessage);
+        } catch (err) {
+            // console.error("Error during login:", err.message);
+            // alert("Error during login:", err.message);
         }
-    }, [isLoaded, form]);
+    };
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_600SemiBold,
@@ -167,7 +184,7 @@ export default function LoginScreen(message?: any) {
                                     backgroundColor: colors.primary,
                                     marginTop: 15,
                                 }}
-                                onPress={handleSignIn}
+                                onPress={() => handleSignIn(form.email, form.password)}
                             >
                                 {buttonSpinner ? (
                                     <ActivityIndicator size="small" color={"white"} />

@@ -150,6 +150,7 @@ export default function ParkingLotScreen() {
               reviews.map((review, index) => (
                 <View key={index} style={styles.review}>
                   <View style={styles.header}>
+                    //:TODO resolve this issue
                     <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 14 }}>{review.driver_fname} {review.driver_lname}</Text>
                     <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 12 }}>{formatDate(review.created_at)}</Text>
                   </View>
