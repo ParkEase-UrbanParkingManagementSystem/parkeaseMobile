@@ -100,7 +100,7 @@ export default function HomePageScreen() {
                 console.log(parseRes);
 
                 if (response.ok) {
-                    console.log("Meka thamai machan",parseRes);
+                    // console.log("Meka thamai machan",parseRes);
                     setDriverStatus(parseRes.data);
                 } else {
                     console.error("Error fetching driver status:", parseRes.message);
