@@ -11,7 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '@/utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
-import {EXPO_PUBLIC_API_KEY} from '../../config'
+import {EXPO_PUBLIC_API_KEY} from '../../config';
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 
 export default function HomePageScreen() {
@@ -145,16 +146,16 @@ export default function HomePageScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.home_page_top}>
-                    <View style={styles.searchBarContainer}>
+                    <View style={styles.parkEaseLogoContainer}>
                         {/* Assuming ParkingLotSearchModal is a functional component */}
-                        <ParkingLotSearchModal />
+                        <Image
+                                source={require('@/assets/images/Group 177.png')}
+                                style={{ width: 190, height: 50, marginLeft: 3 }}
+                            />
                     </View>
                     <View style={styles.iconContainer}>
                         <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
-                            <Image
-                                source={require('@/assets/images/driver_profile.png')}
-                                style={[styles.icon, { marginRight: 20 }]}
-                            />
+                        <ProfileIcon userName={userDetails?.fname} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.iconContainer}>
@@ -171,9 +172,9 @@ export default function HomePageScreen() {
                         <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                             Hi, {userDetails?.fname}
                         </Text>
-                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10 }}>
-                            Locate Parking Lots Near you
-                        </Text>
+                        <View style={styles.searchBarContainer}>
+                            <ParkingLotSearchModal />
+                        </View>
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap />
@@ -201,7 +202,7 @@ export default function HomePageScreen() {
                                         <View style={styles.messageContainer}>
                                             <Image
                                                 source={require('@/assets/images/vehicle.png')}
-                                                style={styles.smallIcon}
+                                                style={styles.smallIconCar}
                                             />
                                             <Text style={styles.messageText}>Please select a vehicle</Text>
                                         </View>
@@ -228,9 +229,9 @@ export default function HomePageScreen() {
 
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
+                {/* <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
                     <Text>Go to Payments</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <View>
                     <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                         Recently visited
@@ -350,6 +351,16 @@ const styles = StyleSheet.create({
         width: wp('80%'), // Adjust width as needed
         maxHeight: hp('60%'), // Adjust height as needed
     },
+
+    parkEaseLogoContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 10,
+        width: wp('65%'), // Adjust width as needed
+        maxHeight: hp('1%'), // Adjust height as needed
+    },
     vehicleInfoContainer: {
         marginBottom: hp('2%'), // Space between vehicle info and QR code
         alignItems: 'center',
@@ -422,7 +433,9 @@ const styles = StyleSheet.create({
     },
     searchBarContainer: {
         width: wp("60%"),
-        marginRight: 10
+        marginRight: 10,
+        marginTop:8,
+        marginLeft:8
     },
     home_page_mid: {
         alignItems: "flex-start",
@@ -469,10 +482,15 @@ const styles = StyleSheet.create({
         width: 100,
         height: 80,
     },
+
+    smallIconCar: {
+        width: 40,
+        height: 30,
+    },
     messageText: {
         display: "flex",
         flexDirection: "row",
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "600",
         color: '#333',
         textAlign: 'center',
@@ -481,9 +499,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 12,
-        backgroundColor: '#f9f9f9',
+        // backgroundColor: '#f9f9f9',
         borderRadius: 12,
-        flexDirection: 'row',
+        flexDirection: 'column',
     },
     plateNoContainer: {
         justifyContent: 'center',

@@ -1,1 +1,1 @@
-export const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY || 'http://192.168.244.147:5000';
+export const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY || 'http://192.168.8.198:5000';
