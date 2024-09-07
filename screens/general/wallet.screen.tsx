@@ -8,7 +8,9 @@ import React, { useState, useEffect } from "react";
 import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
+
 import {EXPO_PUBLIC_API_KEY} from '../../config'
+
 
 
 export default function PaymentScreen() {
@@ -20,7 +22,7 @@ export default function PaymentScreen() {
     const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
     const amountToPay = Number(details?.toll_amount) || 0; // Ensure amountToPay is a number
     
-    
+     
 
     useEffect(() => {
         const fetchDetails = async () => {

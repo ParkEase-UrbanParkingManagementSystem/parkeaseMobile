@@ -7,6 +7,7 @@ import QRCode from 'react-native-qrcode-svg';
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { router } from "expo-router";
+
 import {EXPO_PUBLIC_API_KEY} from '../../config'
 
 
@@ -38,6 +39,7 @@ export default function ParkedScreen() {
   const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
   const [isQRModalVisible, setIsQRModalVisible] = useState(false);
   const [activeSection, setActiveSection] = useState<'warden' | 'lot'>('warden');
+
 
   useEffect(() => {
     const fetchDetails = async () => {

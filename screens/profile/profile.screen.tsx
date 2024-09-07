@@ -7,8 +7,10 @@ import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {EXPO_PUBLIC_API_KEY} from '../../config'
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+
 
 
 export default function ProfileScreen() {
@@ -19,6 +21,8 @@ export default function ProfileScreen() {
         Nunito_700Bold
     });
     
+
+
 
     const [userDetails, setUserDetails] = useState<any>(null);
 

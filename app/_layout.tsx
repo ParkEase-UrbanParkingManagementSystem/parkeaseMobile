@@ -9,14 +9,27 @@ import { View } from 'react-native';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { VehicleProvider } from '../utils/vehicleContext'; 
 import OnBoarding from './(routes)/onboarding';
-
+import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo"
+import { LogBox } from "react-native";
+import { tokenCache } from "@/lib/auth";
 export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
 };
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
+
+const clerk_publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+const stripe_publishableKey = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
+
+if (!clerk_publishableKey) {
+  throw new Error(
+      "Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env",
+  );
+}
+
+LogBox.ignoreLogs(["Clerk:"]);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -39,11 +52,15 @@ export default function RootLayout() {
   }
 
   return (
-    <VehicleProvider> 
-      <StripeProvider publishableKey="pk_test_51Pg52IClnSyidEOPK1f04a5vNTnlRICySgtJJmDG1zAoQ9TqGdljELayqUxiftG167OddlpS1aM6CWXOyZB03W9n000f0UJt7D">
-        <RootLayoutNav />
-      </StripeProvider>
-    </VehicleProvider>
+      <ClerkProvider tokenCache={tokenCache} publishableKey={clerk_publishableKey}>
+        <ClerkLoaded>
+          <VehicleProvider>
+            <StripeProvider publishableKey={stripe_publishableKey}>
+              <RootLayoutNav />
+            </StripeProvider>
+          </VehicleProvider>
+        </ClerkLoaded>
+      </ClerkProvider>
   );
 }
 
@@ -75,6 +92,8 @@ function RootLayoutNav() {
           <Stack.Screen name="(routes)/info/index" />
           <Stack.Screen name="(routes)/parked/index" />
           <Stack.Screen name="(routes)/instance/index" />
+          <Stack.Screen name="(routes)/(tabs)" />
+          <Stack.Screen name="+not-found" />
         </Stack>
       )}
     </>

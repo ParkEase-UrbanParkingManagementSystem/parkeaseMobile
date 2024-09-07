@@ -11,8 +11,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '@/utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
+
 import {EXPO_PUBLIC_API_KEY} from '../../config';
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+
+
+import { useAuth } from "@clerk/clerk-expo";
 
 
 export default function HomePageScreen() {
@@ -23,6 +27,7 @@ export default function HomePageScreen() {
     const [driverStatus, setDriverStatus] = useState<any>(null);
     
     const plateNo = selectedVehicle?.vehicle_number;
+    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
 
     useEffect(() => {
         const fetchRecentVisits = async () => {
@@ -121,6 +126,12 @@ export default function HomePageScreen() {
         fetchUserDetails();   // Call the fetchUserDetails function
         fetchDriverStatus();  // Call the fetchDriverStatus function
     }, []);
+
+    const { signOut } = useAuth();
+    const handleSignOut = () => {
+        signOut();
+        router.push("/(routes)/login");
+    };
     
 
     const handleShowQR = () => {
@@ -155,13 +166,27 @@ export default function HomePageScreen() {
                     </View>
                     <View style={styles.iconContainer}>
                         <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
+
                         <ProfileIcon userName={userDetails?.fname} />
+
                         </TouchableOpacity>
                     </View>
                     <View style={styles.iconContainer}>
-                        <TouchableOpacity onPress={() => router.push("/")}>
+                        <TouchableOpacity
+                            onPress={handleSignOut}
+                        >
                             <Image
                                 source={require('@/assets/images/notification.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity
+                            onPress={() => router.push("/")}
+                        >
+                            <Image
+                                source={require('@/assets/images/signout.png')}
                                 style={styles.icon}
                             />
                         </TouchableOpacity>
@@ -428,7 +453,7 @@ const styles = StyleSheet.create({
         width: wp("95%"),
         padding: 10,
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         gap: 10,
     },
     searchBarContainer: {
@@ -445,10 +470,12 @@ const styles = StyleSheet.create({
         position: "relative",
     },
     title: {},
-    iconContainer: {},
+    iconContainer: {
+        marginRight: 10
+    },
     icon: {
-        width: wp("9%"),
-        height: hp("4%"),
+        width: wp("6%"),
+        height: hp("3%"),
     },
     mapContainer: {
         width: wp("96%"),

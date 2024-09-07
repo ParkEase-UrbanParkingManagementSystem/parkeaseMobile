@@ -1,7 +1,7 @@
 // HistoryScreen.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import colors from "@/constants/Colors";
+import colors from '@/constants/Colors';
 import { LinearGradient } from "expo-linear-gradient";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,7 +12,9 @@ import {
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
 import { router, useFocusEffect } from "expo-router";
+
 import {EXPO_PUBLIC_API_KEY} from '../../../config'
+
 
 
 // Helper functions
@@ -53,6 +55,7 @@ interface Instance {
 
 const HistoryScreen = () => {
     const [instances, setInstances] = useState<Instance[]>([]);
+    
 
     
 

@@ -20,8 +20,10 @@ import VehicleNameInput from "@/components/input/VehicleNameInput";
 import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
 import VehicleNumberInput from "@/components/input/VehicleNumberInput"; // Assuming this is a new component
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {EXPO_PUBLIC_API_KEY} from '../../../config'
 // @ts-ignore
+
 
 
 export default function AddVehicleScreen() {
@@ -40,6 +42,8 @@ export default function AddVehicleScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+
+ 
 
     const handleAddVehicle = async () => {
         setButtonSpinner(true);

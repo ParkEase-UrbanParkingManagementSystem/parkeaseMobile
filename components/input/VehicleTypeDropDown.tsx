@@ -14,7 +14,7 @@ const VehicleTypeDropDown: React.FC<VehicleTypeDropdownProps> = ({ value, onChan
             <RNPickerSelect
                 onValueChange={(value) => onChange(value)} // Call the parent function when value changes
                 items={[
-                    { label: 'Car', value: '1' },
+                    { label: 'Car/SVU/Van/Jeep/Pickup', value: '1' },
                     { label: 'Bike', value: '2' },                                
                     { label: 'TukTuk', value: '3' },
                     { label: 'Large Vehicle', value: '4' },
