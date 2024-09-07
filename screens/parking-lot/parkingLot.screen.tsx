@@ -114,33 +114,45 @@ export default function ParkingLotScreen() {
           </View>
         </View>
         <View style={styles.MidContainer}>
+
+<View style={styles.middleContainer}>
+
           {/* Slot Prices Section */}
-          <View style={styles.slotPricesContainer}>
-            {slotPrices.length > 0 ? (
-              slotPrices.map((price, index) => (
-                <View key={index} style={styles.slotPrice}>
-                  <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 18 }}>
-                    {price.type_name}: Rs. {price.amount_per_vehicle}
-                  </Text>
-                </View>
-              ))
-            ) : (
-              <Text style={{ fontFamily: 'Nunito_400Regular', fontSize: 16 }}>No slot prices available</Text>
-            )}
-          </View>
+          <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Slot Prices</Text>
+        <View style={styles.slotPricesContainer}>
+          {slotPrices.length > 0 ? (
+            slotPrices.map((price, index) => (
+              <View key={index} style={styles.slotPrice}>
+                <Text style={styles.slotPriceText}>
+                  {price.type_name}: Rs. {price.amount_per_vehicle}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noPricesText}>No slot prices available</Text>
+          )}
+        </View>
+      </View>
           {/* Capacities Section */}
-          <View style={styles.capacities}>
-            <View style={styles.cap}>
-              <Image style={styles.vehicleIcon} source={require('@/assets/images/car_side.png')} />
-              <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 18, color: 'green' }}> : 200</Text>
-              <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 18, color: 'black' }}>/250</Text>
-            </View>
-            <View style={styles.cap}>
-              <Image style={styles.vehicleIcon} source={require('@/assets/images/bike_side.png')} />
-              <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 18, color: 'green' }}> : 200</Text>
-              <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 18, color: 'black' }}>/250</Text>
-            </View> 
+          <View style={styles.section}>
+        <Text style={styles.sectionHeader}>Capacities</Text>
+        <View style={styles.capacitiesContainer}>
+          <View style={styles.cap}>
+            <Image style={styles.vehicleIcon} source={require('@/assets/images/car_side.png')} />
+            <Text style={styles.capacityAvailable}>200</Text>
+            <Text style={styles.capacityTotal}>/250</Text>
           </View>
+          <View style={styles.cap}>
+            <Image style={styles.vehicleIcon} source={require('@/assets/images/bike_side.png')} />
+            <Text style={styles.capacityAvailable}>150</Text>
+            <Text style={styles.capacityTotal}>/200</Text>
+          </View>
+        </View>
+      </View>
+
+          </View>
+        
           <View style={{ alignItems: 'flex-start' }}>
             <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 18, marginBottom: 2 }}>
               Reviews & Ratings
@@ -151,11 +163,11 @@ export default function ParkingLotScreen() {
               reviews.map((review, index) => (
                 <View key={index} style={styles.review}>
                   <View style={styles.header}>
-                    <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 14 }}>{review.driver_fname} {review.driver_lname}</Text>
+                    <Text style={{ fontFamily: 'Nunito_700Bold', fontSize: 14 }}>{review?.driver_fname} {review?.driver_lname}</Text>
                     <Text style={{ fontFamily: 'Raleway_700Bold', fontSize: 12 }}>{formatDate(review.created_at)}</Text>
                   </View>
                   <View style={styles.body}>
-                    <Text style={{ fontFamily: 'Nunito_400Regular', marginBottom: 5, marginTop: 10, fontSize: 16 }}>{review.review}</Text>
+                    <Text style={{ fontFamily: 'Nunito_400Regular', marginBottom: 5, marginTop: 10, fontSize: 16 }}>{review?.review}</Text>
                     <StarRating rating={review.rating} />
                   </View>
                 </View>
@@ -208,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 410,
-    gap: 10,
+    gap: 15,
     width: wp('100%'),
     height: wp('80%'),
     shadowColor: '#000000',
@@ -218,33 +230,91 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.17,
     shadowRadius: 3.05,
-    elevation: 4,
+    
+  },
+
+  section: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    justifyContent: 'center',  // Vertically centers the items inside the container
+    alignItems: 'center',       // Horizontally centers the items inside the container
+    
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+    marginLeft:10,
+    marginRight:10,
+  },
+  sectionHeader: {
+    fontFamily: 'Raleway_700Bold',
+    fontSize: 20,
+    marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#E0E0E0',
   },
   slotPricesContainer: {
-    marginBottom: 5,
-    alignItems: 'center',
-    width: wp('90%'),
+    marginBottom: 20,
   },
   slotPrice: {
     marginBottom: 10,
   },
-  capacities: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    flexWrap: 'wrap', // Added to handle overflow
+  
+  slotPriceText: {
+    fontFamily: 'Raleway_700Bold',
+    fontSize: 14,
+    color: '#333',
   },
+
+  noPricesText: {
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 16,
+    color: '#999',
+  },
+  
+  capacities: {
+    flex: 1,                   // Take equal width as slot prices section
+    justifyContent: 'center',   // Center the items vertically
+    alignItems: 'center',     // Align capacities to the right
+  },
+
+  middleContainer: {
+    
+    flexDirection: 'row',      // Align the slot prices and capacities side by side
+    justifyContent: 'space-between', // Space between the two sections
+    // Align the sections vertically in the middle
+                // Add some padding for spacing
+  },
+
+  capacitiesContainer: {
+    flexDirection: 'column',
+  },
+
+  capacityAvailable: {
+    fontFamily: 'Raleway_700Bold',
+    fontSize: 18,
+    color: 'green',
+  },
+  capacityTotal: {
+    fontFamily: 'Raleway_700Bold',
+    fontSize: 18,
+    color: '#333',
+  },
+
   cap: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: wp('1%'),
     marginBottom: 10, // Added margin for spacing between rows
   },
   vehicleIcon: {
     width: 32,
     height: 32,
+    marginRight: 5
   },
   reviewsScrollView: {
     padding: 10,
