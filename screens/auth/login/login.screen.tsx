@@ -119,7 +119,7 @@ export default function LoginScreen(message?: any) {
                 console.log("Role ID:", role_id); // Debugging role ID
 
                 if (role_id === 1) {
-                    router.push("/(routes)/choose-vehicle")
+                    router.push("/(routes)/home-page"); // Navigate to Home for role 1
                 }
                     // else if (role_id === 1) {
                     //     navigation.navigate("Driver"); // Navigate to Driver for role 1

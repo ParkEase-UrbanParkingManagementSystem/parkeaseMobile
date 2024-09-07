@@ -474,8 +474,8 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     icon: {
-        width: wp("6%"),
-        height: hp("3%"),
+        width: wp("8.8%"),
+        height: hp("4%"),
     },
     mapContainer: {
         width: wp("96%"),
