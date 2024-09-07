@@ -9,6 +9,10 @@ import PaymentMethodForm from "@/components/payment/PaymentMethodForm";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from "expo-router";
 
+import {EXPO_PUBLIC_API_KEY} from '../../config'
+
+
+
 export default function PaymentScreen() {
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -17,8 +21,8 @@ export default function PaymentScreen() {
     const [loading, setLoading] = useState<boolean>(true);
     const [isConfirmationVisible, setIsConfirmationVisible] = useState(false);
     const amountToPay = Number(details?.toll_amount) || 0; // Ensure amountToPay is a number
-
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+    
+     
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -93,7 +97,24 @@ export default function PaymentScreen() {
                 console.error('Error paying by wallet:', error);
             }
         } else if(selectedMethod === '2') {
-            // Handle cash payment
+            try {
+                const token = await AsyncStorage.getItem('token');
+
+                if (!token) throw new Error('No token found');
+
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/pay-cash`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        token: token || "",
+                    },
+                    body: JSON.stringify({method: selectedMethod,
+                        instance_id: details?.instance_id, }),
+                });
+
+            } catch (error) {
+                console.error('Error paying by cash:', error);
+            }
         } else if(selectedMethod === '3') {
             try {
                 const token = await AsyncStorage.getItem('token');
@@ -115,6 +136,7 @@ export default function PaymentScreen() {
         }
         setIsConfirmationVisible(false);
         Alert.alert("Payment Confirmed", "Your payment has been processed successfully.");
+        router.push("/(routes)/home-page")
     };
 
     const cancelConfirmation = () => {

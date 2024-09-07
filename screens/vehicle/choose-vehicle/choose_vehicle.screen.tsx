@@ -9,7 +9,12 @@ import colors from '../../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { VehicleContext } from '../../../utils/vehicleContext';
 
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+ // Import VehicleContext
+
+
 export default function ChooseVehicleScreen() {
+
   const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext); // Use VehicleContext
   let [fontsLoaded] = useFonts({
     Raleway_700Bold,

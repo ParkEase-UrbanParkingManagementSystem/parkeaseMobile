@@ -8,6 +8,9 @@ import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { router } from "expo-router";
 
+import {EXPO_PUBLIC_API_KEY} from '../../config'
+
+
 interface ParkingDetails {
   vehicle_name: string;
   vehicle_number: string;
@@ -29,13 +32,14 @@ interface ParkingDetails {
 }
 
 export default function ParkedScreen() {
+ 
   const [details, setDetails] = useState<ParkingDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
   const [isQRModalVisible, setIsQRModalVisible] = useState(false);
   const [activeSection, setActiveSection] = useState<'warden' | 'lot'>('warden');
-  const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+
 
   useEffect(() => {
     const fetchDetails = async () => {

@@ -11,15 +11,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import QRCode from 'react-native-qrcode-svg';
 import { VehicleContext } from '@/utils/vehicleContext';
 import ParkingLotSearchModal from "@/components/Modal/ParkingLotSearchModal";
+
+import {EXPO_PUBLIC_API_KEY} from '../../config';
+import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
+
+
 import { useAuth } from "@clerk/clerk-expo";
+
 
 export default function HomePageScreen() {
     const { selectedVehicle } = useContext(VehicleContext);
     const [userDetails, setUserDetails] = useState<any>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [recentVisits, setRecentVisits] = useState<any[]>([]);
+    const [driverStatus, setDriverStatus] = useState<any>(null);
+    
     const plateNo = selectedVehicle?.vehicle_number;
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+    
 
     useEffect(() => {
         const fetchRecentVisits = async () => {
@@ -80,9 +88,43 @@ export default function HomePageScreen() {
                 }
             }
         };
+
+        const fetchDriverStatus = async () => {
+            const token = await AsyncStorage.getItem("token");
+
+            try {
+                
+                const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-parking-status`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "token": token || ""
+                    }
+                });
+
+                const parseRes = await response.json();
+                console.log(parseRes);
+
+                if (response.ok) {
+                    // console.log("Meka thamai machan",parseRes);
+                    setDriverStatus(parseRes.data);
+                } else {
+                    console.error("Error fetching driver status:", parseRes.message);
+                }
+
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.log("Fetch error:", error.message);
+                } else {
+                    console.log("An unexpected error occurred");
+                }
+            }
+        }
+
     
         fetchRecentVisits();  // Call the fetchRecentVisits function
         fetchUserDetails();   // Call the fetchUserDetails function
+        fetchDriverStatus();  // Call the fetchDriverStatus function
     }, []);
 
     const { signOut } = useAuth();
@@ -100,6 +142,14 @@ export default function HomePageScreen() {
         setIsModalVisible(false);
     };
 
+    const handleNavigation = () => {
+        if (driverStatus === "parked") {
+            router.push("/(routes)/parked");
+        } else if (driverStatus === "payment") {
+            router.push("/(routes)/payment/wallet");
+        }
+    };
+
     return (
         <LinearGradient
             colors={[colors.primary, colors.primary]}
@@ -107,16 +157,18 @@ export default function HomePageScreen() {
         >
             <SafeAreaView style={styles.firstContainer}>
                 <View style={styles.home_page_top}>
-                    <View style={styles.searchBarContainer}>
+                    <View style={styles.parkEaseLogoContainer}>
                         {/* Assuming ParkingLotSearchModal is a functional component */}
-                        <ParkingLotSearchModal />
+                        <Image
+                                source={require('@/assets/images/Group 177.png')}
+                                style={{ width: 190, height: 50, marginLeft: 3 }}
+                            />
                     </View>
                     <View style={styles.iconContainer}>
                         <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
-                            <Image
-                                source={require('@/assets/images/driver_profile.png')}
-                                style={styles.icon}
-                            />
+
+                        <ProfileIcon userName={userDetails?.fname} />
+
                         </TouchableOpacity>
                     </View>
                     <View style={styles.iconContainer}>
@@ -145,35 +197,66 @@ export default function HomePageScreen() {
                         <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                             Hi, {userDetails?.fname}
                         </Text>
-                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 25, marginLeft: 10 }}>
-                            Locate Parking Lots Near you
-                        </Text>
+                        <View style={styles.searchBarContainer}>
+                            <ParkingLotSearchModal />
+                        </View>
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap />
-                        {selectedVehicle && (
-                            <TouchableOpacity
-                                onPress={handleShowQR}
-                                style={styles.currentVehicle}
-                            >
-                                <View style={styles.QRContainer}>
-                                    <Image
-                                        source={require('@/assets/images/QR_icon.png')}
-                                        style={[styles.icon, { marginRight: 20 }]}
-                                    />
-                                </View>
-                                <View style={styles.plateNoContainer}>
-                                    <Text style={styles.plateNo}>
-                                        {plateNo}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity
+                                    onPress={
+                                        driverStatus === "available" && !selectedVehicle
+                                            ? () => router.push('/(routes)/choose-vehicle')
+                                            : driverStatus === "available" && selectedVehicle
+                                            ? handleShowQR
+                                            : handleNavigation
+                                    }
+                                    style={styles.currentVehicle}
+                                >
+                                    {driverStatus === "available" && selectedVehicle ? (
+                                        <View style={styles.QRContainer}>
+                                            <Image
+                                                source={require('@/assets/images/QR_icon.png')}
+                                                style={[styles.icon, { marginBottom: 10 }]}
+                                            />
+                                            <View style={styles.plateNoContainer}>
+                                                <Text style={styles.plateNo}>{plateNo}</Text>
+                                            </View>
+                                        </View>
+                                    ) : driverStatus === "available" && !selectedVehicle ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/vehicle.png')}
+                                                style={styles.smallIconCar}
+                                            />
+                                            <Text style={styles.messageText}>Please select a vehicle</Text>
+                                        </View>
+                                    ) : driverStatus === "parked" ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/home.png')}
+                                                style={styles.smallIcon}
+                                            />
+                                            <Text style={styles.messageText}>Go to the parking screen.</Text>
+                                        </View>
+                                    ) : driverStatus === "payment" ? (
+                                        <View style={styles.messageContainer}>
+                                            <Image
+                                                source={require('@/assets/images/cash.png')}
+                                                style={styles.smallIcon}
+                                            />
+                                            <Text style={styles.messageText}>Go to the payment screen</Text>
+                                        </View>
+                                    ) : null}
+                                </TouchableOpacity>
+
+
+
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
+                {/* <TouchableOpacity onPress={() => { router.push("/(routes)/payment/wallet"); }}>
                     <Text>Go to Payments</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <View>
                     <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                         Recently visited
@@ -253,7 +336,7 @@ export default function HomePageScreen() {
             </View>
             <View style={styles.qrCodeContainer}>
                 <QRCode
-                    value={`Vehicle: ${selectedVehicle?.vehicle_number}, User: ${userDetails?.driver_id}`}
+                    value={`Vehicle: ${selectedVehicle?.vehicle_id}, User: ${userDetails?.driver_id}`}
                     size={wp('60%')}
                 />
             </View>
@@ -292,6 +375,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: wp('80%'), // Adjust width as needed
         maxHeight: hp('60%'), // Adjust height as needed
+    },
+
+    parkEaseLogoContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 10,
+        width: wp('65%'), // Adjust width as needed
+        maxHeight: hp('1%'), // Adjust height as needed
     },
     vehicleInfoContainer: {
         marginBottom: hp('2%'), // Space between vehicle info and QR code
@@ -365,7 +458,9 @@ const styles = StyleSheet.create({
     },
     searchBarContainer: {
         width: wp("60%"),
-        marginRight: 10
+        marginRight: 10,
+        marginTop:8,
+        marginLeft:8
     },
     home_page_mid: {
         alignItems: "flex-start",
@@ -379,8 +474,8 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     icon: {
-        width: wp("6%"),
-        height: hp("3%"),
+        width: wp("8.8%"),
+        height: hp("4%"),
     },
     mapContainer: {
         width: wp("96%"),
@@ -405,12 +500,47 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: "absolute",
     },
-    QRContainer: {},
-    plateNoContainer: {},
+     messageContainer: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    smallIcon: {
+        width: 100,
+        height: 80,
+    },
+
+    smallIconCar: {
+        width: 40,
+        height: 30,
+    },
+    messageText: {
+        display: "flex",
+        flexDirection: "row",
+        fontSize: 16,
+        fontWeight: "600",
+        color: '#333',
+        textAlign: 'center',
+    },
+    QRContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 12,
+        // backgroundColor: '#f9f9f9',
+        borderRadius: 12,
+        flexDirection: 'column',
+    },
+    plateNoContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     plateNo: {
         fontFamily: "Nunito_700Bold",
         fontSize: 20,
     },
+
+    
+    
     home_page_bottom: {
         width: wp("100%"),
         marginLeft: "auto",

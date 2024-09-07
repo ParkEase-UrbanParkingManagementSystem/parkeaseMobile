@@ -33,26 +33,70 @@ import { useState, useCallback } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../../../constants/Colors"
+
+import React from 'react';
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+
+
 import InputField from "@/components/InputField";
 import { icons } from "@/constants";
 import OAuth from "@/components/OAuth";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
+
 export default function LoginScreen(message?: any) {
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
-    // const [required, setRequired] = useState("");
-    // const [error, setError] = useState({
-    //     password: "",
-    // });
+    const [required, setRequired] = useState("");
+    const[password,setPassword] = useState("");
+    const [error, setError] = useState({
+        password: "",
+    });
     const { signIn, setActive, isLoaded } = useSignIn();
     const [form, setForm] = useState({
         email: "",
         password: "",
     });
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+
+
+    const handlePasswordValidation = (value: string) => {
+        const passwordSpecialCharacter = /(?=.*[!@#$&*])/;
+        const passwordOneNumber = /(?=.*[0-9])/;
+        const passwordSixValue = /(?=.{6,})/;
+        
+
+        if (!passwordSpecialCharacter.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least one special character",
+            });
+            setPassword('');
+        } else if (!passwordOneNumber.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least one number",
+            });
+            setPassword('');
+        } else if (!passwordSixValue.test(value)) {
+            setError({
+                ...error,
+                password: "Write at least 6 characters",
+            });
+            setPassword('');
+        } else {
+            setError({
+                ...error,
+                password: "",
+            });
+            setPassword(value);
+        }
+    };
+
+
+    
     const router = useRouter(); // Ensure this is initialized
+
     const handleSignIn = async (email: string, password: string) => {
         try {
             const body = { email, password };
@@ -75,7 +119,7 @@ export default function LoginScreen(message?: any) {
                 console.log("Role ID:", role_id); // Debugging role ID
 
                 if (role_id === 1) {
-                    router.push("/(routes)/choose-vehicle")
+                    router.push("/(routes)/home-page"); // Navigate to Home for role 1
                 }
                     // else if (role_id === 1) {
                     //     navigation.navigate("Driver"); // Navigate to Driver for role 1

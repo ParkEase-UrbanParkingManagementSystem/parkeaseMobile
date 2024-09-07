@@ -13,6 +13,10 @@ import {
 } from "@expo-google-fonts/nunito";
 import { router, useFocusEffect } from "expo-router";
 
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+
+
+
 // Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
 const getMonthAbbr = (date: Date) => date.toLocaleString('default', { month: 'short' });
@@ -51,7 +55,9 @@ interface Instance {
 
 const HistoryScreen = () => {
     const [instances, setInstances] = useState<Instance[]>([]);
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+    
+
+    
 
     useEffect(() => {
         const fetchInstances = async () => {

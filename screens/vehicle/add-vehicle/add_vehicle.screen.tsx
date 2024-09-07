@@ -21,11 +21,17 @@ import VehicleTypeDropDown from "@/components/input/VehicleTypeDropDown";
 import VehicleNumberInput from "@/components/input/VehicleNumberInput"; // Assuming this is a new component
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+// @ts-ignore
+
+
+
 export default function AddVehicleScreen() {
     const [buttonSpinner, setButtonSpinner] = useState(false);
     const [vehicleNumber, setVehicleNumber] = useState(""); 
     const [vehicleName, setVehicleName] = useState("");     
     const [vehicleType, setVehicleType] = useState(""); 
+
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
@@ -37,7 +43,7 @@ export default function AddVehicleScreen() {
         return null;
     }
 
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+ 
 
     const handleAddVehicle = async () => {
         setButtonSpinner(true);

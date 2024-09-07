@@ -33,8 +33,16 @@ import {
 import { useState, useEffect } from "react";
 import { router } from "expo-router";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import {heightPercentageToDP as wp} from "react-native-responsive-screen";
+
+import {EXPO_PUBLIC_API_KEY} from '../../../config'
+
 import colors from "../../../constants/Colors";
+
+import React from 'react';
+
+
+import {heightPercentageToDP as wp} from "react-native-responsive-screen";
+
 import { useSignUp } from "@clerk/clerk-expo";
 import OAuth from "@/components/OAuth";
 import { ReactNativeModal } from "react-native-modal";
@@ -42,7 +50,10 @@ import InputField from "@/components/InputField";
 import CustomButton from "@/components/CustomButton";
 import { icons } from "@/constants";
 
+
 export default function SignUpScreen() {
+    
+   
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [buttonSpinner, setButtonSpinner] = useState(false);
     const [required, setRequired] = useState(false);
@@ -79,7 +90,7 @@ export default function SignUpScreen() {
     });
     const [loading, setLoading] = useState(false);
 
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+ 
 
     let [fontsLoaded, fontError] = useFonts({
         Raleway_600SemiBold,
