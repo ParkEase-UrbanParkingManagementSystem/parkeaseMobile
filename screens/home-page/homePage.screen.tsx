@@ -27,7 +27,7 @@ export default function HomePageScreen() {
     const [driverStatus, setDriverStatus] = useState<any>(null);
     
     const plateNo = selectedVehicle?.vehicle_number;
-    const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+    
 
     useEffect(() => {
         const fetchRecentVisits = async () => {

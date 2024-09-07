@@ -20,9 +20,6 @@ export default function ProfileScreen() {
         Nunito_400Regular,
         Nunito_700Bold
     });
-    
-
-
 
     const [userDetails, setUserDetails] = useState<any>(null);
 
@@ -99,11 +96,11 @@ export default function ProfileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => router.push("/(routes)/payment/wallet")}
+                        onPress={() => router.push("(routes)/wallet")}
                     >
                         <Image
                             style={styles.quickAccessIcon}
-                            source={require("@/assets/images/paymentIcon.png")}
+                            source={require("@/assets/images/paypark.png")}
                         />
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>PayPark Wallet</Text>
                     </TouchableOpacity>
@@ -118,50 +115,28 @@ export default function ProfileScreen() {
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Activity</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={styles.scrollView}>
-                    <TouchableOpacity style={styles.main}>
+                    <TouchableOpacity style={styles.main} onPress={() => router.push("(routes)/parkpoints")}>
                         <View style={styles.left}>
-                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Top-up your Park-Points</Text>
+                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Park-Points</Text>
                             <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>On the other hand, we denounce with righteous</Text>
                         </View>
                         <View style={styles.right}>
                             <Image
-                                source={require("@/assets/images/parkPoints.png")}
+                                source={require("@/assets/images/parkpoints.png")}
                                 style={{width: 35, height: 35}}
                             />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.main}>
-                        <View style={styles.left}>
-                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Try ParkEase Pro</Text>
-                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Unlock huge discounts on parks</Text>
-                        </View>
-                        <View style={styles.right}>
-                            <Image
-                                source={require("@/assets/images/premium.png")}
-                                style={{width: 35, height: 35}}
-                            />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.main}>
-                        <View style={styles.left}>
-                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Safety checkup</Text>
-                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Boost your safety profile by turning on additional features</Text>
-                        </View>
-                        <View style={styles.right}>
-                            <Image
-                                source={require("@/assets/images/premium.png")}
-                                style={{width: 35, height: 35}}
-                            />
-                        </View>
-                    </TouchableOpacity>
+                   
+                <ScrollView style={styles.scrollView}>
+                   
 
                     <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/ParkingLocation.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Usage Insights</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Usage Insights</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.sub}>
@@ -169,35 +144,35 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/settingsIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Account Settings</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Account Settings</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/message.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Messages</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Messages</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/business.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Lets talk business</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Lets talk business</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub} onPress={handleLogout}>
                         <Image
                             source={require("@/assets/images/logOutIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Log Out</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Log Out</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/deleteIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Delete account</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Delete account</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.sub}
@@ -207,7 +182,7 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/PandP.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 15}}>Privacy and Policy</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Privacy and Policy</Text>
                     </TouchableOpacity>
                 </ScrollView>
                 <TouchableOpacity
@@ -267,7 +242,7 @@ export const styles = StyleSheet.create({
     quickAccess: {
         display: "flex",
         flexDirection: "row",
-        gap: 35,
+        gap: 20,
         marginBottom: 10
     },
     button: {
@@ -282,7 +257,7 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         gap: 10,
-        width: wp("25%"),
+        width: wp("28%"),
         backgroundColor: "#BCBDBF",
     },
     quickAccessIcon: {
@@ -305,8 +280,11 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#BCBDBF",
         padding: 10,
-        margin: 5,
+        marginLeft: 10,
+        marginRight:10,
+        marginTop: 10,
         borderRadius: 7,
+        width:365
     },
     left: {
         display: "flex",
@@ -323,11 +301,15 @@ export const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         // backgroundColor: "#BCBDBF",
-        padding: 10,
+        padding: 12,
         // margin: 5,
         borderRadius: 7,
         gap: 20,
         marginLeft: 20,
+        marginTop:20,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.primary,
+        width: wp("90%"),
 
     },
     buttonContainer: {

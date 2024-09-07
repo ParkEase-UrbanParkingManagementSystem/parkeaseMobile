@@ -93,6 +93,9 @@ function RootLayoutNav() {
           <Stack.Screen name="(routes)/parked/index" />
           <Stack.Screen name="(routes)/instance/index" />
           <Stack.Screen name="(routes)/(tabs)" />
+          <Stack.Screen name="(routes)/parkpoints/index" />
+          <Stack.Screen name="(routes)/wallet/index" />
+
           <Stack.Screen name="+not-found" />
         </Stack>
       )}
