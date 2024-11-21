@@ -118,7 +118,7 @@ export default function ProfileScreen() {
                     <TouchableOpacity style={styles.main} onPress={() => router.push("(routes)/parkpoints")}>
                         <View style={styles.left}>
                             <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Park-Points</Text>
-                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>On the other hand, we denounce with righteous</Text>
+                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Earn ParkPoints as you pay for parking</Text>
                         </View>
                         <View style={styles.right}>
                             <Image
@@ -144,7 +144,7 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/settingsIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Account Settings</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Change Password</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
@@ -159,13 +159,6 @@ export default function ProfileScreen() {
                             style={{width: 20, height: 20}}
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Lets talk business</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.sub} onPress={handleLogout}>
-                        <Image
-                            source={require("@/assets/images/logOutIcon.png")}
-                            style={{width: 20, height: 20}}
-                        />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Log Out</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
@@ -183,6 +176,13 @@ export default function ProfileScreen() {
                             style={{width: 20, height: 20}}
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Privacy and Policy</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sub} onPress={handleLogout}>
+                        <Image
+                            source={require("@/assets/images/logOutIcon.png")}
+                            style={{width: 20, height: 20}}
+                        />
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Log Out</Text>
                     </TouchableOpacity>
                 </ScrollView>
                 <TouchableOpacity
