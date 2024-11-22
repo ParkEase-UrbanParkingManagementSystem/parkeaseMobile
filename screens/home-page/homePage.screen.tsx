@@ -164,13 +164,7 @@ export default function HomePageScreen() {
                                 style={{ width: 190, height: 50, marginLeft: 3 }}
                             />
                     </View>
-                    <View style={styles.iconContainer}>
-                        <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
 
-                        <ProfileIcon userName={userDetails?.fname} />
-
-                        </TouchableOpacity>
-                    </View>
                     <View style={styles.iconContainer}>
                         <TouchableOpacity
                             onPress={handleSignOut}
@@ -181,6 +175,15 @@ export default function HomePageScreen() {
                             />
                         </TouchableOpacity>
                     </View>
+
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity onPress={() => router.push("/(routes)/profile")}>
+
+                        <ProfileIcon userName={userDetails?.fname} />
+
+                        </TouchableOpacity>
+                    </View>
+                    
                     
                 </View>
                 <View style={styles.home_page_mid}>
@@ -370,7 +373,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 5, // Spacing between icons
+       marginLeft:5, // Spacing between icons
     },
     icon: {
         width: 25,
