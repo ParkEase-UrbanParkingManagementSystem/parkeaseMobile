@@ -14,14 +14,26 @@
     },
     "ios": {
       "supportsTablet": true,
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg"
+        }
+      }
+
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg"
+        }
+      }
+
     },
     "web": {
       "bundler": "metro",
