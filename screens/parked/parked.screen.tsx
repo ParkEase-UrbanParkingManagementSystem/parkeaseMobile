@@ -100,18 +100,29 @@ export default function ParkedScreen() {
 
   if (!details) {
     return (
-      <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
-        <SafeAreaView style={styles.container_no}>
-        <View style={styles.iconContainer}>
-          <Ionicons name="car-outline" size={60} color="#ff5a5f" />
+      <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient_no}>
+      <SafeAreaView style={styles.container_no}>
+        <View style={styles.headerContainer}>
+          
+          <Text style={styles.headerText}>Parking Status</Text>
         </View>
-        <Text style={styles.noDetailsText}>
-          Your vehicle is not currently parked.
+
+        <View style={styles.iconContainer}>
+          <Image source={require('@/assets/images/notparked.png')} style={styles.backIcon} />
+        </View>
+
+        <Text style={styles.noDetailsText_no}>
+          Your vehicle is not currently parked. Please ask the warden to scan your QR code to start parking.
         </Text>
-        <Text style={styles.instructionText}>
-          Please ask the warden to scan your QR code to start parking.
-        </Text></SafeAreaView>
-      </LinearGradient>
+
+       
+
+        <TouchableOpacity style={styles.backButton} onPress={() => {/* Navigate back */}}>
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+
+      </SafeAreaView>
+    </LinearGradient>
     );
   }
 
@@ -225,25 +236,97 @@ export default function ParkedScreen() {
 }
 
 const styles = StyleSheet.create({
-  gradient: {
+
+  gradient_no: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    marginBottom: 30,
+  },
+  backButton: {
+    marginRight: 10,
+    padding: 5,
+    borderRadius: 30,
+    backgroundColor: colors.primary,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    marginTop: 20,
+  },
+  headerText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
     flex: 1,
   },
-  instructionText: {
-    fontSize: 14,
-    color: '#666',
+  iconContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // semi-transparent white for background
+    borderRadius: 50,
+    padding: 20,
+    marginBottom: 20,
+  },
+  container_no: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
     textAlign: 'center',
-    marginBottom: 10,
+  },
+  additionalTextContainer: {
+    marginBottom: 30,
+  },
+
+  backIcon: {
+    width: 130,
+    height: 150,
+  },
+
+
+  ctaButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+    marginTop: 20,
+  },
+
+  ctaButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  additionalText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'black',
+    opacity: 0.8,
+    marginHorizontal: 20,
+  },
+  
+  noDetailsText_no: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: 'black',
+    fontWeight: '600',
+    marginTop: 10,
+    paddingHorizontal: 20,
+    lineHeight: 24,
+    marginBottom: 30,
+  },
+  gradient: {
+    flex: 1,
   },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: wp('5%'),
-  },
-  container_no: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: wp('5%'),
   },
   headingContainer: {

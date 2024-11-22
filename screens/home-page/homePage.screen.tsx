@@ -181,16 +181,7 @@ export default function HomePageScreen() {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.iconContainer}>
-                        <TouchableOpacity
-                            onPress={() => router.push("/")}
-                        >
-                            <Image
-                                source={require('@/assets/images/signout.png')}
-                                style={styles.icon}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                    
                 </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
@@ -361,6 +352,31 @@ export default function HomePageScreen() {
 }
 
 const styles = StyleSheet.create({
+
+    home_page_top: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+        backgroundColor: '#fff', // Background color for the top section
+        borderBottomWidth: 1, // Optional for a border at the bottom
+        borderBottomColor: '#ddd', // Color of the border
+    },
+    parkEaseLogoContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    iconContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 5, // Spacing between icons
+    },
+    icon: {
+        width: 25,
+        height: 25,
+        resizeMode: 'contain',
+    },
     modalBackground: {
         flex: 1,
         justifyContent: 'center',
@@ -377,15 +393,7 @@ const styles = StyleSheet.create({
         maxHeight: hp('60%'), // Adjust height as needed
     },
 
-    parkEaseLogoContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        gap: 10,
-        width: wp('65%'), // Adjust width as needed
-        maxHeight: hp('1%'), // Adjust height as needed
-    },
+    
     vehicleInfoContainer: {
         marginBottom: hp('2%'), // Space between vehicle info and QR code
         alignItems: 'center',
@@ -470,13 +478,7 @@ const styles = StyleSheet.create({
         position: "relative",
     },
     title: {},
-    iconContainer: {
-        marginRight: 10
-    },
-    icon: {
-        width: wp("8.8%"),
-        height: hp("4%"),
-    },
+    
     mapContainer: {
         width: wp("96%"),
         height: hp("52%"),
