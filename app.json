@@ -13,27 +13,13 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "newArchEnabled": true,
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg"
-        }
-      }
-
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "newArchEnabled": true,
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg"
-        }
       }
-
     },
     "web": {
       "bundler": "metro",
@@ -43,6 +29,7 @@
     "plugins": [
       "expo-router",
       "expo-font",
+      "expo-secure-store",
       "expo-location"
     ],
     "experiments": {

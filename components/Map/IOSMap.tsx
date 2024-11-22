@@ -311,7 +311,7 @@ export default function IOSMap() {
     const [region, setRegion] = useState<Region>(INITIAL_REGION);
     const mapRef = useRef<MapView | null>(null);
 
-    Location.setGoogleApiKey("AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg");
+    // Location.setGoogleApiKey("AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg");
 
     useEffect(() => {
         const getPermissions = async () => {

@@ -7,6 +7,7 @@ import QRCode from 'react-native-qrcode-svg';
 import colors from '../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { router } from "expo-router";
+import { Ionicons } from '@expo/vector-icons';
 
 import {EXPO_PUBLIC_API_KEY} from '../../config'
 
@@ -100,9 +101,16 @@ export default function ParkedScreen() {
   if (!details) {
     return (
       <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
-        <SafeAreaView style={styles.container}>
-          <Text style={styles.noDetailsText}>Your vehicle is not currently parked. Please ask the warden to scan your QR code in order to start parking</Text>
-        </SafeAreaView>
+        <SafeAreaView style={styles.container_no}>
+        <View style={styles.iconContainer}>
+          <Ionicons name="car-outline" size={60} color="#ff5a5f" />
+        </View>
+        <Text style={styles.noDetailsText}>
+          Your vehicle is not currently parked.
+        </Text>
+        <Text style={styles.instructionText}>
+          Please ask the warden to scan your QR code to start parking.
+        </Text></SafeAreaView>
       </LinearGradient>
     );
   }
@@ -220,10 +228,22 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
   },
+  instructionText: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding: wp('5%'),
+  },
+  container_no: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: wp('5%'),
   },
   headingContainer: {
