@@ -311,7 +311,7 @@ export default function IOSMap() {
     const [region, setRegion] = useState<Region>(INITIAL_REGION);
     const mapRef = useRef<MapView | null>(null);
 
-    Location.setGoogleApiKey("AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg");
+    // Location.setGoogleApiKey("AIzaSyD5GUOMMrDY5Ml8JOQ5j7z7p9f8GaGCDBg");
 
     useEffect(() => {
         const getPermissions = async () => {
@@ -323,8 +323,6 @@ export default function IOSMap() {
 
             let currentLocation = await Location.getCurrentPositionAsync({});
             setLocation(currentLocation);
-            // console.log("Location:");
-            // console.log(currentLocation);
             if (currentLocation) {
                 setRegion({
                     latitude: currentLocation.coords.latitude,
@@ -337,6 +335,7 @@ export default function IOSMap() {
         getPermissions();
     }, []);
 
+    
     const centerMapOnLocation = () => {
         if (location && mapRef.current) {
             mapRef.current.animateToRegion({
