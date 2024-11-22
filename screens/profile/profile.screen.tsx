@@ -106,7 +106,7 @@ export default function ProfileScreen() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => router.push("/(routes)/activities")}
+                        onPress={() => router.push("/(routes)/recents")}
                     >
                         <Image
                             style={styles.quickAccessIcon}
