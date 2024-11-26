@@ -136,13 +136,13 @@ export default function ParkingLotScreen() {
               <View style={styles.capacitiesContainer}>
                 <View style={styles.cap}>
                   <Image style={styles.vehicleIcon} source={require('@/assets/images/car_side.png')} />
-                  <Text style={styles.capacityAvailable}>200</Text>
-                  <Text style={styles.capacityTotal}>/250</Text>
+                  <Text style={parkingLotData?.lot?.car_available > 10 ? styles.availableText : styles.notAvailableText}>{!parkingLotData?.lot?.car_available ? parkingLotData?.lot?.car_capacity : parkingLotData?.lot?.car_available}</Text>
+                  <Text style={styles.capacityTotal}>/{parkingLotData?.lot?.car_capacity}</Text>
                 </View>
                 <View style={styles.cap}>
                   <Image style={styles.vehicleIcon} source={require('@/assets/images/bike_side.png')} />
-                  <Text style={styles.capacityAvailable}>150</Text>
-                  <Text style={styles.capacityTotal}>/200</Text>
+                  <Text style={parkingLotData?.lot?.bike_available > 10 ? styles.availableText : styles.notAvailableText}>{!parkingLotData?.lot?.bike_available ? parkingLotData?.lot?.bike_capacity : parkingLotData?.lot?.bike_available}</Text>
+                  <Text style={styles.capacityTotal}> / {parkingLotData?.lot?.bike_capacity}</Text>
                 </View>
               </View>
             </View>
@@ -203,6 +203,14 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+  },
+  availableText: {
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  notAvailableText: {
+    color: 'red',
+    fontWeight: 'bold',
   },
   topContainer: {
     alignItems: 'center',

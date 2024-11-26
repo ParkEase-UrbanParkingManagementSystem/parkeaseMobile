@@ -287,14 +287,14 @@ export default function HomePageScreen() {
                         style={styles.vehicleIcon}
                         source={require("@/assets/images/suv_side.png")}
                     />
-                    <Text>: {visit.car_capacity}</Text>
+                    <Text>: <Text style={visit.car_available > 10 ? styles.availableText : styles.notAvailableText}>{!visit.car_available ? visit.car_capacity : visit.car_available}</Text> / {visit.car_capacity}</Text>
                 </View>
                 <View style={styles.capacity}>
                     <Image
                         style={styles.vehicleIcon}
                         source={require("@/assets/images/bike_side.png")}
                     />
-                    <Text>: {visit.bike_capacity}</Text>
+                    <Text>: <Text style={visit.bike_available > 10 ? styles.availableText : styles.notAvailableText}>{!visit.bike_available ? visit.bike_capacity : visit.bike_available}</Text> / {visit.bike_capacity}</Text>
                 </View>
                 <View style={[styles.statusContainer, { backgroundColor: visit.status === 'active' ? colors.success : 'red' }]}>
                     <Text style={styles.status}>
@@ -375,6 +375,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
        marginLeft:5, // Spacing between icons
     },
+    availableText: {
+        color: 'green',
+        fontWeight: 'bold',
+      },
+      notAvailableText: {
+        color: 'red',
+        fontWeight: 'bold',
+      },
     icon: {
         width: 25,
         height: 25,
