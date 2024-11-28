@@ -166,9 +166,7 @@ export default function HomePageScreen() {
                     </View>
 
                     <View style={styles.iconContainer}>
-                        <TouchableOpacity
-                            onPress={handleSignOut}
-                        >
+                    <TouchableOpacity onPress={() => router.push("/(routes)/notifications")}>
                             <Image
                                 source={require('@/assets/images/notification.png')}
                                 style={styles.icon}
