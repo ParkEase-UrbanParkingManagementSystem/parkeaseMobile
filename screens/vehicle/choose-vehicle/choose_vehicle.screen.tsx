@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { useFonts, Raleway_700Bold } from '@expo-google-fonts/raleway';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,20 +9,19 @@ import colors from '../../../constants/Colors';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { VehicleContext } from '../../../utils/vehicleContext';
 
-import {EXPO_PUBLIC_API_KEY} from '../../../config'
- // Import VehicleContext
-
-
 export default function ChooseVehicleScreen() {
+  const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext); // Use VehicleContext
   let [fontsLoaded] = useFonts({
     Raleway_700Bold,
     Nunito_400Regular,
     Nunito_700Bold,
   });
 
-  const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY
+  const EXPO_PUBLIC_API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
   interface Vehicle {
     type_id: number;
@@ -45,44 +44,44 @@ export default function ChooseVehicleScreen() {
           return require('@/assets/images/tuktuk_side.png');
         case 4:
           return require('@/assets/images/bus_side.png');
+        default:
+          return require('@/assets/images/car_side.png');
       }
     };
 
     return <Image style={styles.vehicleIcon} source={getImageSource(vehicleType)} />;
   };
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-
   useEffect(() => {
     const fetchVehicleDetails = async () => {
+      setIsLoading(true);
+      setError(null);
       const token = await AsyncStorage.getItem('token');
-      console.log('Token:', token); // Debugging token
 
       try {
         const response = await fetch(`${EXPO_PUBLIC_API_KEY}/vehicle`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'token': token || '', // Ensuring token is included correctly
+            'token': token || '',
           },
         });
 
-        console.log('Response status:', response.status); // Debugging response status
         const parseRes = await response.json();
-        console.log('Parsed response:', parseRes); // Debugging parsed response
 
         if (response.ok) {
-          setVehicles(parseRes.data);
-          console.log('Vehicle details set in state:', parseRes.data); // Confirm state update
+          if (parseRes.data && parseRes.data.length > 0) {
+            setVehicles(parseRes.data);
+          } else {
+            setError('No vehicles found. Please add a vehicle.');
+          }
         } else {
-          console.error('Error fetching details:', parseRes.message);
+          setError(parseRes.message || 'An error occurred while fetching vehicles.');
         }
       } catch (error) {
-        if (error instanceof Error) {
-          console.log('Fetch error:', error.message);
-        } else {
-          console.log('An unexpected error occurred');
-        }
+        setError('Network error. Please check your connection and try again.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -94,6 +93,18 @@ export default function ChooseVehicleScreen() {
     // router.push('/(routes)/home-page');
   };
 
+  const handleAddVehicle = () => {
+    router.push('/(routes)/add-vehicle');
+  };
+
+  const handleContinue = () => {
+    if (!selectedVehicle) {
+      Alert.alert('No Vehicle Selected', 'Please select a vehicle before continuing.');
+    } else {
+      router.push('/(routes)/home-page');
+    }
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -103,74 +114,81 @@ export default function ChooseVehicleScreen() {
       <SafeAreaView style={styles.firstContainer}>
         <Text style={styles.heading}>Your Vehicles</Text>
         
-        {selectedVehicle ? (
+        {isLoading ? (
+          <ActivityIndicator size="large" color={colors.primary} />
+        ) : error ? (
+          <View style={styles.errorContainer}>
+            <Image
+              source={require('@/assets/images/home.png')}
+              style={styles.errorImage}
+            />
+            <Text style={styles.errorTitle}>Oops! No Vehicles Found</Text>
+            <Text style={styles.errorText}>
+              Looks like you haven't added a vehicle yet. Add one to start enjoying the benefits of ParkEase!
+            </Text>
+            {/* <TouchableOpacity style={styles.addButton} onPress={onAddVehicle}>
+              <Text style={styles.addButtonText}>Add a Vehicle</Text>
+            </TouchableOpacity> */}
+          </View>
+        ) : (
           <>
-            <View style={styles.PlateNoContainer}>
-              <Text style={styles.plateNo}>{selectedVehicle.vehicle_number}</Text>
-            </View>
-            <View style={styles.vehicleNameContainer}>
-              <Text style={styles.vehicleName}>{selectedVehicle.name}</Text>
-            </View>
-            <View style={styles.vehicleImageContainer}>
-              <Image 
-                style={styles.vehicleImage} 
-                source={
-                  selectedVehicle.type_id === 1 
-                    ? require('@/assets/images/car_side.png') 
-                    : selectedVehicle.type_id === 2 
-                    ? require('@/assets/images/bike_side.png') 
-                    : selectedVehicle.type_id === 3 
-                    ? require('@/assets/images/tuktuk_side.png')
-                    : selectedVehicle.type_id === 4
-                    ? require('@/assets/images/bus_side.png')
-                    : require('@/assets/images/car_side.png') // default image if type_id doesn't match
-                } 
-              />
+            {selectedVehicle ? (
+              <>
+                <View style={styles.PlateNoContainer}>
+                  <Text style={styles.plateNo}>{selectedVehicle.vehicle_number}</Text>
+                </View>
+                <View style={styles.vehicleNameContainer}>
+                  <Text style={styles.vehicleName}>{selectedVehicle.name}</Text>
+                </View>
+                <View style={styles.vehicleImageContainer}>
+                  <VehicleImage vehicleType={selectedVehicle.type_id} />
+                </View>
+              </>
+            ) : (
+              <View style={styles.noVehicleContainer}>
+                <Text style={styles.noVehicleText}>No vehicle selected. Please select a vehicle.</Text>
+                <Image 
+                  style={styles.unavailableImage} 
+                  source={require('@/assets/images/car_side.png')} 
+                />
+              </View>
+            )}
+
+            <Text style={styles.listTopic}>Vehicle List</Text>
+            <View style={styles.vehicleSelectorContainer}>
+              <ScrollView style={styles.vehicleSelector}>
+                {vehicles.map((vehicle, index) => (
+                  <View key={index} style={styles.vehicleContainer}>
+                    <View style={styles.vehicleIconContainer}>
+                      <VehicleImage vehicleType={vehicle.type_id} />
+                    </View>
+                    <View style={styles.vehicleDetailsContainer}>
+                      <Text style={styles.vehicleRegNo}>{vehicle.name}</Text>
+                      <Text style={styles.vehicleName_2}>{vehicle.vehicle_number}</Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.selectButton}
+                      onPress={() => handleSelectVehicle(vehicle)}
+                    >
+                      <Text style={{ color: colors.white }}>Select</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </ScrollView>
             </View>
           </>
-        ) : (
-          <View style={styles.noVehicleContainer}>
-            <Text style={styles.noVehicleText}>No vehicle selected. Please select a vehicle.</Text>
-            <Image 
-              style={styles.unavailableImage} 
-              source={require('@/assets/images/car_side.png')} 
-            />
-          </View>
         )}
-
-        <Text style={styles.listTopic}>Vehicle List</Text>
-        <View style={styles.vehicleSelectorContainer}>
-          <ScrollView style={styles.vehicleSelector}>
-            {vehicles &&
-              vehicles.map((vehicle, index) => (
-                <View key={index} style={styles.vehicleContainer}>
-                  <View style={styles.vehicleIconContainer}>
-                    <VehicleImage vehicleType={vehicle.type_id} />
-                  </View>
-                  <View style={styles.vehicleDetailsContainer}>
-                    <Text style={styles.vehicleRegNo}>{vehicle.name}</Text>
-                    <Text style={styles.vehicleName_2}>{vehicle.vehicle_number}</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.selectButton}
-                    onPress={() => handleSelectVehicle(vehicle)}
-                  >
-                    <Text style={{ color: colors.white }}>Select</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-          </ScrollView>
-        </View>
+        
         <View style={styles.actionButtonContainer}>
           <TouchableOpacity
             style={styles.addVehicleButtonContainer}
-            onPress={() => router.push('/(routes)/add-vehicle')}
+            onPress={handleAddVehicle}
           >
             <Text style={styles.addVehicleText}>Add Vehicle</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.continueButtonContainer}
-            onPress={() => router.push('/(routes)/home-page')}
+            onPress={handleContinue}
           >
             <Text style={styles.continueText}>Continue</Text>
           </TouchableOpacity>
@@ -216,6 +234,60 @@ export const styles = StyleSheet.create({
   vehicleImageContainer: {
     alignItems: 'center',
     marginBottom: hp('2%'),
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: wp('5%'),
+    backgroundColor: colors.secondary_light,
+    borderRadius: wp('4%'),
+    margin: wp('4%'),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // for Android
+  },
+  errorImage: {
+    width: wp('60%'),
+    height: wp('40%'),
+    marginBottom: hp('2%'),
+  },
+  errorTitle: {
+    fontSize: wp('6%'),
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginBottom: hp('1%'),
+    fontFamily: 'Raleway_700Bold',
+    textAlign: 'center',
+  },
+  errorText: {
+    fontSize: wp('4%'),
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: hp('2%'),
+    fontFamily: 'Nunito_400Regular',
+    lineHeight: hp('3%'),
+  },
+  addButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: hp('1.5%'),
+    paddingHorizontal: wp('8%'),
+    borderRadius: wp('3%'),
+    marginTop: hp('2%'),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // for Android
+  },
+  addButtonText: {
+    color: colors.secondary_light,
+    fontSize: wp('5%'),
+    fontWeight: 'bold',
+    fontFamily: 'Raleway_700Bold',
+    textAlign: 'center',
   },
   vehicleImage: {
     width: wp('50%'),

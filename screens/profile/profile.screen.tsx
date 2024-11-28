@@ -5,8 +5,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { VehicleContext } from '@/utils/vehicleContext';
 
 import {EXPO_PUBLIC_API_KEY} from '../../config'
 import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
@@ -15,6 +16,7 @@ import ProfileIcon from "../../components/ProfileIcon/ProfileIcon";
 
 export default function ProfileScreen() {
 
+    const { selectedVehicle, setSelectedVehicle } = useContext(VehicleContext);
     const [fontsLoaded] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -25,6 +27,7 @@ export default function ProfileScreen() {
 
     const handleLogout = async () => {
         
+        setSelectedVehicle(null);
         await AsyncStorage.removeItem("token");
         router.push("/(routes)/login");
     }
