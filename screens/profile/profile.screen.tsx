@@ -134,7 +134,7 @@ export default function ProfileScreen() {
                 <ScrollView style={styles.scrollView}>
                    
 
-                    <TouchableOpacity style={styles.sub}>
+                    <TouchableOpacity style={styles.sub} onPress={() => router.push("(routes)/user-details")}>
                         <Image
                             source={require("@/assets/images/ParkingLocation.png")}
                             style={{width: 20, height: 20}}
@@ -154,7 +154,7 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/message.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Messages</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Notifications</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
