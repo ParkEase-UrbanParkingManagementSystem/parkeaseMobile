@@ -72,7 +72,7 @@ export default function AddVehicleScreen() {
                 Alert.alert('Success', 'Vehicle registered successfully.');
                 router.push("/(routes)/choose-vehicle");
             } else {
-                Alert.alert('Error', result.message || 'Failed to register vehicle.');
+                Alert.alert( 'Failed to register vehicle.', 'Please fill all the fields');
             }
         } catch (error) {
             Alert.alert('Error', 'Failed to connect to the server.');
@@ -120,6 +120,7 @@ export default function AddVehicleScreen() {
                                     source={require("@/assets/images/car_side.png")}
                                 />
                                 <VehicleTypeDropDown value={vehicleType} onChange={setVehicleType} />
+
                             </View>
                             <View style={{ marginTop: 15, alignItems: "center" }}>
                                 <TouchableOpacity
@@ -197,7 +198,8 @@ export const styles = StyleSheet.create({
         justifyContent: "flex-start",
         marginBottom: 20,
         padding: 5,
-        gap: 10
+        gap: 10,
+        width: wp("53%"),   
     },
     feildIcon: {
         width: wp("11%"),

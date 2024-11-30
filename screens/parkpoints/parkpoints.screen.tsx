@@ -80,7 +80,7 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
             Earn ParkPoints for every parking session!
           </Text>
           <Text style={[styles.footerText2, { fontFamily: "Nunito_400Regular" }]}>
-            Earn 1 ParkPoint for every Rs. 100 spent on parking.
+            Earn 5 ParkPoints for every parking session.
           </Text>
           <Text style={[styles.footerText2, { fontFamily: "Nunito_400Regular" }]}>
            When you spend 1 Point = Rs. 1/=
@@ -88,7 +88,7 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
         </View>
 
         {/* Redeem Points Button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.redeemButton}
           onPress={() => router.push("/")}
         >
@@ -100,14 +100,14 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
               Redeem Points
             </Text>
           </LinearGradient>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.historyButton}
           onPress={() => router.push("/")}
         >
           <LinearGradient
-            colors={["#FFB403", "#FFB403"]}
+            colors={["#1A2131", "#1A2131"]}
             style={styles.historyButtonGradient}
           >
             <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
