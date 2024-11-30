@@ -60,6 +60,8 @@ export default function PaymentScreen() {
         fetchDetails();
     }, [router]);
 
+    
+
     const closeModal = () => {
         setIsModalVisible(false);
     };
@@ -158,7 +160,7 @@ export default function PaymentScreen() {
 
     const paymentMethods = [
         { id: '1', name: 'PayPark Wallet', balance: `LKR ${details?.wallet || 0}`, image: require('@/assets/images/wallet.png') },
-        { id: '2', name: 'Cash', balance: '', image: require('@/assets/images/cash.png') },
+        ...(details?.method_id !== 4 ? [{ id: '2', name: 'Cash', balance: '', image: require('@/assets/images/cash.png') }] : []),
         { id: '3', name: 'Park Points', balance: `LKR ${details?.parkpoints || 0}`, image: require('@/assets/images/ParkEase_logo.png') },
     ];
 
@@ -193,10 +195,30 @@ export default function PaymentScreen() {
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>Checkout</Text>
                 </View>
-                <View style={styles.amountContainer}>
-                    <Text style={styles.amountText}>Amount to Pay</Text>
-                    <Text style={styles.amountValue}>LKR {amountToPay.toFixed(2)}</Text>
+
+        {details.method_id!=4 && (<View style={styles.amountContainer2}>
+                    
+                    <Text style={styles.amountText2}>Amount to Pay</Text>
+                    <Text style={styles.amountValue2}>LKR {amountToPay.toFixed(2)}</Text>
+                    
+                </View>)} 
+                
+
+
+
+                {details.method_id === 4 && (
+                 <View style={styles.amountContainer}>
+               <Text style={styles.descriptionText}>
+                    Your vehicle has been exited from the parking lot due to your absence or an unavoidable situation. 
+                    To ensure smooth parking operations, you are required to settle this payment before proceeding to 
+                   your next parking session.
+                 </Text>
+                <Text style={styles.amountText}>Amount to Pay</Text>
+                 <Text style={styles.amountValue}>LKR {amountToPay.toFixed(2)}</Text>
                 </View>
+                    )}
+
+
                 <View style={styles.paymentMethodsContainer}>
                     {paymentMethods.map(method => (
                         <TouchableOpacity
@@ -273,6 +295,23 @@ export default function PaymentScreen() {
 
 // styles
 export const styles = StyleSheet.create({
+
+    amountContainer2: {
+        width: '100%',
+        alignItems: 'center',
+        marginVertical: hp('3%'),
+    },
+    amountText2: {
+        fontFamily: "Nunito_400Regular",
+        fontSize: 20,
+        color: colors.primary,
+    },
+    amountValue2: {
+        fontFamily: "Nunito_700Bold",
+        fontSize: 36,
+        color: colors.primary,
+    },
+
     gradient: {
         flex: 1,
         justifyContent: 'center',
@@ -326,19 +365,34 @@ export const styles = StyleSheet.create({
         marginLeft: wp('4%'),
     },
     amountContainer: {
-        width: '100%',
-        alignItems: 'center',
-        marginVertical: hp('3%'),
+        padding: 20,
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        margin: 10,
+    },
+    descriptionText: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 10,
+        lineHeight: 22,
+        textAlign: 'center',
     },
     amountText: {
-        fontFamily: "Nunito_400Regular",
-        fontSize: 20,
-        color: colors.primary,
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#555',
+        textAlign: 'center',
+        marginBottom: 5,
     },
     amountValue: {
-        fontFamily: "Nunito_700Bold",
-        fontSize: 36,
-        color: colors.primary,
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#d9534f',
+        textAlign: 'center',
     },
     paymentMethodsContainer: {
         width: '100%',
