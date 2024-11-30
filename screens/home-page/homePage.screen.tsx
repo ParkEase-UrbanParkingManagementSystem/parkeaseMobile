@@ -108,6 +108,7 @@ export default function HomePageScreen() {
                 if (response.ok) {
                     // console.log("Meka thamai machan",parseRes);
                     setDriverStatus(parseRes.data);
+                    // console.log("Driver Status:", driverStatus);
                 } else {
                     console.error("Error fetching driver status:", parseRes.message);
                 }
@@ -498,15 +499,15 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         borderStyle: "solid",
-        borderWidth: 0.5,
-        borderColor: colors.white,
+        borderWidth: 2,
+        borderColor: colors.black,
         padding: 10,
         bottom: 10,
         alignSelf: "center",
         alignItems: "center",
         justifyContent: "flex-start",
         gap: 10,
-        backgroundColor: colors.secondary,
+        backgroundColor: "#e3e3e3",
         opacity: 0.8,
         borderRadius: 10,
         position: "absolute",
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
     parkingLotContainer: {
         display: "flex",
         flexDirection: "row",
-        backgroundColor: colors.secondary_light,
+        backgroundColor: "#e3e3e3",
         gap: 5,
         width: 260,
         borderRadius: 10,
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 100,
-        height: 100,
+        height: 110,
         borderRadius: 5,
     },
     statusContainer: {
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
     status: {
         color: "white",
         fontFamily: "Nunito_700Bold",
-        fontSize: 12,
+        fontSize: 14,
         textAlign: "center",
     },
     detailsContainer: {
@@ -603,7 +604,9 @@ const styles = StyleSheet.create({
         padding: 2,
         flex: 3,
         flexShrink: 1,
-        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
     },
     capacity: {
         display: "flex",
