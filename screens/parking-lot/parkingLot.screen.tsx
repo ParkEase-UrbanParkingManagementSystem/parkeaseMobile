@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, Modal, Linking } from 'react-native';
 import { useFonts, Raleway_700Bold } from '@expo-google-fonts/raleway';
 import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -74,6 +74,14 @@ export default function ParkingLotScreen() {
     return null;
   }
 
+  console.log("Menna dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa",parkingLotData?.lot?.latitude, "Menna dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+  console.log("Menna dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa",parkingLotData?.lot?.longitude, "Menna dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+
+  const openGoogleMaps = (latitude, longitude) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+    Linking.openURL(url).catch(err => console.error("Failed to open Google Maps", err));
+  };
+
   const formatDate = (date: Date | string): string => {
     const dateObj = typeof date === 'string' ? new Date(date) : date;
 
@@ -91,7 +99,7 @@ export default function ParkingLotScreen() {
   };
 
   return (
-    <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.container}>
+    <LinearGradient colors={[colors.secondary_light, colors.primary_light]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.topContainer}>
@@ -150,9 +158,19 @@ export default function ParkingLotScreen() {
 
           <View style={styles.reviewsSection}>
             <Text style={styles.reviewsHeader}>Reviews & Ratings</Text>
+
+                <View style={styles.containerBtn}>
             <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.viewReviewsButton}>
               <Text style={styles.viewReviewsButtonText}>View Reviews</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+      onPress={() => openGoogleMaps(parkingLotData?.lot?.latitude, parkingLotData?.lot?.longitude)} // Replace with your latitude and longitude
+      style={styles.viewReviewsButton2}
+    >
+      <Text style={styles.viewReviewsButtonText}>Get Directions</Text>
+    </TouchableOpacity>
+            </View>
+
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -323,6 +341,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
   },
+  viewReviewsButton2: {
+    backgroundColor: colors.secondary,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
   viewReviewsButtonText: {
     fontFamily: 'Nunito_700Bold',
     fontSize: 16,
@@ -334,6 +358,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // Background dim
     padding: 20, // Added padding
+  },
+  containerBtn: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 25,
   },
   modalContent: {
     backgroundColor: colors.white,
