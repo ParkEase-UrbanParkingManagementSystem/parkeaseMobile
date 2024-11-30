@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { TextInput, StyleSheet } from 'react-native';
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 interface VehicleNameInputProps {
     value: string;
@@ -15,6 +15,7 @@ const VehicleNameInput: React.FC<VehicleNameInputProps> = ({ value, onChangeText
             style={styles.input}
             keyboardType="default"
             placeholder="Enter Vehicle Name"
+            placeholderTextColor="#A1A1A1" // Optional: Add placeholder color
             value={value}
             onChangeText={onChangeText}
         />
@@ -23,12 +24,13 @@ const VehicleNameInput: React.FC<VehicleNameInputProps> = ({ value, onChangeText
 
 const styles = StyleSheet.create({
     input: {
-        height: 40,
+        height: 55,
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 10,
-        paddingHorizontal: 8,
-        width: "70%"
+        paddingHorizontal: 15,
+        width: "80%", // Updated to be consistent with the layout
+        fontSize: 16,
     },
 });
 
