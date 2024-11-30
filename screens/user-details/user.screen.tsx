@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { EXPO_PUBLIC_API_KEY } from '../../config';
+import colors from '../../constants/Colors';
+import { LinearGradient } from "expo-linear-gradient";
 
 interface UserDetails {
   fname: string;
@@ -62,93 +64,121 @@ export default function UserDetailsScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      <LinearGradient
+        colors={[colors.secondary, colors.primary]} 
+        style={styles.container}
+      >
+        <ActivityIndicator size="large" color="#00f" />
+      </LinearGradient>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.container}>
+      <LinearGradient
+        colors={[colors.primary_light, colors.secondary_light]} 
+        style={styles.container}
+      >
         <Text style={styles.errorText}>{error}</Text>
-      </View>
+      </LinearGradient>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Driver Profile</Text>
-        </View>
-        {userDetails && (
-          <View style={styles.card}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Personal Information</Text>
-              <Text style={styles.label}>Name:</Text>
-              <Text style={styles.value}>{userDetails.fname} {userDetails.lname}</Text>
-              <Text style={styles.label}>Gender:</Text>
-              <Text style={styles.value}>{userDetails.gender}</Text>
-              <Text style={styles.label}>NIC:</Text>
-              <Text style={styles.value}>{userDetails.nic}</Text>
+    <LinearGradient
+      colors={[colors.secondary_light2, colors.primary_light]} 
+      style={styles.container}
+    >
+       <View style={styles.headerContainer}>
+                <Text style={styles.title}>Driver Profile</Text>
             </View>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+         
 
-            <View style={styles.divider} />
+          {userDetails && (
+            <View style={styles.card}>
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Personal Information</Text>
+                <Text style={styles.label}>Name:</Text>
+                <Text style={styles.value}>{userDetails.fname} {userDetails.lname}</Text>
+                <Text style={styles.label}>Gender:</Text>
+                <Text style={styles.value}>{userDetails.gender}</Text>
+                <Text style={styles.label}>NIC:</Text>
+                <Text style={styles.value}>{userDetails.nic}</Text>
+              </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Address</Text>
-              <Text style={styles.value}>{userDetails.addressno}, {userDetails.street_1}</Text>
-              <Text style={styles.value}>{userDetails.street_2}</Text>
-              <Text style={styles.value}>{userDetails.city}, {userDetails.province}</Text>
+              <View style={styles.divider} />
+
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Address</Text>
+                <Text style={styles.value}>{userDetails.addressno}, {userDetails.street_1}</Text>
+                <Text style={styles.value}>{userDetails.street_2}</Text>
+                <Text style={styles.value}>{userDetails.city}, {userDetails.province}</Text>
+              </View>
+
+              <View style={styles.divider} />
+
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Contact</Text>
+                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.value}>{userDetails.email}</Text>
+                <Text style={styles.label}>Phone:</Text>
+                <Text style={styles.value}>{userDetails.contact}</Text>
+              </View>
+
+              <View style={styles.divider} />
+
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Parking Status</Text>
+                <Text style={styles.value}>{userDetails.isparked ? 'Parked' : 'Not Parked'}</Text>
+              </View>
             </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Contact</Text>
-              <Text style={styles.label}>Email:</Text>
-              <Text style={styles.value}>{userDetails.email}</Text>
-              <Text style={styles.label}>Phone:</Text>
-              <Text style={styles.value}>{userDetails.contact}</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Parking Status</Text>
-              <Text style={styles.value}>{userDetails.isparked ? 'Parked' : 'Not Parked'}</Text>
-            </View>
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+
+  headerContainer: {
+    backgroundColor: colors.primary,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+},
+title: {
+    marginTop: 50,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 24,
+    color: 'white',
+},
+
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent', // Make sure the gradient takes full space
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   scrollContainer: {
     flexGrow: 1,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   header: {
-    backgroundColor: '#4A90E2',
     padding: 20,
     alignItems: 'center',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   headerTitle: {
-    fontSize: 24,
+    marginTop:5,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'black',
   },
   card: {
     backgroundColor: 'white',
@@ -192,4 +222,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

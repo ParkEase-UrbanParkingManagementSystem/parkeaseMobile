@@ -157,7 +157,7 @@ export default function ParkingLotScreen() {
           </View>
 
           <View style={styles.reviewsSection}>
-            <Text style={styles.reviewsHeader}>Reviews & Ratings</Text>
+            
 
                 <View style={styles.containerBtn}>
             <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.viewReviewsButton}>
@@ -362,7 +362,8 @@ const styles = StyleSheet.create({
   containerBtn: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 25,
+    gap: 35,
+    padding: 20
   },
   modalContent: {
     backgroundColor: colors.white,

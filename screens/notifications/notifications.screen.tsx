@@ -138,10 +138,15 @@ export default function NotificationsScreen() {
   }
 
   return (
-    <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.container}>
+    <LinearGradient colors={[colors.secondary_light2, colors.primary_light]} style={styles.container}>
+      
+      <View style={styles.headerContainer}>
+                <Text style={styles.title}>Notifications</Text>
+            </View>
+      
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Notifications</Text>
+          
           {notifications.some(n => !n.is_read) && (
             <TouchableOpacity onPress={markAllAsRead} style={styles.markAllButton}>
               <Text style={styles.markAllText}>Mark all as read</Text>
@@ -181,6 +186,21 @@ export default function NotificationsScreen() {
 }
 
 const styles = StyleSheet.create({
+
+    headerContainer: {
+        backgroundColor: colors.primary,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+    title: {
+        marginTop: 50,
+        fontFamily: "Nunito_700Bold",
+        fontSize: 24,
+        color: 'white',
+    },
   container: {
     flex: 1,
   },

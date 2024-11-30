@@ -72,7 +72,7 @@ export default function ProfileScreen() {
 
     return (
         <LinearGradient
-            colors={[colors.primary_light, colors.primary_light]}
+            colors={[colors.secondary_light2, colors.primary_light]}
             style={{flex:1}}
         >
             <SafeAreaView style={styles.firstContainer}>
@@ -95,7 +95,7 @@ export default function ProfileScreen() {
                             style={styles.quickAccessIcon}
                             source={require("@/assets/images/pickup_side.png")}
                         />
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Vehicles</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 16}}>Vehicles</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
@@ -105,9 +105,9 @@ export default function ProfileScreen() {
                             style={styles.quickAccessIcon}
                             source={require("@/assets/images/paypark.png")}
                         />
-                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>PayPark Wallet</Text>
+                        <Text style={{fontFamily: "Nunito_700Bold", fontSize: 16}}>PayPark Wallet</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={styles.button}
                         onPress={() => router.push("/(routes)/recents")}
                     >
@@ -116,17 +116,17 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/activity.png")}
                         />
                         <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>Activity</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                     <TouchableOpacity style={styles.main} onPress={() => router.push("(routes)/parkpoints")}>
                         <View style={styles.left}>
-                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 15}}>Park-Points</Text>
-                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 12}}>Earn ParkPoints as you pay for parking</Text>
+                            <Text style={{fontFamily: "Nunito_700Bold",fontSize: 16}}>Park-Points</Text>
+                            <Text style={{fontFamily: "Nunito_400Regular", fontSize: 14}}>Earn ParkPoints as you pay for parking</Text>
                         </View>
                         <View style={styles.right}>
                             <Image
                                 source={require("@/assets/images/parkpoints.png")}
-                                style={{width: 35, height: 35}}
+                                style={{width: 45, height: 45}}
                             />
                         </View>
                     </TouchableOpacity>
@@ -147,29 +147,29 @@ export default function ProfileScreen() {
                             source={require("@/assets/images/settingsIcon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Change Password</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}} onPress={() => router.push("/(routes)/recents")}>Activity</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sub}>
                         <Image
-                            source={require("@/assets/images/message.png")}
+                            source={require("@/assets/images/noticon.png")}
                             style={{width: 20, height: 20}}
                         />
-                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Notifications</Text>
+                        <Text style={{fontFamily: "Nunito_700",fontSize: 18}} onPress={() => router.push("(routes)/notifications")}>Notifications</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.sub}>
+                    {/* <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/business.png")}
                             style={{width: 20, height: 20}}
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Lets talk business</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.sub}>
+                    </TouchableOpacity> */}
+                    {/* <TouchableOpacity style={styles.sub}>
                         <Image
                             source={require("@/assets/images/deleteIcon.png")}
                             style={{width: 20, height: 20}}
                         />
                         <Text style={{fontFamily: "Nunito_700",fontSize: 18}}>Delete account</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity
                         style={styles.sub}
                         onPress={() => router.push("/(routes)/info")}
@@ -253,19 +253,26 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-
-        // borderStyle: "solid",
-        // borderColor: "#2467EC",
-        // borderWidth: 1,
         borderRadius: 10,
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 20,
         gap: 10,
-        width: wp("28%"),
-        backgroundColor: "#BCBDBF",
+        width: wp("44%"),
+        backgroundColor: colors.primary_light,
+        
+        // Shadow for iOS
+        shadowColor: "#000", // Color of the shadow
+        shadowOffset: { width: 0, height: 4 }, // Shadow position
+        shadowOpacity: 0.3, // Opacity of the shadow
+        shadowRadius: 6, // Blur radius of the shadow
+    
+        // Shadow for Android
+        elevation: 8, // Elevation for Android shadow effect
     },
+    
     quickAccessIcon: {
-        width: 35,
-        height: 30,
+        width: 45,
+        height: 35,
     },
     scrollView: {
         // borderStyle: "solid",
@@ -281,14 +288,25 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: "#BCBDBF",
-        padding: 10,
+        backgroundColor: colors.primary_light,
+        paddingHorizontal: 30,
+        paddingVertical: 30,
         marginLeft: 10,
-        marginRight:10,
+        marginRight: 10,
         marginTop: 10,
         borderRadius: 7,
-        width:365
+        width: 365,
+    
+        // Shadow for iOS
+        shadowColor: "#000", // Color of the shadow
+        shadowOffset: { width: 0, height: 4 }, // Shadow position
+        shadowOpacity: 0.3, // Opacity of the shadow
+        shadowRadius: 6, // Blur radius of the shadow
+    
+        // Shadow for Android
+        elevation: 8, // Elevation for Android shadow effect
     },
+    
     left: {
         display: "flex",
         flexDirection: "column",

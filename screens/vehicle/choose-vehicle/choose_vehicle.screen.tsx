@@ -110,10 +110,13 @@ export default function ChooseVehicleScreen() {
   }
 
   return (
-    <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={{ flex: 1 }}>
+    <LinearGradient colors={[colors.secondary_light2, colors.primary_light]} style={{ flex: 1 }}>
+      <View style={styles.headerContainer}>
+                <Text style={styles.title}>Your Vehicles</Text>
+            </View>
+      
       <SafeAreaView style={styles.firstContainer}>
-        <Text style={styles.heading}>Your Vehicles</Text>
-        
+      
         {isLoading ? (
           <ActivityIndicator size="large" color={colors.primary} />
         ) : error ? (
@@ -200,6 +203,21 @@ export default function ChooseVehicleScreen() {
 
 // Updated styles
 export const styles = StyleSheet.create({
+
+  headerContainer: {
+    backgroundColor: colors.primary,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+},
+title: {
+    marginTop: 50,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 24,
+    color: 'white',
+},
   firstContainer: {
     flex: 1,
     alignItems: 'center',
@@ -218,6 +236,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   plateNo: {
+    marginTop:20,
     color: colors.black,
     fontSize: wp('7%'),
     fontWeight: '800',
