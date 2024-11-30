@@ -187,12 +187,12 @@ export default function HomePageScreen() {
                 </View>
                 <View style={styles.home_page_mid}>
                     <View style={styles.title}>
-                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
+                        <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 22, marginLeft: 10, marginBottom:1, marginTop:15 }}>
                             Hi, {userDetails?.fname}
                         </Text>
-                        <View style={styles.searchBarContainer}>
+                        {/* <View style={styles.searchBarContainer}>
                             <ParkingLotSearchModal />
-                        </View>
+                        </View> */}
                     </View>
                     <View style={styles.mapContainer}>
                         <IOSMap />

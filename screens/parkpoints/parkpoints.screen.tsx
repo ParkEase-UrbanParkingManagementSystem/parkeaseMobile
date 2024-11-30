@@ -3,6 +3,7 @@ import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import colors from '../../constants/Colors';
 import React, { useState, useEffect } from "react";
 import {
   widthPercentageToDP as wp,
@@ -50,11 +51,15 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
       colors={["#FFD981", "#D1D2D5"]}
       style={styles.gradientBackground}
     >
+
+<View style={styles.headerContainer}>
+                <Text style={styles.title}>My ParkPoints</Text>
+            </View>
+
       <SafeAreaView style={styles.container}>
+
         {/* Header */}
-        <Text style={[styles.titleText, { fontFamily: "Raleway_700Bold" }]}>
-          My ParkPoints
-        </Text>
+       
 
         {/* Information Section */}
         <Text style={[styles.infoText, { fontFamily: "Nunito_500Regular" }]}>
@@ -126,8 +131,7 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
 const styles = StyleSheet.create({
   gradientBackground: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    
   },
   container: {
     alignItems: "center",
@@ -191,6 +195,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  headerContainer: {
+    backgroundColor: colors.primary,
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    marginBottom: 60,
+},
+title: {
+    marginTop: 50,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 24,
+    color: 'white',
+},
   historyButtonGradient: {
     paddingVertical: 18,
     borderRadius: 30,

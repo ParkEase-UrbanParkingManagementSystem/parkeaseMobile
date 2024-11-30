@@ -1,4 +1,3 @@
-// HistoryScreen.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import colors from '@/constants/Colors';
@@ -11,11 +10,9 @@ import {
     Nunito_700Bold,
     Nunito_400Regular,
 } from "@expo-google-fonts/nunito";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 
-import {EXPO_PUBLIC_API_KEY} from '../../config'
-
-
+import { EXPO_PUBLIC_API_KEY } from '../../config'
 
 // Helper functions
 const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
@@ -25,7 +22,6 @@ const getElapsedTime = (inTime: string, outTime: string) => {
     let inDate = new Date(inTime);
     let outDate = new Date(outTime);
 
-    // Ensure that the elapsed time is non-negative
     if (inDate > outDate) {
         [inDate, outDate] = [outDate, inDate];
     }
@@ -35,7 +31,6 @@ const getElapsedTime = (inTime: string, outTime: string) => {
     const elapsedHours = Math.floor(elapsedMinutes / 60);
     const remainingMinutes = elapsedMinutes % 60;
 
-    // Handle cases where the elapsed time crosses midnight
     if (elapsedHours < 0) {
         return `${24 + elapsedHours} hrs ${remainingMinutes} mins`;
     }
@@ -44,20 +39,17 @@ const getElapsedTime = (inTime: string, outTime: string) => {
 };
 
 interface Instance {
-  instance_id: string;
-  in_time: string;
-  out_time: string;
-  lot_name: string;
-  city: string;
-  cost: number;
-  vehicle_name: string;
+    instance_id: string;
+    in_time: string;
+    out_time: string;
+    lot_name: string;
+    city: string;
+    cost: number;
+    vehicle_name: string;
 }
 
 const RecentsScreen = () => {
     const [instances, setInstances] = useState<Instance[]>([]);
-    
-
-    
 
     useEffect(() => {
         const fetchInstances = async () => {
@@ -98,17 +90,19 @@ const RecentsScreen = () => {
 
     return (
         <LinearGradient
-            colors={[colors.secondary_light, colors.secondary_light]}
+            colors={[colors.secondary_light2, colors.primary_light]} // Smooth gradient transition
             style={{ flex: 1 }}
         >
+            <View style={styles.headerContainer}>
+                <Text style={styles.title}>Recent Activity</Text>
+            </View>
+
             <ScrollView style={styles.activityScrollView} contentContainerStyle={{ alignItems: "center" }}>
                 {instances.map((item, index) => (
                     <TouchableOpacity
-
                         key={index}
                         style={styles.parking}
                         onPress={() => router.push({ pathname: "/(routes)/instance", params: { id: item.instance_id } })}
-
                     >
                         <View style={styles.day}>
                             <Text style={styles.lotName}>{item.lot_name}</Text>
@@ -153,11 +147,23 @@ const RecentsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        backgroundColor: colors.primary,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+    title: {
+        marginTop: 50,
+        fontFamily: "Nunito_700Bold",
+        fontSize: 24,
+        color: 'white',
+    },
     activityScrollView: {
         flex: 1,
         padding: 10,
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
     },
     parking: {
         display: 'flex',
@@ -165,8 +171,8 @@ const styles = StyleSheet.create({
         gap: 15,
         backgroundColor: colors.secondary_light2,
         borderRadius: 15,
-        padding: 15,
-        marginVertical: 10,
+        padding: 20,
+        marginVertical: 12,
         width: wp("90%"),
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 5 },

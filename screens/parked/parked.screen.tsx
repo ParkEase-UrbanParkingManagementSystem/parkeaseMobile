@@ -100,7 +100,7 @@ export default function ParkedScreen() {
 
   if (!details) {
     return (
-      <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient_no}>
+      <LinearGradient colors={[colors.secondary_light2, colors.primary_light]} style={styles.gradient_no}>
       <SafeAreaView style={styles.container_no}>
         <View style={styles.headerContainer}>
           

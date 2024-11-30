@@ -353,6 +353,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: hp('4%'),
     },
+    
     backIcon: {
         width: 30,
         height: 30,

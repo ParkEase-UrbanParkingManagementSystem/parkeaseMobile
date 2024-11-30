@@ -2,13 +2,20 @@ import {View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Button, S
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import colors from '../../constants/Colors'
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
+import {EXPO_PUBLIC_API_KEY} from '../../config';
+import { useLocalSearchParams } from "expo-router";
+
 
 
 export default function profileScreen() {
+    const [details, setDetails] = useState<any>(null);
+    const { id } = useLocalSearchParams();
     let [fontsLoaded, fontError] = useFonts({
         Raleway_700Bold,
         Nunito_400Regular,
@@ -18,6 +25,35 @@ export default function profileScreen() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
+
+    useEffect(() => {
+        const fetchInstances = async () => {
+          try {
+            const token = await AsyncStorage.getItem('token');
+            const response = await fetch(`${EXPO_PUBLIC_API_KEY}/parking/get-instance-details/${id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'token': token || '',
+              },
+            });
+            const parseRes = await response.json();
+    
+            if (response.ok) {
+              setDetails(parseRes.data);
+              console.log('details:', parseRes.data);
+              
+              
+            } else {
+              console.error('Error:', parseRes.message);
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        };
+    
+        fetchInstances();
+      }, [id]);
 
     return (
         <LinearGradient

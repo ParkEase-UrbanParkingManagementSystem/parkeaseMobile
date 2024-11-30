@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, TextInput, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, TextInput, Alert, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform} from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
+import { LinearGradient } from "expo-linear-gradient";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLocalSearchParams } from "expo-router";
 import colors from '../../constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
+import {router} from 'expo-router';
 
 import {EXPO_PUBLIC_API_KEY} from '../../config'
 
@@ -144,9 +146,10 @@ const InstanceScreen = () => {
       hour12: true,
     });
   };
-
     const getDay = (date: Date) => date.getDate().toString().padStart(2, '0');
     const getMonthAbbr = (date: Date) => date.toLocaleString('default', { month: 'short' });
+
+    
 
   const getElapsedTime = (inTime: string, outTime: string) => {
     let inDate = new Date(inTime);
@@ -190,11 +193,26 @@ const InstanceScreen = () => {
   
 
   return (
+
+    
     <SafeAreaView style={styles.container}>
+
+<LinearGradient
+      colors={[colors.secondary_light, colors.primary_light]} // Define gradient colors
+      style={styles.container}
+    >
+      </LinearGradient>
      
           <ScrollView >
+        
         <Text style={styles.title}>Parking Instance Details</Text>
         <Text style={styles.title2}>{getMonthAbbr(new Date(details?.instanceDetails.in_time))} {getDay(new Date(details?.instanceDetails.in_time))}</Text>
+        
+        
+        <TouchableOpacity style={styles.reviewButton2} onPress={() => router.push({ pathname: "/(routes)/bill", params: { id: details.instanceDetails.instance_id } })}>
+            <Text style={styles.reviewButtonText}>View Bill</Text>
+          </TouchableOpacity>
+        
         <View style={styles.parkingDetails}>
           <View style={styles.detailsRow}>
             <Text style={styles.label}>Cost:</Text>
@@ -466,6 +484,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
+  },
+  reviewButton2: {
+    marginTop: 10,
+    marginBottom:20,
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+    width: '50%',
+    display: 'flex',
+    alignSelf: 'center',
   },
   reviewButtonText: {
     color: '#ffffff',
