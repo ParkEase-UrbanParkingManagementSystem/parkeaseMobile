@@ -174,7 +174,11 @@ export default function PaymentScreen() {
 
     if (!details) {
         return (
-            <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
+            <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradientNo}>
+                
+                <View style={styles.headerContainer}>
+                <Text style={styles.title}>Checkout</Text>
+            </View>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.messageContainer}>
                         <Text style={styles.noDetailsText}>
@@ -187,15 +191,13 @@ export default function PaymentScreen() {
     }
 
     return (
-        <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.container}>
+        <LinearGradient colors={[colors.secondary_light, colors.primary_light]} style={styles.container}>
+            
+  <View style={styles.headerContainer}>
+                <Text style={styles.title}>Checkout</Text>
+            </View>
             <SafeAreaView style={styles.innerContainer}>
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => {/* Navigate back */}}>
-                        <Image source={require('@/assets/images/next.png')} style={styles.backIcon} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Checkout</Text>
-                </View>
-
+                
         {details.method_id!=4 && (<View style={styles.amountContainer2}>
                     
                     <Text style={styles.amountText2}>Amount to Pay</Text>
@@ -296,6 +298,22 @@ export default function PaymentScreen() {
 // styles
 export const styles = StyleSheet.create({
 
+    headerContainer: {
+        backgroundColor: colors.primary,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+    title: {
+        marginTop: 50,
+        fontFamily: "Nunito_700Bold",
+        fontSize: 24,
+        color: 'white',
+    },
+
+
     amountContainer2: {
         width: '100%',
         alignItems: 'center',
@@ -317,6 +335,13 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+
+    gradientNo: {
+        flex: 1,
+       
+        
+    },
+
     messageContainer: {
         display: 'flex',
         backgroundColor: '#ffffff',
@@ -329,7 +354,10 @@ export const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
-        elevation: 5
+        elevation: 5,
+        top: 290,
+        width: '90%',
+        alignSelf: 'center',
     },
     noDetailsText: {
         fontSize: 16,
@@ -339,13 +367,14 @@ export const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
+        
     },
     innerContainer: {
         flex: 1,
         width: '90%',
         justifyContent: 'flex-start',
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     header: {
         width: '100%',

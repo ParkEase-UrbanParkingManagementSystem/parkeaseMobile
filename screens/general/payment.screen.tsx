@@ -96,6 +96,20 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 20,
     },
+    headerContainer: {
+        backgroundColor: colors.primary,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+    title: {
+        marginTop: 50,
+        fontFamily: "Nunito_700Bold",
+        fontSize: 24,
+        color: 'white',
+    },
     option: {
         flexDirection: "row",
         width: wp("90%"),

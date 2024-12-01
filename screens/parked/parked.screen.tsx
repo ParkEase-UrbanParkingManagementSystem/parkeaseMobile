@@ -101,6 +101,10 @@ export default function ParkedScreen() {
   if (!details) {
     return (
       <LinearGradient colors={[colors.secondary_light2, colors.primary_light]} style={styles.gradient_no}>
+
+        
+
+        
       <SafeAreaView style={styles.container_no}>
         <View style={styles.headerContainer}>
           
@@ -137,13 +141,18 @@ export default function ParkedScreen() {
   };
 
   return (
-    <LinearGradient colors={[colors.secondary_light, colors.secondary_light]} style={styles.gradient}>
+    <LinearGradient colors={[colors.secondary_light2, colors.primary_light]} style={styles.gradient}>
+
+<View style={styles.headerContainerr}>
+                <Text style={styles.titlee}>Your {details?.vehicle_name || 'Unknown Vehicle'} </Text>
+                <Text style={styles.titlee2}>is parked in</Text>
+                <Text style={styles.titlee2}>{details?.lot_name || 'Unknown Lot'}</Text>
+                
+            </View>
+
+      
       <SafeAreaView style={styles.container}>
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Your {details?.vehicle_name || 'Unknown Vehicle'}</Text>
-        <Text style={styles.heading2}>is Parked in</Text>
-        <Text style={styles.headingLot}>{details?.lot_name || 'Unknown Lot'}</Text>
-      </View>
+    
 
         <View style={styles.vehicleDetailsContainer}>
           <Image
@@ -166,6 +175,11 @@ export default function ParkedScreen() {
           <View style={styles.detailRow}>
             <Text style={styles.parkingDetailsText}>Price per Hour:</Text>
             <Text style={styles.parkingDuration}>{details?.parking_toll_amount || 'Rs 70/='}</Text>
+          </View>
+
+          <View style={styles.detailRow}>
+            <Text style={styles.parkingDetailsText}>Warden Contact:</Text>
+            <Text style={styles.parkingDuration}>{details?.warden_contact || 'N/A'}</Text>
           </View>
         </View>
 
@@ -236,6 +250,29 @@ export default function ParkedScreen() {
 }
 
 const styles = StyleSheet.create({
+
+  headerContainerr: {
+    backgroundColor: colors.primary,
+    padding: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+},
+titlee: {
+    marginTop: 50,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 24,
+    color: 'white',
+},
+
+titlee2: {
+  marginTop: 1,
+  fontFamily: "Nunito_700Bold",
+  fontSize: 24,
+  color: 'white',
+},
+
 
   gradient_no: {
     flex: 1,
@@ -387,6 +424,9 @@ const styles = StyleSheet.create({
   parkingDetailsContainer: {
     marginVertical: hp('3%'),
     alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    padding: wp('7%'),
+    borderRadius: wp('5%'),
   },
   detailRow: {
     flexDirection: 'row',
