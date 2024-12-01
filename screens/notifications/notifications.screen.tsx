@@ -225,7 +225,11 @@ const styles = StyleSheet.create({
   markAllText: {
     fontFamily: 'Nunito_400Regular',
     color: colors.primary,
-    fontSize: 14,
+    fontSize: 18,
+    backgroundColor: '#f0f9ff',
+    padding: 8,
+    marginTop: -38,
+    borderRadius: 15,
   },
   scrollViewContent: {
     padding: 16,

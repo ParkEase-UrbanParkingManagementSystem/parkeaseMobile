@@ -100,12 +100,26 @@ export default function ParkingLotScreen() {
 
   return (
     <LinearGradient colors={[colors.secondary_light, colors.primary_light]} style={styles.container}>
+      
+      <View style={styles.headerContainer}>
+                <Text style={styles.title}>{parkingLotData?.lot?.name || 'Parking Lot Name'}</Text>
+            </View>
+      
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.topContainer}>
-            <AutoScroller />
-            <View style={styles.status}>
-              <Text style={[styles.statusText, { color: parkingLotData?.lot?.status === 'active' ? 'green' : 'red' }]}>
+          <View style={styles.imageContainer}>
+                {parkingLotData?.lot?.images && parkingLotData?.lot?.images.length > 0 ? (
+                    <Image
+                        style={styles.image}
+                        source={{ uri: `${EXPO_PUBLIC_API_KEY}/${parkingLotData?.lot?.images[0].replace(/\\/g, "/")}` }} // Corrected image path formatting
+                    />
+                ) : (
+                    <Text>No Image Available</Text>
+                )}
+            </View>
+            <View style={[styles.status, { backgroundColor: parkingLotData?.lot?.status === 'active' ? 'green' : 'red' }]}>
+              <Text style={[styles.statusText, { color: parkingLotData?.lot?.status === 'active' ? 'white' : 'white' }]}>
                 {parkingLotData?.lot?.status === 'active' ? 'Open' : 'Closed'}
               </Text>
             </View>
@@ -115,10 +129,18 @@ export default function ParkingLotScreen() {
               </Text>
             </View>
             <View style={styles.des}>
+
+            <Text style={styles.desText2}>
+                {parkingLotData?.lot?.addressno}, {parkingLotData?.lot?.street1}, {parkingLotData?.lot?.street2}, {parkingLotData?.lot?.city}, {parkingLotData?.lot?.district}
+              </Text>
+              </View>
+              <View style={styles.descriptionCont}>
               <Text style={styles.desText}>
                 {parkingLotData?.lot?.description || 'Description of the parking lot'}
               </Text>
-            </View>
+              </View>
+             
+            
           </View>
 
           <View style={styles.midContainer}>
@@ -222,6 +244,18 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
   },
+  imageContainer: {
+    width: wp('100%'),
+    height: wp('60%'),
+    marginBottom: 10,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  image:{
+    width: '95%',
+    height: '100%',
+    borderRadius: 10,
+  },
   availableText: {
     color: 'green',
     fontWeight: 'bold',
@@ -235,17 +269,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: wp('100%'),
     height: wp('100%'),
-    marginTop: 55,
+    marginTop: 25,
   },
   status: {
     marginBottom: 10,
+    marginTop:1,
+    paddingHorizontal: 20,
+    paddingVertical:5,
+    borderRadius: 10,
   },
   statusText: {
     fontFamily: 'Nunito_700Bold',
     fontSize: 16,
   },
   name: {
-    marginBottom: 10,
+    marginBottom: 1,
   },
   nameText: {
     fontFamily: 'Nunito_700Bold',
@@ -253,7 +291,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   des: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   desText: {
     fontFamily: 'Nunito_400Regular',
@@ -261,10 +299,36 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: 'center',
   },
+
+  desText2: {
+    fontFamily: 'Nunito_400Regular',
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 5,
+    textAlign: 'center',
+  },
+
+  descriptionCont: {
+    
+    marginBottom: 5,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 15,
+    marginHorizontal: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+    width: wp('90%'),
+    marginTop: 5,
+  },
+
   midContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
+    marginTop: 10,
   },
   section: {
     flex: 1,
@@ -281,13 +345,13 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontFamily: 'Raleway_700Bold',
     fontSize: 20,
-    marginBottom: 15, // Increased spacing
+    marginBottom: 5, // Increased spacing
     borderBottomWidth: 2,
     borderBottomColor: '#E0E0E0',
     textAlign: 'center',
   },
   slotPricesContainer: {
-    marginBottom: 20,
+    marginBottom: 1,
   },
   slotPrice: {
     marginBottom: 10,
@@ -309,7 +373,7 @@ const styles = StyleSheet.create({
   cap: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   vehicleIcon: {
     width: 32,
@@ -362,9 +426,24 @@ const styles = StyleSheet.create({
   containerBtn: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 35,
-    padding: 20
+    gap: 25,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
+  headerContainer: {
+    backgroundColor: colors.primary,
+    padding: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+},
+title: {
+    marginTop: 50,
+    fontFamily: "Nunito_700Bold",
+    fontSize: 24,
+    color: 'white',
+},
   modalContent: {
     backgroundColor: colors.white,
     borderRadius: 20, // Softer corners
