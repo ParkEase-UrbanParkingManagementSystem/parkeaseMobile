@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Image, Modal, FlatList } from "react-native";
 import { useFonts, Raleway_700Bold } from "@expo-google-fonts/raleway";
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import colors from '../../constants/Colors';
@@ -20,7 +20,18 @@ export default function WalletScreen({ walletAmount: initialAmount = 100 }) {
   });
 
   const [walletAmount, setWalletAmount] = useState(initialAmount);
+  const [topUpHistory, setTopUpHistory] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}/${month}/${day}`;
+}
+  
   const fetchWalletBalance = async () => {
     const token = await AsyncStorage.getItem('token');
     try {
@@ -38,6 +49,32 @@ export default function WalletScreen({ walletAmount: initialAmount = 100 }) {
     }
   };
 
+  const fetchTopUpHistory = async () => {
+    const token = await AsyncStorage.getItem('token');
+    try {
+      const response = await fetch(`${EXPO_PUBLIC_API_KEY}/driver/topup-history`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
+      const data = await response.json();
+      setTopUpHistory(data.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openTopUpHistoryModal = async () => {
+    await fetchTopUpHistory(); // Fetch history when modal opens
+    setIsModalVisible(true); // Show modal
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false); // Close modal
+  };
+
   useEffect(() => {
     fetchWalletBalance();
   }, []);
@@ -46,19 +83,16 @@ export default function WalletScreen({ walletAmount: initialAmount = 100 }) {
     return null;
   }
 
-  return (
-    <LinearGradient
-      colors={["#FFD981", "#D1D2D5"]}
-      style={styles.gradientBackground}
-    >
+  console.log(topUpHistory)
 
-<View style={styles.headerContainer}>
-                <Text style={styles.title}>My PayPark Wallet</Text>
-            </View>
-      
+  return (
+    <LinearGradient colors={["#FFD981", "#D1D2D5"]} style={styles.gradientBackground}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>My PayPark Wallet</Text>
+      </View>
+
       <SafeAreaView style={styles.container}>
         {/* Header */}
-        
 
         {/* Information Section */}
         <Text style={[styles.infoText, { fontFamily: "Nunito_500Regular" }]}>
@@ -79,34 +113,47 @@ export default function WalletScreen({ walletAmount: initialAmount = 100 }) {
         </View>
 
         {/* Top Up Button */}
-        <TouchableOpacity
-          style={styles.topUpButton}
-          onPress={() => router.push("/")}
-        >
-          <LinearGradient
-            colors={["#1A2131", "#1A2131"]}
-            style={styles.topUpButtonGradient}
-          >
+        <TouchableOpacity style={styles.topUpButton} onPress={() => router.push("/")}>
+          <LinearGradient colors={["#1A2131", "#1A2131"]} style={styles.topUpButtonGradient}>
             <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
               Top Up Now
             </Text>
           </LinearGradient>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.topUpButton2}
-          onPress={() => router.push("/")}
-        >
-          <LinearGradient
-            colors={["#FFB403", "#FFB403"]}
-            style={styles.topUpButtonGradient2}
-          >
+        <TouchableOpacity style={styles.topUpButton2} onPress={openTopUpHistoryModal}>
+          <LinearGradient colors={["#FFB403", "#FFB403"]} style={styles.topUpButtonGradient2}>
             <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
               View Top Up History
             </Text>
           </LinearGradient>
         </TouchableOpacity>
 
+        {/* Modal for Top Up History */}
+        <Modal visible={isModalVisible} transparent={true} animationType="slide">
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Top Up History</Text>
+          <FlatList
+            data={topUpHistory}
+            keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.historyItem}>
+                <Text style={styles.historyText}>
+                  Rs. {item?.amount}
+                </Text>
+                <Text style={styles.historyText}>
+                  {formatDate(item?.date)} at {item?.time}
+                </Text>
+              </View>
+            )}
+          />
+          <TouchableOpacity style={styles.closeModalButton} onPress={closeModal}>
+            <Text style={styles.buttonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
 
 
         {/* Footer Section */}
@@ -130,7 +177,6 @@ export default function WalletScreen({ walletAmount: initialAmount = 100 }) {
 const styles = StyleSheet.create({
   gradientBackground: {
     flex: 1,
-    
   },
   container: {
     alignItems: "center",
@@ -196,13 +242,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     marginBottom: 30,
-},
-title: {
+  },
+  title: {
     marginTop: 50,
     fontFamily: "Nunito_700Bold",
     fontSize: 24,
     color: 'white',
-},
+  },
   topUpButtonGradient: {
     paddingVertical: 18,
     borderRadius: 30,
@@ -215,16 +261,14 @@ title: {
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonText: {
-    fontSize: hp("2.5%"),
-    color: "#FFF",
-  },
+  
+  
   footer: {
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 20,
   },
   footerText: {
-    fontSize: hp("2%"),
+    fontSize: 14,
     color: "#6b6b6b",
   },
   paymentIcons: {
@@ -232,8 +276,60 @@ title: {
     marginTop: 10,
   },
   icon: {
-    width: 50,
+    width: 40,
     height: 40,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
+  },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "85%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontFamily: "Nunito_700Bold",
+    color: "#1E2952",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  historyItem: {
+    width: "100%",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+    alignItems: "center",
+  },
+  historyText: {
+    fontSize: 16,
+    color: "#333",
+    fontFamily: "Nunito_400Regular",
+  },
+  closeModalButton: {
+    marginTop: 20,
+    backgroundColor: "#FFB403",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontFamily: "Nunito_700Bold",
   },
 });
