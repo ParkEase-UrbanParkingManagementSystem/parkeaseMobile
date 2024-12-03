@@ -248,26 +248,25 @@ export default function ProfileScreen() {
                             <Text style={{fontFamily: "Nunito_600SemiBold", fontSize: 15}}>Total</Text>
                         </View>
                         <View style={styles.right}>
-                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>: {details?.data?.instanceDetails?.cost}</Text>
+                            <Text style={{fontFamily: "Nunito_700Bold", fontSize: 15}}>: {details?.data?.instanceDetails?.cost}/=</Text>
                         </View>
                     </View>
                 </View>
             </View>
                 <View style={styles.currentPaymentMethod}>
-                    <Image
-                        source={require('@/assets/images/visa.png')}
-                        style={{width: 25, height: 25}}
-                    />
-                    <Text>Debit Card ••••1022</Text>
-                    <TouchableOpacity
-                        onPress={() => router.push("/(routes)/payment/paymentMethods")}
-                        style={{marginLeft: 20}}
-                    >
-                        <Image
-                            source={require('@/assets/images/next.png')}
-                            style={{width: 15, height: 15}}
-                        />
-                    </TouchableOpacity>
+                <Image
+        source={
+            details?.data?.instanceDetails?.payment_method === 'PayPark Wallet'
+                ? require('@/assets/images/paypark.png') 
+                : details?.data?.instanceDetails?.payment_method === 'ParkPoints'
+                ? require('@/assets/images/parkpoints.png')
+                : require('@/assets/images/cash.png')  // Default image for cash or other methods
+        }
+        style={{ width: 25, height: 25 }}
+    />
+                    
+                    <Text>Paid using - {details?.data?.instanceDetails?.payment_method}</Text>
+                   
                 </View>
                
         </SafeAreaView>
