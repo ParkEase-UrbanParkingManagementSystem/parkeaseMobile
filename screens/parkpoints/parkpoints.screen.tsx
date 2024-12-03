@@ -107,19 +107,7 @@ export default function ParkPointsScreen({ parkPoints: initialPoints = 1000 }) {
           </LinearGradient>
         </TouchableOpacity> */}
 
-        <TouchableOpacity
-          style={styles.historyButton}
-          onPress={() => router.push("/")}
-        >
-          <LinearGradient
-            colors={["#1A2131", "#1A2131"]}
-            style={styles.historyButtonGradient}
-          >
-            <Text style={[styles.buttonText, { fontFamily: "Nunito_700Bold" }]}>
-              View Points History
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
+       
 
         
       </SafeAreaView>

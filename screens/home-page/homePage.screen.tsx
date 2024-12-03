@@ -251,6 +251,7 @@ export default function HomePageScreen() {
                     <Text>Go to Payments</Text>
                 </TouchableOpacity> */}
                 <View>
+                    
                     <Text style={{ color: colors.secondary_light, fontFamily: "Nunito_700Bold", fontSize: 20, marginLeft: 10 }}>
                         Recently visited
                     </Text>
